@@ -9,6 +9,9 @@ instance/
 .idea/**/dictionaries
 .idea/**/shelf
 
+app/__pycache__
+__pycache__
+
 # Environments
 .env
 .venv
