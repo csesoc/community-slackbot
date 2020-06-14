@@ -4,7 +4,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "Hey %%USER%% :wave:\n, :tada: *Welcome* :tada: to the CSESoc Community slack :slightly_smiling_face:. I'm Slackbot :robot_face:, a CSESoc project :computer: maintained by the CSESoc projects subcommittee :sunglasses:, and I'm here to help you set up your profile :grin:. Here are some things I can help you do to get started:"
+				"text": "Hey %%USER%% :wave:,\n\n :tada: *Welcome* :tada: to the CSESoc Community Slack :slightly_smiling_face:. I'm Slackbot :robot_face:, a CSESoc project :computer: maintained by the CSESoc Projects Subcommittee :sunglasses:, and I'm here to help you set up your profile :grin:. Here are some things I can help you do to get started:"
 			}
 		},
 		{
@@ -91,7 +91,7 @@
 			"type": "section",
 			"text": {
 				"type": "plain_text",
-				"text": "That's all for now, looking forward to seeing you around the slack :grinning: ",
+				"text": "That's all for now, looking forward to seeing you around the Slack :grinning:. ",
 				"emoji": true
 			}
 		}
