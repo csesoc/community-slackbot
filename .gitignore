@@ -1,0 +1,4 @@
+.env
+/slackbot-env
+/.vscode
+/__pycache__

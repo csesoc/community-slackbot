@@ -1,0 +1,99 @@
+{
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Hey %%USER%% :wave:, :tada: welcome :tada: to the CSESoc Community slack :slightly_smiling_face:. I'm Slackbot :robot_face:, a CSESoc project :computer: maintained by the CSESoc projects subcommittee :sunglasses:, and I'm here to help you set up your profile :grin:. Here are some things I can help you do to get started:"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "1. Introduce yourself in the #who-am-i channel :speech_balloon:"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "2. Upload a profile picture :frame_with_picture: so we can know you better :hugging_face:"
+			},
+			"accessory": {
+				"type": "button",
+				"text": {
+					"type": "plain_text",
+					"text": "How do I upload a photo?",
+					"emoji": true
+				},
+				"value": "pass",
+				"url": "https://slack.com/intl/en-au/help/articles/115005506003-Upload-a-profile-photo"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "3. Set up :wrench: your profile :female-technologist: by adding a little bit about yourself "
+			},
+			"accessory": {
+				"type": "button",
+				"text": {
+					"type": "plain_text",
+					"text": "Edit your profile",
+					"emoji": true
+				},
+				"value": "edit_profile"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "4. Check out what's happening on the workspace :eyes:"
+			},
+			"accessory": {
+				"type": "button",
+				"text": {
+					"type": "plain_text",
+					"text": "How do I navigate this space?",
+					"emoji": true
+				},
+				"value": "pass",
+				"url": "https://slack.com/intl/en-au/resources/slack-101/navigating-slack"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "5. Check out what else you can do with the bot :robot_face:"
+			},
+			"accessory": {
+				"type": "button",
+				"text": {
+					"type": "plain_text",
+					"text": "See commands and features",
+					"emoji": true
+				},
+				"value": "commands_help"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Some channels you can join: #coffee-meetups :coffee:, #personal-projects :construction_worker:, and the course chats :memo:."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "plain_text",
+				"text": "That's all for now, looking forward to seeing you around the slack :grinning: ",
+				"emoji": true
+			}
+		}
+	]
+}
