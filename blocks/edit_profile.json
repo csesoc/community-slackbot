@@ -31,9 +31,80 @@
 				"type": "plain_text_input",
 				"placeholder": {
 					"type": "plain_text",
+					"text": "COMP1511"
+				},
+				"action_id": "favourite_course"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Favourite course?",
+				"emoji": true
+			},
+			"optional": true,
+			"block_id": "favourite_course"
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Python"
+				},
+				"action_id": "favourite_programming_language"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Favourite programming language?",
+				"emoji": true
+			},
+			"optional": true,
+			"block_id": "favourite_programming_language"
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Crash landing on you"
+				},
+				"action_id": "favourite_netflix_show"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Favourite netflix show?",
+				"emoji": true
+			},
+			"optional": true,
+			"block_id": "favourite_netflix_show"
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Anything edible"
+				},
+				"action_id": "favourite_food"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Favourite food?",
+				"emoji": true
+			},
+			"optional": true,
+			"block_id": "favourite_food"
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"placeholder": {
+					"type": "plain_text",
 					"text": "Time for thai"
 				},
-				"min_length": 0,
 				"action_id": "overrated"
 			},
 			"label": {

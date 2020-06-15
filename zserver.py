@@ -52,6 +52,10 @@ def interactivity():
             extract_value = lambda key : values[key][key]["value"] if "value" in values[key][key].keys() else None
 
             # Extract data from form submission
+            favourite_course = extract_value("favourite_course")
+            favourite_programming_language = extract_value("favourite_programming_language")
+            favourite_netflix_show = extract_value("favourite_netflix_show")
+            favourite_food = extract_value("favourite_food")
             most_overrated_thing = extract_value("overrated")
             most_underrated_thing = extract_value("underrated")
             biggest_flex = extract_value("biggest_flex")
@@ -60,6 +64,10 @@ def interactivity():
             general_interests = extract_value("general_interests")
 
             # Save information to database
+            print(favourite_course)
+            print(favourite_programming_language)
+            print(favourite_netflix_show)
+            print(favourite_food)
             print(most_overrated_thing)
             print(most_underrated_thing)
             print(biggest_flex)
