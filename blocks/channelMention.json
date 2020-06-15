@@ -1,0 +1,45 @@
+{
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Hi $USER and members of $CHANNEL!\n\n *Here are some things I can do for you:*"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Trivia*\n:nerd_face:\n An admin of the channel can run a trivia game using the global shortcut."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Karma*\n:100:\n React to a user's comment with :yay: if they've been helpful to give them karma. Type '/karma' to see the current leaderboard."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Events*\n:tada:\n Type '/events' to find new events happening at UNSW soon."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*FAQ*\n:robot_face:\nTo see commonly asked questions, type '/FAQ'."
+			}
+		},
+		{
+			"type": "divider"
+		}
+	]
+}

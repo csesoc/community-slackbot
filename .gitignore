@@ -1,0 +1,9 @@
+.git
+.vscode
+__pycache__
+
+myTasks
+.env
+payloads.txt
+requirements.txt
+settings.py

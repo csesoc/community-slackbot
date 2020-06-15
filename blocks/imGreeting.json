@@ -1,0 +1,38 @@
+{
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Hi $USER!\n\n *Here are some things I can do for you:*"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Course Summaries*\n:book:\n Type '/course {coursename}' to get a summary of that course including prerequisites, term dates, and student reviews."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Review a Course*\n:computer:\n If you'd like to leave a review of a course, type '/review {coursename}'."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*CS Job Opportunities*\n:money_with_wings:\n Type '/CSopportunites' to see a list of available CS internship and graduate job opportunities."
+			}
+		},
+		{
+			"type": "divider"
+		}
+	]
+}
