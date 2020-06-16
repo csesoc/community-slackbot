@@ -5,6 +5,7 @@ from . import db
 
 
 class User(db.Model):
+    __tablename__ = "Users"
     id = db.Column(db.Integer, primary_key=True)
     karma = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, server_default=func.now())
@@ -14,8 +15,9 @@ class User(db.Model):
 
 
 class UserProfileDetail(db.Model):
+    __tablename__ = "UserProfileDetail"
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, ForeignKey("users.id"))
+    user_id = db.Column(db.Integer, ForeignKey("Users.id"))
     detail_key = db.Column(db.String(255))
     value = db.Column(db.String(255))
 
