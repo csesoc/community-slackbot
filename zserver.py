@@ -17,7 +17,7 @@ def interactivity():
 
     # Verify request
     if not zutil.verify_request(request):
-        return
+        return make_response("", 400)
 
     # Parse request
     payload = json.loads(request.form.to_dict()["payload"])
