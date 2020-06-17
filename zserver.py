@@ -2,6 +2,9 @@ from slackeventsapi import SlackEventAdapter
 from flask import Flask, request, make_response
 import os
 import zhandler
+import zutil
+import threading
+import json
 
 # Set up flask and slack events adapter
 app = Flask(__name__)
@@ -11,8 +14,16 @@ slack_events_adapter = SlackEventAdapter(slack_signing_secret, "/slack/events", 
 # Routes
 @app.route("/", methods=['POST'])
 def interactivity():
+
+    # Verify request
+    if not zutil.verify_request(request):
+        return
+
+    # Parse request
+    payload = json.loads(request.form.to_dict()["payload"])
+
     # Spawn a thread to service the request
-    zhandler.interactions(request)
+    threading.Thread(target=zhandler.interactions, args=[payload]).start()
     return make_response("", 200)
 
 
@@ -28,7 +39,7 @@ def team_join(event_data):
     user = event_data["event"]["user"]
     
     # Spawn a thread to service the request
-    zhandler.onboarding(user)
+    threading.Thread(target=zhandler.onboarding, args=[user]).start()
 
 
 @slack_events_adapter.on("app_home_opened")
@@ -42,7 +53,7 @@ def app_home_opened(event_data):
     channel = event["channel"]
 
     # Spawn a thread to service the request
-    zhandler.onboarding(user, channel)
+    threading.Thread(target=zhandler.onboarding, args=[user, channel]).start()
 
 
 # Main function

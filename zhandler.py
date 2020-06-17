@@ -8,13 +8,8 @@ import json
 # Set up slack client
 client = WebClient(os.environ['SLACK_TOKEN'])
 
-def interactions(request):
+def interactions(payload):
 
-    # Verify request
-    if not zutil.verify_request(request):
-        return
-
-    payload = json.loads(request.form.to_dict()["payload"])
     trigger_id = payload["trigger_id"]
     user = payload["user"]["id"]
 
