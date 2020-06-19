@@ -21,7 +21,7 @@
 			"type": "section",
 			"text": {
 				"type": "plain_text",
-				"text": "Hey there :wave:. In order to display relevant information on your profile, we need know a little bit about you. Keep in mind that everyone will be able to see this through a command.",
+				"text": "Hey there :wave:. In order to display relevant information on your public profile, we need to know a little bit about you. Fill out the details below, and get more connected to your CSE community. 🙂",
 				"emoji": true
 			}
 		},
@@ -33,7 +33,8 @@
 					"type": "plain_text",
 					"text": "COMP1511"
 				},
-				"action_id": "favourite_course"
+				"action_id": "favourite_course",
+				"max_length": 255
 			},
 			"label": {
 				"type": "plain_text",
@@ -51,7 +52,8 @@
 					"type": "plain_text",
 					"text": "Python"
 				},
-				"action_id": "favourite_programming_language"
+				"action_id": "favourite_programming_language",
+				"max_length": 255
 			},
 			"label": {
 				"type": "plain_text",
@@ -69,7 +71,8 @@
 					"type": "plain_text",
 					"text": "Crash landing on you"
 				},
-				"action_id": "favourite_netflix_show"
+				"action_id": "favourite_netflix_show",
+				"max_length": 255
 			},
 			"label": {
 				"type": "plain_text",
@@ -87,7 +90,8 @@
 					"type": "plain_text",
 					"text": "Anything edible"
 				},
-				"action_id": "favourite_food"
+				"action_id": "favourite_food",
+				"max_length": 255
 			},
 			"label": {
 				"type": "plain_text",
@@ -105,7 +109,8 @@
 					"type": "plain_text",
 					"text": "Time for thai"
 				},
-				"action_id": "overrated"
+				"action_id": "overrated",
+				"max_length": 255
 			},
 			"label": {
 				"type": "plain_text",
@@ -123,7 +128,8 @@
 					"type": "plain_text",
 					"text": "Quad food court"
 				},
-				"action_id": "underrated"
+				"action_id": "underrated",
+				"max_length": 255
 			},
 			"label": {
 				"type": "plain_text",
@@ -141,7 +147,8 @@
 					"type": "plain_text",
 					"text": "I'm a part of the most P O W E R F U L society in UNSW"
 				},
-				"action_id": "biggest_flex"
+				"action_id": "biggest_flex",
+				"max_length": 255
 			},
 			"label": {
 				"type": "plain_text",
@@ -159,7 +166,8 @@
 					"type": "plain_text",
 					"text": "COMPXXXX, SENGXXXX"
 				},
-				"action_id": "enrolled_courses"
+				"action_id": "enrolled_courses",
+				"max_length": 255
 			},
 			"label": {
 				"type": "plain_text",
@@ -170,7 +178,6 @@
 				"type": "plain_text",
 				"text": "Please include the course code in the format COMPXXXX, SENGXXXX"
 			},
-			"optional": true,
 			"block_id": "enrolled_courses"
 		},
 		{
@@ -181,7 +188,8 @@
 					"type": "plain_text",
 					"text": "COMP1511, COMP1521 etc"
 				},
-				"action_id": "completed_courses"
+				"action_id": "completed_courses",
+				"max_length": 255
 			},
 			"label": {
 				"type": "plain_text",
@@ -192,7 +200,6 @@
 				"type": "plain_text",
 				"text": "Write na if you have not yet completed any courses"
 			},
-			"optional": true,
 			"block_id": "completed_courses"
 		},
 		{
@@ -204,14 +211,14 @@
 					"type": "plain_text",
 					"text": "Write anything"
 				},
-				"action_id": "general_interests"
+				"action_id": "general_interests",
+				"max_length": 255
 			},
 			"label": {
 				"type": "plain_text",
 				"text": "General Interests",
 				"emoji": true
 			},
-			"optional": true,
 			"block_id": "general_interests"
 		}
 	]
