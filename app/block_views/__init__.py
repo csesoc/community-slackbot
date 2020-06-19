@@ -1,4 +1,5 @@
-import os
+from pathlib import Path
+import json
 
 TEST_VIEW_ONE = "test"
 __CACHED_VIEWS = {}
@@ -7,13 +8,14 @@ __CACHED_VIEWS = {}
 def try_load_view(view):
     """
     Attempts to load block kit view directly from file
-    :param view:
-    :return:
+    :param view: The name of the file to view e.g "onboarding.json"
+    :return: JSON String representation of block view if it exists else None
     """
-    view_path = os.path.join("/views", view)
-    if os.path.exists(view_path):
-        return open(view_path, "r").read()
-    return None
+    view_path = Path("app/block_views/") / view
+    try:
+        return view_path.read_text()
+    except FileNotFoundError:
+        return None
 
 
 def get_block_view(view):
@@ -29,3 +31,34 @@ def get_block_view(view):
     if loaded_view is not None:
         __CACHED_VIEWS[view] = loaded_view
     return loaded_view
+
+
+# Functions to load block_views start here
+# Block_views may vary from block_view to block_view,
+# so each one is tailored to the situation.
+def onboarding(user_id):
+    """
+    Retrieve a personalised block view of the onboarding message
+    :param user: A string of 9 characters representing a slack user id
+    :return: Array of json objects representing the blocks for slack
+    """
+    view = get_block_view("onboarding.json")
+    blocks = json.loads(view)["blocks"]
+    blocks[0]["text"]["text"] = blocks[0]["text"]["text"].replace("%%USER%%", f"<@{user_id}>")
+    return blocks
+
+
+def edit_profile():
+    """
+    Retrieve the "edit_profile" modal, and fill in the specfied initial values.
+    :return: A json object which represents the view of the "edit_profile" modal.
+    """
+    return json.loads(get_block_view("edit_profile.json"))
+
+
+def commands_help():
+    """
+    Retrieve the "commands_help" modal.
+    :return: A json object which represents the view of the "commands_help" modal.
+    """
+    return json.loads(get_block_view("commands_help.json"))

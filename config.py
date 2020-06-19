@@ -22,3 +22,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = \
         'mysql+pymysql://{}:{}@{}/{}'.format(db_user, db_password, db_host, db_schema)
     SQLALCHEMY_ECHO = bool(os.environ["DEBUG"])
+
+    # General Slack Config
+    SLACK_SIGNING_SECRET = os.environ['SLACK_SIGNING_SECRET']
+    SLACK_TOKEN = os.environ['SLACK_TOKEN']

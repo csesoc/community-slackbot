@@ -1,18 +1,26 @@
 from slack import WebClient
-from flask import make_response
-import zutil
-import block_views as blocks
-import os
-import json
+from config import Config
+import app.slack_utils as utils
+import app.block_views as blocks
 
-# Set up slack client
-client = WebClient(os.environ['SLACK_TOKEN'])
+# Set up the slack client
+client = WebClient(Config.SLACK_TOKEN)
+
 
 def interactions(payload):
+    """
+    The main function for enabling interactions with shortcuts, modals, or 
+    interactive components (such as buttons, select menus, and datepickers).
+    See https://api.slack.com/reference/interaction-payloads for more details
+    on how to handle interaction payloads.
+    """
 
+    # Extract data
     trigger_id = payload["trigger_id"]
     user = payload["user"]["id"]
 
+
+    # Received when a user clicks a Block Kit interactive component.
     if payload["type"] == "block_actions":
         actions = payload["actions"]
         value = actions[0]["value"]
@@ -29,6 +37,8 @@ def interactions(payload):
         if value == "edit_profile":
             client.views_open(trigger_id=trigger_id, view=blocks.edit_profile())
 
+
+    # Received when a modal is submitted.
     if payload["type"] == "view_submission":
         view = payload["view"]
         callback_id = view["callback_id"]
@@ -38,18 +48,21 @@ def interactions(payload):
             values = view["state"]["values"]
             for key in ["favourite_course", "favourite_programming_language", "favourite_netflix_show", "favourite_food", \
                     "overrated", "underrated", "biggest_flex", "enrolled_courses", "completed_courses", "general_interests"]:
-                value = zutil.extract_value(values, key, key)
-                zutil.add_profile_attributes(user, key, value)
+                value = utils.extract_value(values, key, key)
+                utils.add_profile_attributes(user, key, value)
 
 
 def onboarding(user, channel=None):
+    """
+    Onboards a new user or a existing user that hasn't been onboarded yet.
+    """
 
     # Check if user is in the database
-    if zutil.query_user_exists(user):
+    if utils.query_user_exists(user):
         return
 
     # Add user to the database
-    zutil.add_new_user(user)
+    utils.add_new_user(user)
 
     # Retrieve channel
     if channel is None:
