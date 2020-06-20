@@ -1,11 +1,6 @@
-from slack import WebClient
-from config import Config
 import app.slack_utils as utils
 import app.block_views as blocks
-
-# Set up the slack client
-client = WebClient(Config.SLACK_TOKEN)
-
+from app import client
 
 def interactions(payload):
     """

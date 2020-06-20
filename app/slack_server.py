@@ -1,14 +1,9 @@
-from flask import Flask, Blueprint, make_response, request
-from slackeventsapi import SlackEventAdapter
-from config import Config
+from flask import Blueprint, make_response, request
 import app.slack_handler as handler
 import app.slack_utils as utils
 import threading
 import json
-
-# Set up SlackEventAdapter and app
-app = Flask(__name__, instance_relative_config=False)
-slack_events_adapter = SlackEventAdapter(Config.SLACK_SIGNING_SECRET, "/slack/events", server=app)
+from app import slack_events_adapter
 
 slack = Blueprint(
     'slack', __name__,
