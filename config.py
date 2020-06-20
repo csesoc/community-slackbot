@@ -7,7 +7,6 @@ load_dotenv(os.path.join(basedir, '.env'))
 
 class Config:
     """Set Flask configuration variables from .env file."""
-    print("creating config")
     # General Flask Config
     FLASK_ENV = os.environ.get('FLASK_ENV')
     FLASK_APP = 'wsgi.py'
@@ -20,7 +19,7 @@ class Config:
     db_schema = os.environ['DB_SCHEMA']
     SQLALCHEMY_TRACK_MODIFICATIONS = bool(os.environ["DEBUG"])
     SQLALCHEMY_DATABASE_URI = \
-        'mysql+pymysql://{}:{}@{}/{}'.format(db_user, db_password, db_host, db_schema)
+        'mysql+pymysql://{}:{}@{}/{}?charset=utf8mb4'.format(db_user, db_password, db_host, db_schema)
     SQLALCHEMY_ECHO = bool(os.environ["DEBUG"])
 
     # General Slack Config
