@@ -33,9 +33,10 @@ def interactions(payload):
         if value == "commands_help":
             client.views_open(trigger_id=trigger_id, view=blocks.commands_help())
 
-        # Opens the "edit_profile" view
+        # Opens the "edit_profile" view with prefilled information
         if value == "edit_profile":
-            client.views_open(trigger_id=trigger_id, view=blocks.edit_profile())
+            values = utils.retrieve_profile_details(user)
+            client.views_open(trigger_id=trigger_id, view=blocks.edit_profile(values))
 
 
     # Received when a modal is submitted.
@@ -49,7 +50,7 @@ def interactions(payload):
             for key in ["favourite_course", "favourite_programming_language", "favourite_netflix_show", "favourite_food", \
                     "overrated", "underrated", "biggest_flex", "enrolled_courses", "completed_courses", "general_interests"]:
                 value = utils.extract_value(values, key, key)
-                utils.add_profile_attributes(user, key, value)
+                utils.add_profile_details(user, key, value)
 
 
 def onboarding(user, channel=None):

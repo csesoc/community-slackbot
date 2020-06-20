@@ -34,7 +34,8 @@
 					"text": "COMP1511"
 				},
 				"action_id": "favourite_course",
-				"max_length": 255
+				"max_length": 255,
+				"initial_value": "%%favourite_course%%"
 			},
 			"label": {
 				"type": "plain_text",
@@ -53,7 +54,8 @@
 					"text": "Python"
 				},
 				"action_id": "favourite_programming_language",
-				"max_length": 255
+				"max_length": 255,
+				"initial_value": "%%favourite_programming_language%%"
 			},
 			"label": {
 				"type": "plain_text",
@@ -72,7 +74,8 @@
 					"text": "Crash landing on you"
 				},
 				"action_id": "favourite_netflix_show",
-				"max_length": 255
+				"max_length": 255,
+				"initial_value": "%%favourite_netflix_show%%"
 			},
 			"label": {
 				"type": "plain_text",
@@ -91,7 +94,8 @@
 					"text": "Anything edible"
 				},
 				"action_id": "favourite_food",
-				"max_length": 255
+				"max_length": 255,
+				"initial_value": "%%favourite_food%%"
 			},
 			"label": {
 				"type": "plain_text",
@@ -110,7 +114,8 @@
 					"text": "Time for thai"
 				},
 				"action_id": "overrated",
-				"max_length": 255
+				"max_length": 255,
+				"initial_value": "%%overrated%%"
 			},
 			"label": {
 				"type": "plain_text",
@@ -129,7 +134,8 @@
 					"text": "Quad food court"
 				},
 				"action_id": "underrated",
-				"max_length": 255
+				"max_length": 255,
+				"initial_value": "%%underrated%%"
 			},
 			"label": {
 				"type": "plain_text",
@@ -148,7 +154,8 @@
 					"text": "I'm a part of the most P O W E R F U L society in UNSW"
 				},
 				"action_id": "biggest_flex",
-				"max_length": 255
+				"max_length": 255,
+				"initial_value": "%%biggest_flex%%"
 			},
 			"label": {
 				"type": "plain_text",
@@ -167,7 +174,8 @@
 					"text": "COMPXXXX, SENGXXXX"
 				},
 				"action_id": "enrolled_courses",
-				"max_length": 255
+				"max_length": 255,
+				"initial_value": "%%enrolled_courses%%"
 			},
 			"label": {
 				"type": "plain_text",
@@ -189,7 +197,8 @@
 					"text": "COMP1511, COMP1521 etc"
 				},
 				"action_id": "completed_courses",
-				"max_length": 255
+				"max_length": 255,
+				"initial_value": "%%completed_courses%%"
 			},
 			"label": {
 				"type": "plain_text",
@@ -212,7 +221,8 @@
 					"text": "Write anything"
 				},
 				"action_id": "general_interests",
-				"max_length": 255
+				"max_length": 255,
+				"initial_value": "%%general_interests%%"
 			},
 			"label": {
 				"type": "plain_text",

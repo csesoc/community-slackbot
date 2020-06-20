@@ -42,18 +42,29 @@ def onboarding(user_id):
     :param user: A string of 9 characters representing a slack user id
     :return: Array of json objects representing the blocks for slack
     """
-    view = get_block_view("onboarding.json")
-    blocks = json.loads(view)["blocks"]
-    blocks[0]["text"]["text"] = blocks[0]["text"]["text"].replace("%%USER%%", f"<@{user_id}>")
-    return blocks
+    view = get_block_view("onboarding.json").replace("%%USER%%", f"<@{user_id}>")
+    return json.loads(view)["blocks"]
 
 
-def edit_profile():
+def edit_profile(current):
     """
     Retrieve the "edit_profile" modal, and fill in the specfied initial values.
-    :return: A json object which represents the view of the "edit_profile" modal.
+    :current: A dictionary of key-value pairs corresponding to the user's current profile details.
+    :return: A json object which represents the view of the "edit_profile" modal with correct intial values.
     """
-    return json.loads(get_block_view("edit_profile.json"))
+    # Retrieve raw "edit_profile" modal view
+    string_view = get_block_view("edit_profile.json")
+
+    # Insert intial values into the respective fields, and clearing any that the user has not yet set.
+    for key in ["favourite_course", "favourite_programming_language", "favourite_netflix_show", "favourite_food", \
+            "overrated", "underrated", "biggest_flex", "enrolled_courses", "completed_courses", "general_interests"]:
+        try:
+            string_view = string_view.replace(f"%%{key}%%", current[key])
+        except KeyError:
+            string_view = string_view.replace(f"%%{key}%%", "")
+
+    # Return intialised json view
+    return json.loads(string_view)
 
 
 def commands_help():
