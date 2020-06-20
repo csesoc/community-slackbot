@@ -63,7 +63,7 @@ def add_profile_details(user, key, value):
         pass
 
     # If the value is None then skip instead of adding to the database 
-    if value is "":
+    if value == "":
         return
 
     # Add the new key value pair to the database
