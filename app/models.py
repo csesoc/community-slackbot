@@ -14,6 +14,11 @@ class User(db.Model):
 
 class UserProfileDetail(db.Model):
     __tablename__ = "userprofiledetails"
+
+    __mapper_args__ = {
+        'confirm_deleted_rows': False
+    }
+
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(16), db.ForeignKey("users.id"))
     detail_key = db.Column(db.String(32))

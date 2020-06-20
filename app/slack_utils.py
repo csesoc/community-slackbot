@@ -2,12 +2,8 @@ import hashlib
 import hmac
 import os
 
-# Set up db
-# TODO: Replace below with:
-# from . import db
-# and add database functionality to the user functions
-users = []
-user_profile_details = []
+from app import db
+from app.models import User, UserProfileDetail
 
 
 def verify_request(request):
@@ -34,7 +30,8 @@ def add_new_user(user):
     Add a user to the database
     :param user: A string of 9 characters representing a slack user id
     """
-    users.append(user)
+    db.session.add(User(id=user))
+    db.session.commit()
 
 
 def query_user_exists(user):
@@ -43,7 +40,7 @@ def query_user_exists(user):
     :param user: A string of 9 characters representing a slack user id
     :return: Bool 
     """
-    return True if user in users else False
+    return True if User.query.filter_by(id=user).first() is not None else False
 
 
 def add_profile_details(user, key, value):
@@ -54,27 +51,23 @@ def add_profile_details(user, key, value):
     :param value: The value to be stored and accessed.
     """
 
-    # Remove exisiting details for the particular user and key in the database 
-    try:
-        user_profile_details.remove(
-            [i for i in user_profile_details if i["user"] == user and i["key"] == key][0]
-        )
-    except:
-        pass
+    # Retrieve details for given user and key 
+    details = UserProfileDetail.query.filter_by(user_id=user, detail_key=key)
 
-    # If the value is None then skip instead of adding to the database 
-    if value == "":
-        return
+    for detail in details:
+        # Return if value is already set
+        if detail.value == value:
+            return
 
-    # Add the new key value pair to the database
-    user_profile_details.append({
-        "user": user,
-        "key": key,
-        "value": value
-    })
+        # Delete detail
+        db.session.delete(detail)
+        db.session.commit()
 
-    # Debug. TODO: Remove
-    print(f'{user}:{key}="{value}"')
+    # Adds the detail to the database if the value is not an empty string 
+    if value != "":
+        db.session.add(UserProfileDetail(user_id=user, detail_key=key, value=value))
+        db.session.commit()   
+
 
 def retrieve_profile_details(user):
     """
@@ -87,11 +80,11 @@ def retrieve_profile_details(user):
     details = {}
 
     # Retrieve the raw details from the database
-    raw_details = [detail for detail in user_profile_details if detail["user"] == user]
+    raw_details = UserProfileDetail.query.filter_by(user_id=user)
 
     # Convert the raw details into a usable dict format
     for item in raw_details:
-        details[item["key"]] = item["value"]
+        details[item.detail_key] = item.value
 
     # Return the key value pairs
     return details
