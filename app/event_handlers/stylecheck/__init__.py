@@ -29,7 +29,9 @@ class CodeEntry:
         """
         :return: Linting Result
         """
-        if self.language == SUPPORTED_LANGUAGES[2]:
+        if self.language in SUPPORTED_LANGUAGES[:2]:
+            return run_c_lint(self)
+        elif self.language == SUPPORTED_LANGUAGES[2]:
             return run_py_lint(self)
 
         return 'No Linting Run: ' + self.language
