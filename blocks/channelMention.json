@@ -21,7 +21,21 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
+				"text": "*Pairs*\n:smiley: :smile:\n Type '/pair' to create conversational pairs within the channel."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
 				"text": "*Karma*\n:100:\n React to a user's comment with :yay: if they've been helpful to give them karma. Type '/karma' to see the current leaderboard."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Anonymous Messages*\n:man_in_business_suit_levitating:\n Using the global and message shortcuts you can send messages anonymously to people."
 			}
 		},
 		{
@@ -35,11 +49,81 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
+				"text": "*Course Summaries*\n:book:\n Type '/course {coursename}' to get a summary of that course including prerequisites, term dates, and student reviews."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Review a Course*\n:computer:\n If you'd like to leave a review of a course, type '/review {coursename}'."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*CS Job Opportunities*\n:money_with_wings:\n Type '/CSopportunites' to see a list of available CS internship and graduate job opportunities."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Stylechecker*\n:male-technologist:\n Type '/stylechecker' to upload a file to be stylechecked with a linter."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Timetabler*\n:calendar:\n Type '/timetable' to start a modal that lets you customise your term timetable using Notangles."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Important*\n:heavy_exclamation_mark:\n Type '/important {message}' to send an important message to a channel. This will send an email notification to all members of the channel."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Purge*\n:file_cabinet:\n Type '/purge {count} {@user | time}' to delete the last n messages either sent by a user or since a set time within the given channel."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Profile*\n:bust_in_silhouette:\n Type '/profile {@user}' to see useful information about a user."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Freerooms*\n:door:\n Type '/freerooms' to help find available rooms nearby using CSESOC's Freerooms."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
 				"text": "*FAQ*\n:robot_face:\nTo see commonly asked questions, type '/FAQ'."
 			}
 		},
 		{
 			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*More Help*\n:slack:\n To get more in-depth info on what I can do type in '/helpme' or message me directly."
+			}
 		}
 	]
 }

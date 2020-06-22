@@ -14,3 +14,9 @@ def imBlock(user_name):
         blocks = json.load(f)['blocks']
         blocks[0]['text']['text'] = blocks[0]['text']['text'].replace("$USER", user_name)
         return blocks
+
+def helpModal(user_name):
+    with open("blocks/helpCommand.json", "r") as f:
+        view = json.load(f)
+        view['blocks'][0]['text']['text'] = view['blocks'][0]['text']['text'].replace("$USER", user_name)
+        return view
