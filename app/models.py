@@ -5,8 +5,9 @@ from . import db
 
 
 class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    karma = db.Column(db.Integer)
+    __tablename__ = "users"
+    id = db.Column(db.String(16), primary_key=True)
+    karma = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, server_default=func.now())
 
     def __repr__(self):
@@ -14,10 +15,11 @@ class User(db.Model):
 
 
 class UserProfileDetail(db.Model):
+    __tablename__ = "userprofiledetails"
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, ForeignKey("user.id"))
-    detail_key = db.Column(db.String(255))
-    value = db.Column(db.String(255))
+    user_id = db.Column(db.String(16), ForeignKey("users.id"))
+    detail_key = db.Column(db.String(32))
+    value = db.Column(db.String(256))
 
     def __repr__(self):
         return '<UserProfileDetail {}>'.format(self.id)
