@@ -7,7 +7,6 @@ def verify_request(request):
     """
     Verifies slack request
     :param request
-    :param secret
     :return: Is request verified
     """
     timestamp = request.headers['X-Slack-Request-Timestamp']

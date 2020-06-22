@@ -15,7 +15,7 @@ class User(db.Model):
 
 class UserProfileDetail(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, ForeignKey("users.id"))
+    user_id = db.Column(db.Integer, ForeignKey("user.id"))
     detail_key = db.Column(db.String(255))
     value = db.Column(db.String(255))
 
@@ -23,5 +23,3 @@ class UserProfileDetail(db.Model):
         return '<UserProfileDetail {}>'.format(self.id)
 
 
-# class Courses(db.Model):
-#     user_id = db.Column(db.Integer, ForeignKey("users.id"))

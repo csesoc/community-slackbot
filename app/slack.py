@@ -12,4 +12,24 @@ slack = Blueprint(
 def pair():
     if not verify_request(request):
         return make_response("", 400)
+
+    print(request.get_data())
+    payload = request.form.to_dict()
+    payload = payload['text'].split(' ')
+    print(payload)
+
+    return make_response("Pair success", 200)
+
+
+@slack.route('/stylecheck', methods=['POST'])
+def stylecheck():
+    if not verify_request(request):
+        return make_response("", 400)
+
+    print(request.get_data())
+    payload = request.form.to_dict()
+    print(payload)
+    payload = payload['text'].split(' ')
+    print(payload)
+
     return make_response("Pair success", 200)
