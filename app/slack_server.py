@@ -30,6 +30,25 @@ def interactivity():
     return make_response("", 200)
 
 
+@slack.route('/CSopportunities', methods=['POST'])
+def cs_job_opportunities():
+    """
+    Lets you know about CS job opportunities from indeed
+    Usage: /CSopportunities [page_number=1, query="software internship"]
+    """
+
+    # Verify request
+    if not utils.verify_request(request):
+        return make_response("", 400)
+
+    # Parse request
+    payload = request.form.to_dict()
+
+    # Spawn a thread to service the request
+    threading.Thread(target=handler.cs_job_opportunities, args=[payload]).start()
+    return make_response("", 200)
+
+
 @slack.route('/pair', methods=['POST'])
 def pair():
     if not utils.verify_request(request):

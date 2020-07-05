@@ -1,6 +1,10 @@
 import hashlib
 import hmac
 import os
+import re
+import requests
+from bs4 import BeautifulSoup
+from urllib.parse import quote
 
 from app import db
 from app.models import User, UserProfileDetail
@@ -99,3 +103,44 @@ def extract_value(values, block_id, action_id):
     :return: The extracted value as a string. Can be an empty string if value does not exist.
     """
     return values[block_id][action_id]["value"] if "value" in values[block_id][action_id].keys() else ""
+
+
+def jobs_from_indeed(page_number, query):
+    """
+    Retrieve a set of jobs from the indeed website, given the query string and page number.
+    :param query: Query string which contains the job title, keywords, or company. Defaults
+                  to "software internship"
+    :param page_number: The page number of the results that you want to obtain. Defaults to 1.
+    :return: Text that specifies the current set of jobs being shown, and an array of jobs.
+    """
+
+    # Make a request to the indeed website
+    r = requests.get(f'https://au.indeed.com/jobs?q={quote(query)}&start={(page_number-1)*5}&limit=5')
+
+    # Extract the jobs from the html
+    raw_jobs = re.findall('jobmap\[.*};', r.text)
+
+    # Extract the text that specifies the number of jobs available
+    try:
+        message = BeautifulSoup(r.content, "html.parser").find(id="searchCountPages").get_text().strip()
+        message += " | Indeed job search"
+
+    # Return error message if no jobs found
+    except:
+        return f"The search {query} jobs did not match any jobs | Indeed job search", []
+
+    # Array to store jobs
+    jobs = []
+
+    # Extract data from each job
+    for job in raw_jobs:
+        job = job[11:-1].strip()
+
+        jobs.append({
+            "link": "https://au.indeed.com/viewjob?jk=" + re.search("jk:'.*',efccid", job).group(0)[4:-8],
+            "title": re.search("title:'.*',locid:", job).group(0)[7:-8].replace("\\", ""),
+            "company": re.search("cmp:'.*',cmpesc:", job).group(0)[5:-9],
+            "location": re.search("loc:'.*',country:", job).group(0)[5:-10]
+        })
+
+    return message, jobs

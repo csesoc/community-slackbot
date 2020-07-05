@@ -1,0 +1,32 @@
+{
+	"type": "modal",
+	"title": {
+		"type": "plain_text",
+		"text": "Job Opportunities",
+		"emoji": true
+	},
+	"close": {
+		"type": "plain_text",
+		"text": "Close",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "* ---------- Search results for %%QUERY%%* ---------- "
+			}
+		},
+		{
+			"type": "context",
+			"elements": [
+				{
+					"type": "plain_text",
+					"text": "%%TEXT%%",
+					"emoji": true
+				}
+			]
+		}
+	]
+}

@@ -66,3 +66,31 @@ def onboarding(user, channel=None):
 
     # Post the message in the channel
     client.chat_postMessage(channel=channel, text='IMPORTANT: CSESoc Slack Onboarding!!', blocks=blocks.onboarding(user))
+
+
+def cs_job_opportunities(payload):
+    """
+    Lets you know about CS job opportunities from indeed
+    Usage: /CSopportunities [page_number=1, query="software internship"]
+    """
+
+    # Extract the text from the payload
+    text = payload["text"].strip()
+
+    # Attempt to extract the page number from the given text
+    try:
+        page_number = text.split()[0]
+        page_number = int(page_number)
+    except:
+        page_number = 1
+
+    # Attempt to extract the query from the given text
+    query = text.lstrip('0123456789.- ') 
+    if query == "":
+        query = "software internship"
+
+    # Retrieve jobs
+    message, jobs = utils.jobs_from_indeed(page_number, query)
+
+    # Open modal with jobs
+    client.views_open(trigger_id=payload["trigger_id"], view=blocks.job_opportunities(query, message, jobs))

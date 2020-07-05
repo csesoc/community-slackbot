@@ -73,3 +73,60 @@ def commands_help():
     :return: A json object which represents the view of the "commands_help" modal.
     """
     return json.loads(get_block_view("commands_help.json"))
+
+
+def job_block(job):
+    """
+    Retrieves the job block, and populates it with the required information.
+    :param job: A dictionary with 4 fields: link, title, company, location.
+    :return: A job block with the respective fields.
+    """
+
+    # Retrieve raw "job_block" block
+    block = get_block_view("job_block.json")
+
+    # Insert data into the block
+    block = block.replace("%%LINK%%", job["link"])
+    block = block.replace("%%TITLE%%", job["title"])
+    block = block.replace("%%COMPANY%%", job["company"])
+    block = block.replace("%%LOCATION%%", job["location"])
+
+    # Return the block as a dictionary
+    return json.loads(block)
+
+
+def job_opportunities(query, text, jobs):
+    """
+    Retrieves the job_opportunities view, and populates it with the required information.
+    :param query: The query string that the user uses to search.
+    :param text: The status of the search.
+    :param jobs: An array of dictionaries with 4 fields: link, title, company, location.
+    :return: A job oppotunities view with the respective fields populated.
+    """
+
+    # Retrieve raw "job_opportunitites" view
+    view = get_block_view("job_opportunities.json")
+
+    # Insert query and text into the views
+    view = view.replace("%%QUERY%%", query)
+    view = view.replace("%%TEXT%%", text)
+
+    # Transform the string into a dictionary
+    view = json.loads(view)
+    blocks = view["blocks"]
+
+    # Add each job to the view after formatting it
+    for job in jobs:
+
+        # Format the jobs
+        formatted_job = job_block(job)
+
+        # Insert the block into the second last position of the array
+        blocks.insert(-1, formatted_job)
+
+    # Return the view
+    return view
+
+
+
+
