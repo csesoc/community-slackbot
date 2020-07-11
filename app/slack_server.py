@@ -34,7 +34,7 @@ def interactivity():
 def cs_job_opportunities():
     """
     Lets you know about CS job opportunities from indeed
-    Usage: /CSopportunities [page_number=1, query="software internship"]
+    Usage: /CSopportunities [OPTIONS, page_number=1, query="software internship"]
     """
 
     # Verify request

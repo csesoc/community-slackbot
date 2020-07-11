@@ -105,7 +105,7 @@ def extract_value(values, block_id, action_id):
     return values[block_id][action_id]["value"] if "value" in values[block_id][action_id].keys() else ""
 
 
-def jobs_from_indeed(page_number, query):
+def jobs_from_indeed(page_number, query, options):
     """
     Retrieve a set of jobs from the indeed website, given the query string and page number.
     :param query: Query string which contains the job title, keywords, or company. Defaults
@@ -115,7 +115,7 @@ def jobs_from_indeed(page_number, query):
     """
 
     # Make a request to the indeed website
-    r = requests.get(f'https://au.indeed.com/jobs?q={quote(query)}&start={(page_number-1)*5}&limit=5')
+    r = requests.get(f'https://au.indeed.com/jobs?q={quote(query)}&start={(page_number-1)*5}&limit=5{options}')
 
     # Extract the jobs from the html
     raw_jobs = re.findall('jobmap\[.*};', r.text)

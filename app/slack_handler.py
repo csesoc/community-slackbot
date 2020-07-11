@@ -71,11 +71,17 @@ def onboarding(user, channel=None):
 def cs_job_opportunities(payload):
     """
     Lets you know about CS job opportunities from indeed
-    Usage: /CSopportunities [page_number=1, query="software internship"]
+    Usage: /CSopportunities [OPTIONS, page_number=1, query="software internship"]
     """
 
     # Extract the text from the payload
     text = payload["text"].strip()
+
+    # Attempt to extract options
+    options=""
+    if "-r" in text:
+        text = text.replace("-r", "")
+        options += "&sort=date"
 
     # Attempt to extract the page number from the given text
     try:
@@ -90,7 +96,7 @@ def cs_job_opportunities(payload):
         query = "software internship"
 
     # Retrieve jobs
-    message, jobs = utils.jobs_from_indeed(page_number, query)
+    message, jobs = utils.jobs_from_indeed(page_number, query, options)
 
     # Open modal with jobs
     client.views_open(trigger_id=payload["trigger_id"], view=blocks.job_opportunities(query, message, jobs))
