@@ -1,0 +1,52 @@
+[
+    {
+        "question": "Which of the following bit patterns (represented in hexadecimal notation) represents a negative number in two’s complement notation?",
+        "answer": "A6",
+        "options": ["55", "7F", "08"]
+    },
+    {
+        "question": "Which of the following bit patterns represents the value 5 in two’s complement notation?",
+        "answer": "00000101",
+        "options": ["11111011", "00011010", "11010110"]
+    },
+    {
+        "question": "How do computers talk to each other?",
+        "answer": "In code",
+        "options": ["By whispering", "By shouting", "With a Welsh accent"]
+    },
+    {
+        "question": "Who is considered the first computer programmer?",
+        "answer": "Ada Lovelace",
+        "options": ["Bill Gates", "Andrew Taylor", "Charles Babbage"]
+    },
+    {
+        "question": "`gcc -S myProg.c` produces what kind of file?",
+        "answer": "assembly language",
+        "options": ["C code, with all macros expanded", "unlinked machine code", "executable machine code"]
+    },
+    {
+        "question": "What does 'KISS' stand for?",
+        "answer": "Keep It Simple Stupid",
+        "options": ["Keep Iterations Simple Stupid", "Keep It Sound & Simple", "Keep Iterations Sounds & Simple"]
+    },
+    {
+        "question": "What are the 4 methods of CRUD",
+        "answer": "GET, POST, PUT, DELETE",
+        "options": ["GET, POST, CREATE, DELETE", "GET, POST, CREATE, REMOVE", "GET, POST, PUT, REMOVE"]
+    },
+    {
+        "question": "What do we call a function f that satisfies the property f(f(x)) = f(x)?",
+        "answer": "Idempotent",
+        "options": ["Commutative", "Round-trip", "Associative"]
+    },
+    {
+        "question": "How many legs does a spider have?",
+        "answer": "Eight",
+        "options": ["Forty-Two", "Six", "Nine"]
+    },
+    {
+        "question": "What is the collective noun for a group of lions?",
+        "answer": "Pride",
+        "options": ["Army", "School", "Murder"]
+    }
+]
