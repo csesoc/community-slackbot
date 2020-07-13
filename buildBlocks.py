@@ -1,3 +1,4 @@
+import copy
 import json
 import random
 
@@ -73,7 +74,7 @@ def triviaBoard(players):
         playerBlock = view['blocks'].pop()
         players = sorted(players, key=lambda x: x['score'], reverse=True)
         for player in players:
-            tempBlock = playerBlock
+            tempBlock = copy.deepcopy(playerBlock)
             tempBlock['text']['text'] = playerBlock['text']['text'].replace("$PLAYER", player['name']).replace("$SCORE", str(player['score']))
             view['blocks'].append(tempBlock)
         return view['blocks']

@@ -92,6 +92,8 @@ def trivia_reply(user_id, response, game_id, trigger_id):
         trivia_question(user_id, trigger_id)
     else:
         trivia_games[game_id].trivia_players.remove(user_id)
+        if len(trivia_games[game_id].trivia_players) == 0:
+            del trivia_games[game_id]
 
 def trivia_question(user_id, trigger_id):
     game_id = trivia_players[user_id].game_id
