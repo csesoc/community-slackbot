@@ -1,4 +1,5 @@
-from flask import Blueprint, make_response, request
+from flask import Blueprint, make_response, request, jsonify
+from app.models import Courses
 
 from app.slack_utils import verify_request
 from config import Config
@@ -29,6 +30,7 @@ def get_course_summary():
 @slack.route("/courses", methods=['POST'])
 def get_courses_listing():
     pass
+    # return jsonify(Courses.select().get())
 
 
 @slack.route('/stylecheck', methods=['POST'])

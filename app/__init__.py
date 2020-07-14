@@ -1,43 +1,39 @@
-import os
-from flask import Flask, make_response, request
-from flask_migrate import Migrate, Config
-from flask_sqlalchemy import SQLAlchemy
-from slack import WebClient
-from slackeventsapi import SlackEventAdapter
+# Import flask
+from flask import Flask
 
+# Import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
+
+# Define the WSGI application object
+app = Flask(__name__)
+
+# Configurations
+from config import Config
+app.config.from_object('config.Config')
+
+# Define the database object which is imported
+# by modules and controllers
+db = SQLAlchemy(app)
+
+# Import Flask-Migrate and intialise it
+from flask_migrate import Migrate
+migrate = Migrate()
+migrate.init_app(app, db)
+
+# Import SlackEventsAdapter and set it up
+from slackeventsapi import SlackEventAdapter
+slack_events_adapter = SlackEventAdapter(Config.SLACK_SIGNING_SECRET, "/slack/events", server=app)
+
+# Set up the slack client
+from slack import WebClient
+client = WebClient(Config.SLACK_TOKEN)
+
+# Import a module using its blueprint handler variable
 from app.slack import slack
 
-db = SQLAlchemy()
-migrate = Migrate()
+# Register blueprint
+app.register_blueprint(slack)
 
-slack_events_adapter = None
-client = None
-slack_token = None
-
-
-def create_app():
-    """Construct the core application."""
-
-    global slack_events_adapter
-    global client
-    global slack_token
-
-    app = Flask(__name__, instance_relative_config=False)
-    app.config.from_object('config.Config')
-
-    slack_signing_secret = os.environ['SLACK_SIGNING_SECRET']
-    slack_events_adapter = SlackEventAdapter(slack_signing_secret, "/events", server=app)
-
-    slack_token = os.environ['SLACK_TOKEN']
-    client = WebClient(slack_token)
-
-    db.init_app(app)
-    migrate.init_app(app, db)
-
-    with app.app_context():
-        from . import events
-        from . import models
-        app.register_blueprint(slack)
-        return app
-
-
+# Build the database:
+# This will create the database file using SQLAlchemy
+db.create_all()

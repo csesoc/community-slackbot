@@ -1,7 +1,6 @@
 """Data models."""
 from sqlalchemy import func, ForeignKey
-
-from . import db
+from app import db
 
 MAX_STRING_LENGTH = 65535
 
@@ -31,7 +30,7 @@ class Courses(db.Model):
     __tablename__ = "courses"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     course = db.Column(db.String(255))
-    msg = db.Column(db.String(MAX_STRING_LENGTH))
+    msg = db.Column(db.Text())
     user_id = db.Column(db.String(16), ForeignKey("users.id"))
 
     def __repr__(self):
@@ -41,7 +40,7 @@ class Courses(db.Model):
 class AnonMsgs(db.Model):
     __tablename__ = "anon_msgs"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    msg = db.Column(db.String(MAX_STRING_LENGTH))
+    msg = db.Column(db.Text())
     user_id = db.Column(db.String(16), ForeignKey("users.id"))
 
     def __repr__(self):
@@ -62,7 +61,7 @@ class UserProfileDetail(db.Model):
 class Review(db.Model):
     __tablename__ = "reviews"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    review = db.Column(db.String(MAX_STRING_LENGTH))
+    review = db.Column(db.Text())
     user_id = db.Column(db.String(16), ForeignKey("users.id"))
     lecturer = db.Column(db.String(255))
     term = db.Column(db.String(255))
@@ -76,7 +75,7 @@ class Report(db.Model):
     __tablename__ = "reports"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     msg_id = db.Column(db.Integer, ForeignKey("anon_msgs.id"))
-    report = db.Column(db.String(MAX_STRING_LENGTH))
+    report = db.Column(db.Text())
 
     def __repr__(self):
         return '<AnonMsgs {}>'.format(self.id)
