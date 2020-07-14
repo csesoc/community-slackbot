@@ -37,3 +37,6 @@ app.register_blueprint(slack)
 # Build the database:
 # This will create the database file using SQLAlchemy
 db.create_all()
+
+# Add extra commands
+from app.commands import *

@@ -10,7 +10,8 @@ def try_load_view(view):
     :param view:
     :return:
     """
-    view_path = os.path.join("/views", view)
+    view_path = os.path.join("app/block_views/views", view)
+    print(view_path)
     if os.path.exists(view_path):
         return open(view_path, "r").read()
     return None

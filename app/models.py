@@ -31,7 +31,6 @@ class Courses(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     course = db.Column(db.String(255))
     msg = db.Column(db.Text())
-    user_id = db.Column(db.String(16), ForeignKey("users.id"))
 
     def __repr__(self):
         return '<Courses {}>'.format(self.id)
