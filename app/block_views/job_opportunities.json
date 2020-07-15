@@ -15,7 +15,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "* ---------- Search results for %%QUERY%%* ---------- "
+				"text": "-------------------------------------------------------------\nFor more job oppotunities check out http://jobsboard.csesoc.unsw.edu.au/\n* ---------- Search results for %%QUERY%%* ---------- "
 			}
 		},
 		{
