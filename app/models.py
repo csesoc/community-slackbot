@@ -27,6 +27,18 @@ class UserProfileDetail(db.Model):
     def __repr__(self):
         return '<UserProfileDetail {}>'.format(self.id)
 
+class Roles(db.Model):
+    __tablename__ = "roles"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(16), db.ForeignKey("users.id"))
+    title = db.Column(db.String(255))
+    perm_level = db.Column(db.Integer)
+
+    def __repr__(self):
+        return '<Roles {}>'.format(self.id)
+
+
 
 # class Courses(db.Model):
 #     user_id = db.Column(db.Integer, ForeignKey("users.id"))
