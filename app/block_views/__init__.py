@@ -128,5 +128,42 @@ def job_opportunities(query, text, jobs):
     return view
 
 
+def permission_denied():
+    """
+    Retrieve the "generic_permission_denied" modal.
+    :return: A json object which represents the view of the "generic_permission_denied" modal.
+    """
+    return json.loads(get_block_view("generic_permission_denied.json"))
 
+
+def error_message(message):
+    """
+    Retrieve the "error_message" modal.
+    :param message: A string which represents the error message
+    :return: A json object which represents the view of the "error_message" modal.
+    """
+    modal = get_block_view("error_message.json").replace("%%ERROR_MESSAGE%%", message)
+    return json.loads(modal)
+
+
+def purge_confirmation(number_of_messages, user, time_period):
+    """
+    Retrieve the "purge_confirmation" modal.
+    :param number_of_messages: Integer which represents the number of messages to delete
+    :param user: A string which represents a slack user
+    :param time_period: Only messages sent within the last "time_period" seconds will be deleted
+    :return: A json object which represents the view of the "purge_confirmation" modal
+    """
+
+    # Retrieve modal and add number of messages
+    modal = get_block_view("purge_confirmation.json").replace("%%NUMBER_OF_MESSAGES%%", str(number_of_messages))
+    modal = json.loads(modal)
+
+    # Specify messages from which user
+    modal["blocks"][0]["text"]["text"] += f" from user {user}" if user != "" else ""
+
+    # Specify the time period
+    modal["blocks"][0]["text"]["text"] += f" within the last {time_period} seconds" if time_period > 0 else ""
+
+    return modal
 
