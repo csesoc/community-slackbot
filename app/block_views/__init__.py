@@ -165,5 +165,9 @@ def purge_confirmation(number_of_messages, user, time_period):
     # Specify the time period
     modal["blocks"][0]["text"]["text"] += f" within the last {time_period} seconds" if time_period > 0 else ""
 
+    # Save the details in the metadata
+    metadata = json.dumps({"number_of_messages": number_of_messages, "user": user, "time_period": time_period})
+    modal["private_metadata"] = metadata
+
     return modal
 
