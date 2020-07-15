@@ -100,3 +100,43 @@ def cs_job_opportunities(payload):
 
     # Open modal with jobs
     client.views_open(trigger_id=payload["trigger_id"], view=blocks.job_opportunities(query, message, jobs))
+
+
+def purge(payload):
+    """
+    Mass delete unwanted messages.
+    Usage: /purge <number of messages> [user, time_period]
+    """
+
+    # Retrieve permission level of user_id
+    perm_level = utils.retrieve_highest_permission_level(payload["user_id"])
+
+    # Deny request if user doesn't have enough permission
+    if perm_level <= 0:
+        client.views_open(trigger_id=payload["trigger_id"], view=blocks.permission_denied())
+        return
+
+    # Extract number of messages
+    text = payload["text"].strip()
+    try:
+        number_of_messages = int(text.split()[0])
+        text = text.replace(str(number_of_messages), "", 1).strip()
+        if number_of_messages <= 0:
+            raise ValueError
+    except:
+        client.views_open(trigger_id=payload["trigger_id"], view=blocks.error_message("Invalid number of messages"))
+        return
+
+    # Extract user from arguments
+    user = ""
+    if text != "" and utils.re.search("^<@[A-Z0-9]+|.*>$", text.split()[0]):
+        user = text.split()[0]
+        text = text.replace(user, "").strip()
+
+    # Extract time period from arguments
+    time_period = -1
+    if text != "" and utils.re.search("^[0-9]+$", text.split()[0]):
+        time_period = int(text.split()[0])
+
+    # Open purge confirmation modal
+    client.views_open(trigger_id=payload["trigger_id"], view=blocks.purge_confirmation(number_of_messages, user, time_period))

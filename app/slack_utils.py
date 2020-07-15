@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import quote
 
 from app import db
-from app.models import User, UserProfileDetail
+from app.models import User, UserProfileDetail, Roles
 
 
 def verify_request(request):
@@ -92,6 +92,22 @@ def retrieve_profile_details(user):
 
     # Return the key value pairs
     return details
+
+
+def retrieve_highest_permission_level(user_id):
+    """
+    Retrieve highest permission level of a given user_id
+    :param user_id: A string of 11 characters representing a slack user id
+    :return: An integer that represents the highest permission level for the given user
+    """
+
+    # Retrieve all roles of given user
+    query = Roles.query.filter_by(user_id=user_id).all()
+
+    # Set permission level to the highest of the roles or 0 if user does not have any roles
+    perm_level = max(role.perm_level for role in query) if query != [] else 0
+
+    return perm_level
 
 
 def extract_value(values, block_id, action_id):

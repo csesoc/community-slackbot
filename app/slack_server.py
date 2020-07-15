@@ -49,6 +49,25 @@ def cs_job_opportunities():
     return make_response("", 200)
 
 
+@slack.route('/purge', methods=['POST'])
+def purge():
+    """
+    Mass delete unwanted messages.
+    Usage: /purge <number of messages> [user, time_period]
+    """
+
+    # Verify request
+    if not utils.verify_request(request):
+        return make_response("", 400)
+
+    # Parse request
+    payload = request.form.to_dict()
+
+    # Spawn a thread to service the request
+    threading.Thread(target=handler.purge, args=[payload]).start()
+    return make_response("", 200)
+
+
 @slack.route('/pair', methods=['POST'])
 def pair():
     if not utils.verify_request(request):
