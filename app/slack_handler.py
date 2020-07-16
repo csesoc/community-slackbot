@@ -1,6 +1,6 @@
 import app.slack_utils as utils
 import app.block_views as blocks
-from app import client
+from app import client, user_client
 
 def interactions(payload):
     """

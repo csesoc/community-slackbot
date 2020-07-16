@@ -24,4 +24,5 @@ class Config:
 
     # General Slack Config
     SLACK_SIGNING_SECRET = os.environ['SLACK_SIGNING_SECRET']
-    SLACK_TOKEN = os.environ['SLACK_TOKEN']
+    SLACK_USER_TOKEN = os.environ['SLACK_USER_TOKEN']
+    SLACK_BOT_TOKEN = os.environ['SLACK_BOT_TOKEN']

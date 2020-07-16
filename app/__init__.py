@@ -26,7 +26,8 @@ slack_events_adapter = SlackEventAdapter(Config.SLACK_SIGNING_SECRET, "/slack/ev
 
 # Set up the slack client
 from slack import WebClient
-client = WebClient(Config.SLACK_TOKEN)
+client = WebClient(Config.SLACK_BOT_TOKEN)
+user_client = WebClient(Config.SLACK_USER_TOKEN)
 
 # Import a module using its blueprint handler variable
 from app.slack_server import slack
