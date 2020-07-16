@@ -71,17 +71,16 @@ def interactions(payload):
                 # Iterate through messages
                 for msg in conversations_history["messages"]:
 
-                    #Skip messages that are not actual messages (e.g event messages)
+                    # Skip messages that are not actual messages (e.g event messages)
                     if msg["type"] != "message":
                         continue
 
                     # Delete if no user specified or user of message matches target
-                    if (target_user_id == "" or target_user_id == msg["user"]):
+                    if target_user_id == "" or target_user_id == msg["user"]:
                         try:
                             user_client.chat_delete(channel=channel_id, ts=msg["ts"])
                             count_deleted += 1
                         except Exception as e:
-                            print(msg)
                             # Serve error back to user for debugging
                             client.chat_postEphemeral(channel=metadata["channel_id"], user=user, text=str(e))
                             quit()
