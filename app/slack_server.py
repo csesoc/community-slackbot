@@ -53,7 +53,7 @@ def cs_job_opportunities():
 def purge():
     """
     Mass delete unwanted messages.
-    Usage: /purge <number of messages> [user, time_period]
+    Usage: /purge <number of messages> [user, time_period, text_snippet]
     """
 
     # Verify request

@@ -146,7 +146,7 @@ def error_message(message):
     return json.loads(modal)
 
 
-def purge_confirmation(number_of_messages, user, time_period, channel_id):
+def purge_confirmation(number_of_messages, user, time_period, channel_id, text_snippet):
     """
     Retrieve the "purge_confirmation" modal.
     :param number_of_messages: Integer which represents the number of messages to delete
@@ -159,6 +159,9 @@ def purge_confirmation(number_of_messages, user, time_period, channel_id):
     modal = get_block_view("purge_confirmation.json").replace("%%NUMBER_OF_MESSAGES%%", str(number_of_messages))
     modal = json.loads(modal)
 
+    # Specify content
+    modal["blocks"][0]["text"]["text"] += f" which contains {text_snippet}" if text_snippet != "" else ""
+
     # Specify messages from which user
     modal["blocks"][0]["text"]["text"] += f" from user {user}" if user != "" else ""
 
@@ -170,7 +173,8 @@ def purge_confirmation(number_of_messages, user, time_period, channel_id):
         "number_of_messages": number_of_messages, 
         "user": user, 
         "time_period": time_period,
-        "channel_id": channel_id
+        "channel_id": channel_id,
+        "text_snippet": text_snippet
     })
 
     return modal

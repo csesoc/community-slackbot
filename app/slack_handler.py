@@ -60,6 +60,7 @@ def interactions(payload):
             target_user_id = metadata["user"][2:13]
             oldest = int(utils.time.time()) - metadata["time_period"] if metadata["time_period"] != -1 else 0   
             channel_id = metadata["channel_id"]
+            text_snippet = metadata["text_snippet"]
 
             # Get messages from channel
             conversations_history = client.conversations_history(channel=channel_id, oldest=oldest).data
@@ -76,7 +77,7 @@ def interactions(payload):
                         continue
 
                     # Delete if no user specified or user of message matches target
-                    if target_user_id == "" or target_user_id == msg["user"]:
+                    if (target_user_id == "" or target_user_id == msg["user"]) and (text_snippet == "" or text_snippet in blocks.json.dumps(msg)):
                         try:
                             user_client.chat_delete(channel=channel_id, ts=msg["ts"])
                             count_deleted += 1
@@ -158,7 +159,7 @@ def cs_job_opportunities(payload):
 def purge(payload):
     """
     Mass delete unwanted messages.
-    Usage: /purge <number of messages> [user, time_period]
+    Usage: /purge <number of messages> [user, time_period, text_snippet]
     """
 
     # Retrieve permission level of user_id
@@ -190,9 +191,13 @@ def purge(payload):
     time_period = -1
     if text != "" and utils.re.search("^[0-9]+$", text.split()[0]):
         time_period = int(text.split()[0])
+        text = text.replace(str(time_period), "", 1).strip()
+
+    # Extract text snippet from arguments
+    text_snippet = text
 
     # Open purge confirmation modal
-    client.views_open(trigger_id=payload["trigger_id"], view=blocks.purge_confirmation(number_of_messages, user, time_period, payload["channel_id"]))
+    client.views_open(trigger_id=payload["trigger_id"], view=blocks.purge_confirmation(number_of_messages, user, time_period, payload["channel_id"], text_snippet))
 
 
 def say(payload):
