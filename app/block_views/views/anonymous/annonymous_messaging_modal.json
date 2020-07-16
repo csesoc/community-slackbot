@@ -1,0 +1,69 @@
+{
+	"type": "modal",
+	"callback_id": "anonymous_messaging_modal",
+	"title": {
+		"type": "plain_text",
+		"text": "Anonymous Messaging",
+		"emoji": true
+	},
+	"submit": {
+		"type": "plain_text",
+		"text": "Send",
+		"emoji": true
+	},
+	"close": {
+		"type": "plain_text",
+		"text": "Cancel",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "input",
+			"element": {
+				"type": "multi_users_select",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Select users",
+					"emoji": true
+				}
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Set Message User Recipients",
+				"emoji": true
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Set Channel Recipient*"
+			}
+		},
+		{
+			"type": "actions",
+			"elements": [
+				{
+					"type": "channels_select",
+					"placeholder": {
+						"type": "plain_text",
+						"text": "Select a channel",
+						"emoji": true
+					}
+				}
+			]
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"multiline": true
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Message",
+				"emoji": true
+			}
+		}
+	]
+}

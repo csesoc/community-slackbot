@@ -30,3 +30,9 @@ def get_block_view(view):
     if loaded_view is not None:
         __CACHED_VIEWS[view] = loaded_view
     return loaded_view
+
+
+def get_anonymous_modal():
+    return get_block_view("anonymous/annonymous_messaging_modal.json")
+
+
