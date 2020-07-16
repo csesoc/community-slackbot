@@ -47,6 +47,60 @@ def interactions(payload):
                 value = utils.extract_value(values, key, key)
                 utils.add_profile_details(user, key, value)
 
+        # Purge messages
+        if callback_id == "purge_confirmation":
+            # Extract metadata
+            metadata = blocks.json.loads(view["private_metadata"])
+
+            # Signal the purge is starting
+            ts = client.chat_postEphemeral(channel=metadata["channel_id"], user=user, text="Purging messages...")
+
+            # Retrieve data from metadata
+            number_of_messages = metadata["number_of_messages"]
+            target_user_id = metadata["user"][2:13]
+            oldest = int(utils.time.time()) - metadata["time_period"] if metadata["time_period"] != -1 else 0   
+            channel_id = metadata["channel_id"]
+
+            # Get messages from channel
+            conversations_history = client.conversations_history(channel=channel_id, oldest=oldest).data
+
+            # Iterate through messages and delete messages until we run out of messages to delete or reach our target
+            count_deleted = 0
+            while count_deleted < number_of_messages:
+
+                # Iterate through messages
+                for msg in conversations_history["messages"]:
+
+                    #Skip messages that are not actual messages (e.g event messages)
+                    if msg["type"] != "message":
+                        continue
+
+                    # Delete if no user specified or user of message matches target
+                    if (target_user_id == "" or target_user_id == msg["user"]):
+                        try:
+                            user_client.chat_delete(channel=channel_id, ts=msg["ts"])
+                            count_deleted += 1
+                        except Exception as e:
+                            print(msg)
+                            # Serve error back to user for debugging
+                            client.chat_postEphemeral(channel=metadata["channel_id"], user=user, text=str(e))
+                            quit()
+
+                    # Break loop if target number of messages is reached
+                    if count_deleted >= number_of_messages:
+                        break
+
+                # Check that there are more messages to retrieve
+                if conversations_history["has_more"] is False:
+                    break
+
+                # Retrieve next set of messages
+                cursor = conversations_history["response_metadata"]["next_cursor"]
+                conversations_history = client.conversations_history(channel=channel_id, oldest=oldest, cursor=cursor)
+
+            # Signal the purge is complete
+            client.chat_postEphemeral(channel=metadata["channel_id"], user=user, text="Purge complete")
+
 
 def onboarding(user, channel=None):
     """
