@@ -139,4 +139,4 @@ def purge(payload):
         time_period = int(text.split()[0])
 
     # Open purge confirmation modal
-    client.views_open(trigger_id=payload["trigger_id"], view=blocks.purge_confirmation(number_of_messages, user, time_period))
+    client.views_open(trigger_id=payload["trigger_id"], view=blocks.purge_confirmation(number_of_messages, user, time_period, payload["channel_id"]))

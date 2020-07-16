@@ -146,7 +146,7 @@ def error_message(message):
     return json.loads(modal)
 
 
-def purge_confirmation(number_of_messages, user, time_period):
+def purge_confirmation(number_of_messages, user, time_period, channel):
     """
     Retrieve the "purge_confirmation" modal.
     :param number_of_messages: Integer which represents the number of messages to delete
@@ -166,8 +166,12 @@ def purge_confirmation(number_of_messages, user, time_period):
     modal["blocks"][0]["text"]["text"] += f" within the last {time_period} seconds" if time_period > 0 else ""
 
     # Save the details in the metadata
-    metadata = json.dumps({"number_of_messages": number_of_messages, "user": user, "time_period": time_period})
-    modal["private_metadata"] = metadata
+    modal["private_metadata"] = json.dumps({
+        "number_of_messages": number_of_messages, 
+        "user": user, 
+        "time_period": time_period,
+        "channel": channel
+    })
 
     return modal
 
