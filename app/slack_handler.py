@@ -193,3 +193,7 @@ def purge(payload):
 
     # Open purge confirmation modal
     client.views_open(trigger_id=payload["trigger_id"], view=blocks.purge_confirmation(number_of_messages, user, time_period, payload["channel_id"]))
+
+
+def say(payload):
+    client.chat_postMessage(channel=payload["channel_id"], text=payload["text"])
