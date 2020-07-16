@@ -146,7 +146,7 @@ def error_message(message):
     return json.loads(modal)
 
 
-def purge_confirmation(number_of_messages, user, time_period, channel):
+def purge_confirmation(number_of_messages, user, time_period, channel_id):
     """
     Retrieve the "purge_confirmation" modal.
     :param number_of_messages: Integer which represents the number of messages to delete
@@ -170,7 +170,7 @@ def purge_confirmation(number_of_messages, user, time_period, channel):
         "number_of_messages": number_of_messages, 
         "user": user, 
         "time_period": time_period,
-        "channel": channel
+        "channel_id": channel_id
     })
 
     return modal
