@@ -2,6 +2,7 @@ import json
 import random
 import time
 from jhandler import trivia_modal, trivia_custom_questions_modal, start_trivia_message, trivia_response_notify, trivia_question_send, trivia_complete, trivia_leaderboard, trivia_ongoing, trivia_custom_questions_prompt
+from buildBlocks import triviaCustomQuestions
 
 class Trivia_Game:
     def __init__(self, creator_id):
@@ -55,11 +56,15 @@ def trivia_finalise(user_id, trigger_id):
         for _ in range(trivia_games[user_id].number_qs):
             trivia_games[user_id].questions.append(questionBank.pop(random.randint(0,len(questionBank) - 1)))
         start_trivia(user_id)
+    elif len(trivia_games[user_id].questions) != 0:
+        start_trivia(user_id)
     else:
-        trivia_custom_questions_prompt(user_id, trivia_games[user_id].channel)
+        # trivia_custom_questions_prompt(user_id, trivia_games[user_id].channel)
+        return True
 
 def trivia_customs(user_id, trigger_id):
-    trivia_custom_questions_modal(trivia_games[user_id].view, trigger_id, user_id, trivia_games[user_id].number_qs)
+    # trivia_custom_questions_modal(trivia_games[user_id].view, trigger_id, user_id, trivia_games[user_id].number_qs)
+    return triviaCustomQuestions(user_id, trivia_games[user_id].number_qs)
 
 def trivia_custom_questions(game_id, data):
     for i in range(trivia_games[game_id].number_qs):
@@ -70,7 +75,7 @@ def trivia_custom_questions(game_id, data):
                 'options': [data[f'wrong{j}_{i+1}']['number_questions']['value'] for j in range(1,4)]
             }
         )
-    start_trivia(game_id)
+    # start_trivia(game_id)
 
 def trivia_failure(user_id, trigger_id):
     pass

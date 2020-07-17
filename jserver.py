@@ -1,5 +1,5 @@
 from slackeventsapi import SlackEventAdapter
-from flask import Flask, request, make_response, Response
+from flask import Flask, request, make_response, Response, jsonify
 import requests
 import hmac
 import os
@@ -7,7 +7,7 @@ import hashlib
 import json
 import random
 
-from jhandler import reply_mention, reply_im, help_modal, trivia_modal
+from jhandler import reply_mention, reply_im, help_modal, trivia_modal, slack_token
 from jother import verify_request
 from jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, trivia_custom_questions
 
@@ -50,7 +50,10 @@ def slack_shortcut():
                 game_id = attributes['view']['callback_id'].replace('trivia_start_', '')
                 trivia_q_number(game_id, int(attributes['view']['state']['values']['number_questions']['number_questions']['value']))
                 trivia_player_list(game_id, attributes['view']['state']['values']['users_playing']['users_playing']['selected_users'])
-                trivia_finalise(game_id, attributes['trigger_id'])
+                if trivia_finalise(game_id, attributes['trigger_id']):
+                    resp = jsonify({'response_action': 'push', 'view': trivia_customs(game_id, attributes['trigger_id'])})
+                    resp.headers['Authorization'] = slack_token
+                    return resp
             except:
                 trivia_failure(game_id, attributes['trigger_id'])
         elif 'custom_questions_' in attributes['view']['callback_id']:
