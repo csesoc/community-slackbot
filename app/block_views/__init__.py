@@ -179,3 +179,22 @@ def purge_confirmation(number_of_messages, user, time_period, channel_id, text_s
 
     return modal
 
+
+def app_home(data):
+    # Load view
+    view = get_block_view("app_home.json")
+
+    # Add essential information
+    view = view.replace("%%USERNAME%%", data["username"])
+    view = view.replace("%%FULL_NAME%%", data["full_name"])
+    view = view.replace("%%ROLE%%", data["role"])
+    view = view.replace("%%JOIN_DATE%%", data["join_date"])
+    view = view.replace("https://picsum.photos/200/300", data["image_original"])
+
+    # Add profile details
+    values = data["values"]
+    for key in ["favourite_course", "favourite_programming_language", "favourite_netflix_show", "favourite_food", \
+        "overrated", "underrated", "biggest_flex", "enrolled_courses", "completed_courses", "general_interests"]:
+        view = view.replace(f"%%{key.upper()}%%", values[key] if key in values.keys() else "-")
+
+    return json.loads(view)

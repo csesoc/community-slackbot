@@ -121,3 +121,4 @@ def app_home_opened(event_data):
 
     # Spawn a thread to service the request
     threading.Thread(target=handler.onboarding, args=[user, channel]).start()
+    threading.Thread(target=handler.app_home, args=[event]).start()

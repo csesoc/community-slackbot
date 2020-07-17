@@ -46,6 +46,7 @@ def interactions(payload):
                     "overrated", "underrated", "biggest_flex", "enrolled_courses", "completed_courses", "general_interests"]:
                 value = utils.extract_value(values, key, key)
                 utils.add_profile_details(user, key, value)
+            app_home({"user": user})
 
         # Purge messages
         if callback_id == "purge_confirmation":
@@ -163,7 +164,7 @@ def purge(payload):
     """
 
     # Retrieve permission level of user_id
-    perm_level = utils.retrieve_highest_permission_level(payload["user_id"])
+    perm_level, _ = utils.retrieve_highest_permission_level(payload["user_id"])
 
     # Deny request if user doesn't have enough permission
     if perm_level <= 0:
@@ -201,4 +202,31 @@ def purge(payload):
 
 
 def say(payload):
+    """
+    Say something as the SlackBot
+    """
     client.chat_postMessage(channel=payload["channel_id"], text=payload["text"])
+
+
+def app_home(event):
+    """
+    Publish app home to the user
+    """
+
+    # Retrieve user profile details from slack
+    user = event["user"]
+    user_profile = client.users_profile_get(user=user)
+
+    # Retrieve profile details from database 
+    values = utils.retrieve_profile_details(user)
+    _, title = utils.retrieve_highest_permission_level(user)
+
+    data = {
+        "image_original": user_profile["profile"]["image_original"],
+        "full_name": user_profile["profile"]["real_name"],
+        "username": user_profile["profile"]["real_name"].lower().replace(" ", "_"),
+        "values": values,
+        "role": title,
+        "join_date": utils.retrieve_created_at(user)
+    }
+    client.views_publish(user_id=user, view=blocks.app_home(data))

@@ -3,6 +3,7 @@ import hmac
 import os
 import re
 import requests
+import datetime
 import time
 from bs4 import BeautifulSoup
 from urllib.parse import quote
@@ -107,8 +108,9 @@ def retrieve_highest_permission_level(user_id):
 
     # Set permission level to the highest of the roles or 0 if user does not have any roles
     perm_level = max(role.perm_level for role in query) if query != [] else 0
+    title = Roles.query.filter_by(user_id=user_id, perm_level=perm_level).first().title
 
-    return perm_level
+    return perm_level, title
 
 
 def extract_value(values, block_id, action_id):
@@ -161,3 +163,8 @@ def jobs_from_indeed(page_number, query, options):
         })
 
     return message, jobs
+
+
+def retrieve_created_at(user):
+    created_at = User.query.filter_by(id=user).first().created_at.strftime("%d/%m/%y")
+    return created_at
