@@ -40,7 +40,9 @@ class AnonMsgs(db.Model):
     __tablename__ = "anon_msgs"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     msg = db.Column(db.Text())
-    user_id = db.Column(db.String(16), ForeignKey("users.id"))
+    # user_id = db.Column(db.String(16), ForeignKey("users.id"))
+    user_id = db.Column(db.String(16))
+    target_id = db.Column(db.String(16))
 
     def __repr__(self):
         return '<AnonMsgs {}>'.format(self.id)

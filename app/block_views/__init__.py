@@ -32,7 +32,22 @@ def get_block_view(view):
     return loaded_view
 
 
-def get_anonymous_modal():
-    return get_block_view("anonymous/annonymous_messaging_modal.json")
+def get_report_modal(message_id):
+    return get_block_view("anonymous/report_message.json")\
+        .replace("{MESSAGE_ID}", str(message_id))
 
+
+def get_anonymous_modal():
+    return get_block_view("anonymous/anonymous_messaging_modal.json")
+
+
+def get_anonymous_reply_modal(message_id):
+    return get_block_view("anonymous/anonymous_messaging_modal_reply.json")\
+        .replace("{MESSAGE_ID}", str(message_id))
+
+
+def get_anonymous_message(message, message_id):
+    return get_block_view("anonymous/anonymous_message.json")\
+        .replace("{ANONYMOUS_MESSAGE}", message)\
+        .replace("{MESSAGE_ID}", str(message_id))
 

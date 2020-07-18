@@ -1,7 +1,7 @@
-{
-	"blocks": [
+[
 		{
 			"type": "section",
+			"block_id": "{MESSAGE_ID}",
 			"text": {
 				"type": "mrkdwn",
 				"text": "*Anonymous message*"
@@ -37,5 +37,4 @@
 				}
 			]
 		}
-	]
-}
+]
