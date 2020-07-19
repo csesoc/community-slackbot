@@ -3,7 +3,7 @@ import hmac
 import os
 
 from app import db
-from app.models import AnonMsgs, Report
+from app.models import AnonMsgs, Report, User, Roles, UserRole
 
 
 def verify_request(request):
@@ -48,3 +48,31 @@ def report_message(msg_id, report):
     db.session.add(report)
     db.session.commit()
     return report.id
+
+
+def get_role_title(role_id):
+    role = Roles.query.filter_by(id=role_id).first()
+    return role.title
+
+
+def get_role_id_by_perm_level(perm_level):
+    role = Roles.query.filter_by(perm_level=perm_level).first()
+    return role.id
+
+
+def retrieve_highest_permission_level(user_id):
+    """
+    Retrieve highest permission level of a given user_id
+    :param user_id: A string of 11 characters representing a slack user id
+    :return: An integer that represents the highest permission level for the given user
+    """
+
+    # Retrieve all roles of given user
+    role_ids = [user_role.role_id for user_role in UserRole.query.filter_by(user_id=user_id).all()]
+
+    max_role = Roles.query.filter(Roles.id.in_(role_ids))\
+        .order_by(Roles.perm_level.desc())\
+        .first()
+    if max_role is None:
+        return 0
+    return max_role.id

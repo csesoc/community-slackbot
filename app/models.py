@@ -1,8 +1,22 @@
 """Data models."""
+import enum
+
 from sqlalchemy import func, ForeignKey
 from app import db
 
 MAX_STRING_LENGTH = 65535
+
+
+class UserRoles:
+    NORMAL = 0
+    MOD = 1
+    ADMIN = 2
+    ROLES = [NORMAL, MOD, ADMIN]
+    TITLES = [
+        "Normal",
+        "Moderator",
+        "Admin"
+    ]
 
 
 class User(db.Model):
@@ -15,12 +29,21 @@ class User(db.Model):
         return '<User {}>'.format(self.id)
 
 
-class Role(db.Model):
+class UserRole(db.Model):
+    __tablename__ = "user_role"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.String(16), ForeignKey("users.id"))
+    role_id = db.Column(db.Integer(), ForeignKey("roles.id"))
+
+    def __repr__(self):
+        return '<UserRole {}>'.format(self.id)
+
+
+class Roles(db.Model):
     __tablename__ = "roles"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(255))
     perm_level = db.Column(db.Integer)
-    user_id = db.Column(db.String(16), ForeignKey("users.id"))
 
     def __repr__(self):
         return '<Role {}>'.format(self.id)

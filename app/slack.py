@@ -4,10 +4,11 @@ import threading
 from flask import Blueprint, make_response, request, jsonify, Response
 
 from app import handler
-from app.models import Courses
+from app.models import Courses, UserRoles
 from app.block_views import get_block_view
+from app import client
 
-from app.slack_utils import verify_request
+from app.slack_utils import verify_request, retrieve_highest_permission_level, get_role_title
 from config import Config
 
 slack = Blueprint(
@@ -22,10 +23,17 @@ def pair():
 
     print(request.get_data())
     payload = request.form.to_dict()
-    payload = payload['text'].split(' ')
     print(payload)
-
-    return make_response("Pair success", 200)
+    print(retrieve_highest_permission_level(payload["user_id"]))
+    if retrieve_highest_permission_level(payload["user_id"]) < UserRoles.MOD:
+        min_title = get_role_title(UserRoles.MOD)
+        return make_response("You do not have permission to run /pair."
+                             " You require at least {} privileges to run /pair".format(min_title), 200)
+    member_ids = client.conversations_members(channel=payload["channel_id"])["members"]
+    print(member_ids)
+    message = "Pair success: \n"
+    # message += "\n".join(member_ids)
+    return make_response(message, 200)
 
 
 @slack.route("/course", methods=['POST'])
