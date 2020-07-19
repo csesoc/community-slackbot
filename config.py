@@ -12,6 +12,7 @@ class Config:
     FLASK_ENV = os.environ.get('FLASK_ENV')
     FLASK_APP = 'wsgi.py'
     FLASK_DEBUG = 1
+    PAIR_GROUP_SIZE = 1
 
     # Database
     db_host = os.environ['DB_HOST']

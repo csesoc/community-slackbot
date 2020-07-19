@@ -3,7 +3,7 @@ import threading
 
 from flask import Blueprint, make_response, request, jsonify, Response
 
-from app import handler
+from app import handler, app
 from app.models import Courses, UserRoles
 from app.block_views import get_block_view
 from app import client
@@ -15,7 +15,6 @@ slack = Blueprint(
     'slack', __name__,
 )
 
-
 @slack.route('/pair', methods=['POST'])
 def pair():
     if not verify_request(request):
@@ -24,15 +23,30 @@ def pair():
     print(request.get_data())
     payload = request.form.to_dict()
     print(payload)
-    print(retrieve_highest_permission_level(payload["user_id"]))
     if retrieve_highest_permission_level(payload["user_id"]) < UserRoles.MOD:
         min_title = get_role_title(UserRoles.MOD)
         return make_response("You do not have permission to run /pair."
                              " You require at least {} privileges to run /pair".format(min_title), 200)
     member_ids = client.conversations_members(channel=payload["channel_id"])["members"]
-    print(member_ids)
-    message = "Pair success: \n"
-    # message += "\n".join(member_ids)
+
+    groupings = []
+    current_group = []
+    for member_id in member_ids:
+        current_group.append(member_id)
+        if len(current_group) == app.config["PAIR_GROUP_SIZE"]:
+            groupings.append(current_group)
+            current_group = []
+    if len(current_group) > 0:
+        index = -1 if len(groupings) > 0 else 0
+        groupings[index].extend(current_group)
+
+    message = "Pairing Success Groups are:\n\n"
+
+    for i, group in enumerate(groupings):
+        message += "Group {}:\n".format(i + 1)
+        message += "\n".join(group)
+        message += "\n\n"
+
     return make_response(message, 200)
 
 
@@ -57,7 +71,7 @@ def get_courses_listing():
     for course in Courses.query.all():
         item = get_block_view("courses/course_list_item.json")
         item = item.replace("{COURSE NAME}", course.course)
-        course_brief_summary = course.msg if len(course.msg) < 20 else course.msg[0:20]
+        course_brief_summary = course.msg if len(course.msg) < 120 else course.msg[0:120] + "..."
         item = item.replace("{COURSE_SHORT_SUMMARY}", course_brief_summary)
         list_items.append(item)
     response = response.replace("{ITEM_PLACE_HOLDER}", ",\n".join(list_items))

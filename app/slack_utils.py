@@ -50,8 +50,8 @@ def report_message(msg_id, report):
     return report.id
 
 
-def get_role_title(role_id):
-    role = Roles.query.filter_by(id=role_id).first()
+def get_role_title(perm_level):
+    role = Roles.query.filter_by(perm_level=perm_level).first()
     return role.title
 
 
@@ -75,4 +75,4 @@ def retrieve_highest_permission_level(user_id):
         .first()
     if max_role is None:
         return 0
-    return max_role.id
+    return max_role.perm_level
