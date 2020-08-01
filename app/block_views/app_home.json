@@ -1,0 +1,128 @@
+{
+	"type": "home",
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Your Profile*"
+			},
+			"accessory": {
+				"type": "button",
+				"text": {
+					"type": "plain_text",
+					"text": "Edit your Profile",
+					"emoji": true
+				},
+				"value": "edit_profile"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*CSESocSlack:~$* profile %%USERNAME%%\nRetrieving profile for user %%USERNAME%%..."
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "\n*:name_badge: Name:* %%FULL_NAME%%\n*:rolled_up_newspaper: Role:* %%ROLE%%\n*:yin_yang: Karma:* 0\n*:clock1: Member Since %%JOIN_DATE%%*\n\n"
+			},
+			"accessory": {
+				"type": "image",
+				"image_url": "https://picsum.photos/200/300",
+				"alt_text": "profile picture"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*About You*\n:computer: Favourite Course: %%FAVOURITE_COURSE%% \n:speech_balloon: Favourite Programming Language: %%FAVOURITE_PROGRAMMING_LANGUAGE%% \n:tv: Favourite Netflix Show: %%FAVOURITE_NETFLIX_SHOW%% \n:pizza: Favourite Food: %%FAVOURITE_FOOD%% \n:face_with_rolling_eyes: Most Overrated Thing: %%OVERRATED%% \n:drooling_face: Most Underrated Thing: %%UNDERRATED%% \n:muscle: Biggest Flex: %%BIGGEST_FLEX%% \n:books: Enrolled Courses: %%ENROLLED_COURSES%% \n:mortar_board: Completed Courses: %%COMPLETED_COURSES%% \n:cooking: General Interests: %%GENERAL_INTERESTS%% \n"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*CSESocSlack:~$* help\n:sos: For help on how to use this slackbot, click the button below"
+			}
+		},
+		{
+			"type": "actions",
+			"elements": [
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "Help",
+						"emoji": true
+					},
+					"value": "commands_help"
+				}
+			]
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*CSESocSlack:~$* feedback\n:memo: Want to give some feedback for the slackbot?\n:email: Shoot us a message at projects@csesoc.unsw.edu.au"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "plain_text",
+				"text": " ",
+				"emoji": true
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*CSESocSlack:~$  _*"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "plain_text",
+				"text": " ",
+				"emoji": true
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "plain_text",
+				"text": " ",
+				"emoji": true
+			}
+		},
+		{
+			"type": "context",
+			"elements": [
+				{
+					"type": "image",
+					"image_url": "https://api.slack.com/img/blocks/bkb_template_images/placeholder.png",
+					"alt_text": "placeholder"
+				}
+			]
+		}
+	]
+}

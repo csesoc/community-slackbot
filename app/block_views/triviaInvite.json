@@ -1,0 +1,39 @@
+{
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "_*You've been invited to a trivia game*_"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "actions",
+			"elements": [
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "I accept",
+						"emoji": true
+                    },
+                    "action_id": "accept_trivia_$GAMEID",
+					"value": "true"
+				},
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "I'm scared",
+						"emoji": true
+                    },
+                    "action_id": "forfeit_trivia_$GAMEID",
+					"value": "false"
+				}
+			]
+		}
+	]
+}

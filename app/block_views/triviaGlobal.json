@@ -1,0 +1,112 @@
+{
+	"type": "modal",
+	"title": {
+		"type": "plain_text",
+		"text": "Slackbot Trivia",
+		"emoji": true
+	},
+	"submit": {
+		"type": "plain_text",
+		"text": "Submit",
+		"emoji": true
+	},
+	"close": {
+		"type": "plain_text",
+		"text": "Cancel",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Starting Trivia $USER?*"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "What channel would you like to start trivia in?"
+			},
+			"accessory": {
+				"type": "channels_select",
+				"action_id": "trivia_channel_$USERID",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Select a channel",
+					"emoji": true
+				}
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Would like to use default trivia or your own?"
+			},
+			"accessory": {
+				"type": "static_select",
+				"action_id": "default_trivia_$USERID",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Select an item",
+					"emoji": true
+				},
+				"options": [
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "default",
+							"emoji": true
+						},
+						"value": "true"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "mine own",
+							"emoji": true
+						},
+						"value": "false"
+					}
+				]
+			}
+		},
+		{
+			"type": "input",
+			"block_id": "number_questions",
+			"element": {
+				"type": "plain_text_input",
+				"action_id": "number_questions"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "How many questions?",
+				"emoji": true
+			}
+		},
+		{
+			"type": "input",
+			"block_id": "users_playing",
+			"element": {
+				"type": "multi_users_select",
+				"action_id": "users_playing",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Select users",
+					"emoji": true
+				}
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Which users are playing?",
+				"emoji": true
+			}
+		}
+	],
+	"callback_id": "trivia_start_$USERID"
+}

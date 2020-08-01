@@ -1,0 +1,96 @@
+{
+	"title": {
+		"type": "plain_text",
+		"text": "Slackbot Trivia",
+		"emoji": true
+	},
+	"submit": {
+		"type": "plain_text",
+		"text": "Submit",
+		"emoji": true
+	},
+	"type": "modal",
+	"close": {
+		"type": "plain_text",
+		"text": "Cancel",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "_*Question $QNUMBER*_"
+			}
+		},
+		{
+			"type": "input",
+			"block_id": "question_$QNUMBER",
+			"element": {
+				"type": "plain_text_input",
+				"action_id": "number_questions"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "What's the question? :question:",
+				"emoji": true
+			}
+		},
+		{
+			"type": "input",
+			"block_id": "answer_$QNUMBER",
+			"element": {
+				"type": "plain_text_input",
+				"action_id": "number_questions"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "What's the answer? :heavy_check_mark:",
+				"emoji": true
+			}
+		},
+		{
+			"type": "input",
+			"block_id": "wrong1_$QNUMBER",
+			"element": {
+				"type": "plain_text_input",
+				"action_id": "number_questions"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Enter an incorrect option :x:",
+				"emoji": true
+			}
+		},
+		{
+			"type": "input",
+			"block_id": "wrong2_$QNUMBER",
+			"element": {
+				"type": "plain_text_input",
+				"action_id": "number_questions"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Enter an incorrect option :x:",
+				"emoji": true
+			}
+		},
+		{
+			"type": "input",
+			"block_id": "wrong3_$QNUMBER",
+			"element": {
+				"type": "plain_text_input",
+				"action_id": "number_questions"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Enter an incorrect option :x:",
+				"emoji": true
+			}
+		},
+		{
+			"type": "divider"
+		}
+	],
+	"callback_id": "custom_questions_$USERID"
+}

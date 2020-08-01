@@ -1,0 +1,21 @@
+{
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Click this button to start writing your trivia custom questions."
+			},
+			"accessory": {
+				"type": "button",
+				"action_id": "trivia_custom_$USER",
+				"text": {
+					"type": "plain_text",
+					"text": "Start",
+					"emoji": true
+				},
+				"value": "custom_time"
+			}
+		}
+	]
+}

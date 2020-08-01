@@ -1,0 +1,21 @@
+{
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Trivia is done!*\nHere's the leaderboard:"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*$PLAYER*\n$SCORE points"
+			}
+		}
+	]
+}

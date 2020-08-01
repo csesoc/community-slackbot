@@ -1,0 +1,40 @@
+{
+	"type": "modal",
+	"title": {
+		"type": "plain_text",
+		"text": "SlackBot Features",
+		"emoji": true
+	},
+	"close": {
+		"type": "plain_text",
+		"text": "Close",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "plain_text",
+				"text": "Here are some of the things you can do with SlackBot:",
+				"emoji": true
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*\\stylecheck <language> <code>* - Evalualates your code via a linter to provide friendly, constructive critism."
+			}
+		},
+		{
+			"type": "context",
+			"elements": [
+				{
+					"type": "plain_text",
+					"text": "Updated 14/06/2020 - Iteration 1",
+					"emoji": true
+				}
+			]
+		}
+	]
+}

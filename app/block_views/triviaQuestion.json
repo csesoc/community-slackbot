@@ -1,0 +1,62 @@
+{
+	"type": "modal",
+	"title": {
+		"type": "plain_text",
+		"text": "Slackbot's Fun Trivia",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Question $QNUM*\n$QUESTION"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "actions",
+			"elements": [
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "$OPTION1",
+						"emoji": true
+					},
+					"value": "$VALUE1"
+				},
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "$OPTION2",
+						"emoji": true
+					},
+					"value": "$VALUE2"
+				},
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "$OPTION3",
+						"emoji": true
+					},
+					"value": "$VALUE3"
+				},
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "$OPTION4",
+						"emoji": true
+					},
+					"value": "$VALUE4"
+				}
+			]
+		}
+	],
+	"callback_id": "trivia_question_$GAMEID"
+}
