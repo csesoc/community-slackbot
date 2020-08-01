@@ -1,0 +1,15 @@
+{
+    "type": "section",
+    "text": {
+        "type": "mrkdwn",
+        "text": "*{COURSE NAME}*"
+    }
+},
+{
+    "type": "section",
+    "text": {
+        "type": "plain_text",
+        "text": "{COURSE_SHORT_SUMMARY}",
+        "emoji": true
+    }
+}

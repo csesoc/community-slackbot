@@ -1,1 +1,15 @@
-
+{
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Courses Listing*"
+			}
+		},
+		{
+			"type": "divider"
+		},
+        {ITEM_PLACE_HOLDER}
+	]
+}
