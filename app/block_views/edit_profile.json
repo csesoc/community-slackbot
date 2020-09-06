@@ -1,0 +1,235 @@
+{
+	"title": {
+		"type": "plain_text",
+		"text": "Edit profile",
+		"emoji": true
+	},
+	"submit": {
+		"type": "plain_text",
+		"text": "Submit",
+		"emoji": true
+	},
+	"type": "modal",
+	"close": {
+		"type": "plain_text",
+		"text": "Cancel",
+		"emoji": true
+	},
+	"callback_id": "edit_profile_modal",
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "plain_text",
+				"text": "Hey there :wave:. In order to display relevant information on your public profile, we need to know a little bit about you. Fill out the details below, and get more connected to your CSE community. 🙂",
+				"emoji": true
+			}
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "COMP1511"
+				},
+				"action_id": "favourite_course",
+				"max_length": 255,
+				"initial_value": "%%favourite_course%%"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Favourite course?",
+				"emoji": true
+			},
+			"optional": true,
+			"block_id": "favourite_course"
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Python"
+				},
+				"action_id": "favourite_programming_language",
+				"max_length": 255,
+				"initial_value": "%%favourite_programming_language%%"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Favourite programming language?",
+				"emoji": true
+			},
+			"optional": true,
+			"block_id": "favourite_programming_language"
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Crash landing on you"
+				},
+				"action_id": "favourite_netflix_show",
+				"max_length": 255,
+				"initial_value": "%%favourite_netflix_show%%"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Favourite netflix show?",
+				"emoji": true
+			},
+			"optional": true,
+			"block_id": "favourite_netflix_show"
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Anything edible"
+				},
+				"action_id": "favourite_food",
+				"max_length": 255,
+				"initial_value": "%%favourite_food%%"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Favourite food?",
+				"emoji": true
+			},
+			"optional": true,
+			"block_id": "favourite_food"
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Time for thai"
+				},
+				"action_id": "overrated",
+				"max_length": 255,
+				"initial_value": "%%overrated%%"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Most overrated thing?",
+				"emoji": true
+			},
+			"optional": true,
+			"block_id": "overrated"
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Quad food court"
+				},
+				"action_id": "underrated",
+				"max_length": 255,
+				"initial_value": "%%underrated%%"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Most underrated thing?",
+				"emoji": true
+			},
+			"optional": true,
+			"block_id": "underrated"
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "I'm a part of the most P O W E R F U L society in UNSW"
+				},
+				"action_id": "biggest_flex",
+				"max_length": 255,
+				"initial_value": "%%biggest_flex%%"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Biggest Flex",
+				"emoji": true
+			},
+			"optional": true,
+			"block_id": "biggest_flex"
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "COMPXXXX, SENGXXXX"
+				},
+				"action_id": "enrolled_courses",
+				"max_length": 255,
+				"initial_value": "%%enrolled_courses%%"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Which cse courses are you enrolled in?",
+				"emoji": true
+			},
+			"hint": {
+				"type": "plain_text",
+				"text": "Please include the course code in the format COMPXXXX, SENGXXXX"
+			},
+			"block_id": "enrolled_courses"
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "COMP1511, COMP1521 etc"
+				},
+				"action_id": "completed_courses",
+				"max_length": 255,
+				"initial_value": "%%completed_courses%%"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Which cse courses have you completed?",
+				"emoji": true
+			},
+			"hint": {
+				"type": "plain_text",
+				"text": "Write na if you have not yet completed any courses"
+			},
+			"block_id": "completed_courses"
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"multiline": false,
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Write anything"
+				},
+				"action_id": "general_interests",
+				"max_length": 255,
+				"initial_value": "%%general_interests%%"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "General Interests",
+				"emoji": true
+			},
+			"block_id": "general_interests"
+		}
+	]
+}

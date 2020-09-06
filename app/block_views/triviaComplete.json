@@ -1,0 +1,22 @@
+{
+	"title": {
+		"type": "plain_text",
+		"text": "Congrats!",
+		"emoji": true
+	},
+	"type": "modal",
+	"close": {
+		"type": "plain_text",
+		"text": "Close",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*You've finished the trivia!*\nYou scored $SCORE"
+			}
+		}
+	]
+}

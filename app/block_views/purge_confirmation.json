@@ -1,0 +1,28 @@
+{
+	"type": "modal",
+	"title": {
+		"type": "plain_text",
+		"text": "Purge confirmation",
+		"emoji": true
+	},
+	"submit": {
+		"type": "plain_text",
+		"text": "Confirm",
+		"emoji": true
+	},
+	"close": {
+		"type": "plain_text",
+		"text": "Cancel",
+		"emoji": true
+	},
+	"callback_id": "purge_confirmation",
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Are you sure that you want to delete up to %%NUMBER_OF_MESSAGES%% message(s)"
+			}
+		}
+	]
+}

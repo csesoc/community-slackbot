@@ -1,0 +1,40 @@
+[
+		{
+			"type": "section",
+			"block_id": "{MESSAGE_ID}",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Anonymous message*"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "{ANONYMOUS_MESSAGE}"
+			}
+		},
+		{
+			"type": "actions",
+			"elements": [
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "Report",
+						"emoji": true
+					},
+					"value": "click_report"
+				},
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "Reply",
+						"emoji": true
+					},
+					"value": "click_reply"
+				}
+			]
+		}
+]

@@ -1,0 +1,33 @@
+{
+	"type": "modal",
+    "callback_id": "report_messaging_modal_reply={MESSAGE_ID}",
+	"title": {
+		"type": "plain_text",
+		"text": "Report Message",
+		"emoji": true
+	},
+	"submit": {
+		"type": "plain_text",
+		"text": "Submit",
+		"emoji": true
+	},
+	"close": {
+		"type": "plain_text",
+		"text": "Cancel",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"multiline": true
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Report",
+				"emoji": true
+			}
+		}
+	]
+}
