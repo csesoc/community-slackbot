@@ -142,17 +142,20 @@ def interactions(payload):
                                          "provide the following report id: R{}".format(report_id))
 
     if payload["type"] == "block_actions":
-        action = payload["actions"][0]["value"]
-        message_id = payload["message"]["blocks"][0]["block_id"]
-        print(message_id)
-        if action == "click_report":
-            client.views_open(trigger_id=trigger_id, view=get_report_modal(message_id))
-        elif action == "click_reply":
-            client.views_open(trigger_id=trigger_id, view=get_anonymous_reply_modal(message_id))
 
         # Received when a user clicks a Block Kit interactive component.
         actions = payload["actions"]
         value = actions[0]["value"]
+
+        # Opens the "report" view
+        if value == "click_report":
+            message_id = payload["message"]["blocks"][0]["block_id"]
+            client.views_open(trigger_id=trigger_id, view=get_report_modal(message_id))
+
+        # Opens the "anonymous_reply" modal
+        if value == "click_reply":
+            message_id = payload["message"]["blocks"][0]["block_id"]
+            client.views_open(trigger_id=trigger_id, view=get_anonymous_reply_modal(message_id))
 
         # No modal is expected
         if value == "pass":
@@ -269,7 +272,14 @@ def say(payload):
     """
     Say something as the SlackBot
     """
-    print('Got here')
+    client.chat_postMessage(channel=payload["channel_id"], text=payload["text"])
+
+
+def events(payload):
+    """
+    Display a list of events using linkup
+    """
+    
     client.chat_postMessage(channel=payload["channel_id"], text=payload["text"])
 
 

@@ -189,6 +189,24 @@ def say():
     threading.Thread(target=handler.say, args=[payload]).start()
     return make_response("", 200)
 
+    @slack.route('/say', methods=['POST'])
+
+def events():
+    """
+    Display a list of events using linkup
+    Usage: /events cse | unsw
+    """
+    # Verify request
+    if not utils.verify_request(request):
+        return make_response("", 400)
+
+    # Parse request
+    payload = request.form.to_dict()
+
+    # Spawn a thread to service the request
+    threading.Thread(target=handler.events, args=[payload]).start()
+    return make_response("", 200)
+
 
 # Events
 @slack_events_adapter.on("team_join")

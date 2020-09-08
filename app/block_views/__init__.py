@@ -11,8 +11,7 @@ def try_load_view(view):
     :param view:
     :return:
     """
-    view_path = os.path.join("app/block_views/views", view)
-    print(view_path)
+    view_path = os.path.join("app/block_views", view)
     if os.path.exists(view_path):
         return open(view_path, "r").read()
     return None
@@ -34,21 +33,21 @@ def get_block_view(view):
 
 
 def get_report_modal(message_id):
-    return get_block_view("anonymous/report_message.json")\
+    return get_block_view("views/anonymous/report_message.json")\
         .replace("{MESSAGE_ID}", str(message_id))
 
 
 def get_anonymous_modal():
-    return get_block_view("anonymous/anonymous_messaging_modal.json")
+    return get_block_view("views/anonymous/anonymous_messaging_modal.json")
 
 
 def get_anonymous_reply_modal(message_id):
-    return get_block_view("anonymous/anonymous_messaging_modal_reply.json")\
+    return get_block_view("views/anonymous/anonymous_messaging_modal_reply.json")\
         .replace("{MESSAGE_ID}", str(message_id))
 
 
 def get_anonymous_message(message, message_id):
-    return get_block_view("anonymous/anonymous_message.json")\
+    return get_block_view("views/anonymous/anonymous_message.json")\
         .replace("{ANONYMOUS_MESSAGE}", message)\
         .replace("{MESSAGE_ID}", str(message_id))
 

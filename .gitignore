@@ -10,7 +10,7 @@ instance/
 .idea/**/dictionaries
 .idea/**/shelf
 
-app/__pycache__
+/__pycache__
 __pycache__
 
 .vscode
@@ -25,3 +25,5 @@ env.bak/
 venv.bak/
 
 migrations
+*.pyc
+vars.env
