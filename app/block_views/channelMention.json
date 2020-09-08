@@ -98,7 +98,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "*Profile*\n:bust_in_silhouette:\n Type '/profile {@user}' to see useful information about a user."
+				"text": "*Profile*\n:bust_in_silhouette:\n Type '/profile {@user}' to see profile information about a user."
 			}
 		},
 		{
@@ -122,7 +122,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "*More Help*\n:slack:\n To get more in-depth info on what I can do type in '/helpme' or message me directly."
+				"text": "*More Help*\n:slack:\n To get more in-depth info on what I can do type in '/helpme', mention me in a public channel or message me directly with a 'hi' or 'hello'."
 			}
 		}
 	]
