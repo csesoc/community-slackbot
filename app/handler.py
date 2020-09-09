@@ -5,7 +5,8 @@ import os
 from flask import json
 from app.block_views import get_anonymous_modal, get_anonymous_message, get_anonymous_reply_modal, get_report_modal
 import app.block_views as blocks
-from app.buildBlocks import imBlock, mentionBlock, helpModal, globalTriviaModal, triviaCustomQuestions, triviaInviteMessage, triviaAskQuestion, triviaComplete, triviaBoard, triviaOngoing, triviaCustomMessage
+from app.buildBlocks import mentionBlock, imBlock, helpModal
+from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, trivia_custom_questions
 
 def interactions(payload):
     """
@@ -26,9 +27,26 @@ def interactions(payload):
         # Opens the "edit_profile" view with prefilled information
         if callback_id == "anonymous_messaging":
             client.views_open(trigger_id=trigger_id, view=get_anonymous_modal())
+        elif callback_id == "trivia":
+            init_trivia(trigger_id, user)
 
     # Received when a modal is submitted.
     if payload["type"] == "view_submission":
+
+        if 'trivia_start_' in payload['view']['callback_id']:
+            try:
+                game_id = payload['view']['callback_id'].replace('trivia_start_', '')
+                trivia_q_number(game_id, int(payload['view']['state']['values']['number_questions']['number_questions']['value']))
+                trivia_player_list(game_id, payload['view']['state']['values']['users_playing']['users_playing']['selected_users'])
+                if trivia_finalise(game_id, trigger_id):
+                    resp = jsonify({'response_action': 'push', 'view': trivia_customs(game_id, trigger_id)})
+                    resp.headers['Authorization'] = slack_token
+                    return resp
+            except:
+                trivia_failure(game_id, trigger_id)
+        elif 'custom_questions_' in payload['view']['callback_id']:
+            trivia_custom_questions(payload['view']['callback_id'].replace('custom_questions_', ''), payload['view']['state']['values'])
+
         view = payload["view"]
         callback_id = view["callback_id"]
         state = view["state"]
@@ -142,6 +160,33 @@ def interactions(payload):
                                          "provide the following report id: R{}".format(report_id))
 
     if payload["type"] == "block_actions":
+        
+        if "trivia_custom_" in payload['actions'][0]['action_id']:
+            print("FIRST ONE")
+            trivia_customs(payload['actions'][0]['action_id'].replace("trivia_custom_", ""), payload['trigger_id'])
+            return
+        elif "accept_trivia_" in payload['actions'][0]['action_id']:
+            print("SECOND ONE")
+            trivia_reply(payload['user']['id'], True, payload['actions'][0]['action_id'].replace("accept_trivia_", ""), payload['trigger_id'])
+            return
+        elif "forfeit_trivia_" in payload['actions'][0]['action_id']:
+            print("THIRD ONE")
+            trivia_reply(payload['user']['id'], False, payload['actions'][0]['action_id'].replace("forfeit_trivia_", ""), payload['trigger_id'])
+            return
+        elif "trivia_start_" in payload['view']['callback_id']:
+            if "default_trivia_" in payload['actions'][0]['action_id']:
+                print("FOURTH ONE")
+                trivia_set_qs(payload['actions'][0]['action_id'].replace("default_trivia_", ""), payload['actions'][0]['selected_option']['value'] == "true")
+                return
+            elif "trivia_channel_" in payload['actions'][0]['action_id']:
+                print("FIFTH ONE")
+                trivia_set_channel(payload['actions'][0]['action_id'].replace("trivia_channel_", ""), payload['actions'][0]['selected_channel'])
+                return
+        elif "trivia_question_" in payload['view']['callback_id']:
+            print("SIXTH ONE")
+            trivia_response(payload['user']['id'], payload['actions'][0]['value'] == 'correct', payload['trigger_id'])
+            return
+
 
         # Received when a user clicks a Block Kit interactive component.
         actions = payload["actions"]

@@ -237,7 +237,7 @@ def app_home_opened(event_data):
     threading.Thread(target=handler.app_home, args=[event]).start()
 
 
-@slack.route('/shortcut', methods=['POST'])
+'''@slack.route('/shortcut', methods=['POST'])
 def slack_shortcut():
     if not verify_request(request):
         return make_response("",400)
@@ -274,7 +274,7 @@ def slack_shortcut():
         elif 'custom_questions_' in attributes['view']['callback_id']:
             trivia_custom_questions(attributes['view']['callback_id'].replace('custom_questions_', ''), attributes['view']['state']['values'])
 
-    return Response()
+    return Response()'''
 
 @slack_events_adapter.on("app_mention")
 def slack_mention(event_data):

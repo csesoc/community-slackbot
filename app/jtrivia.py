@@ -1,8 +1,8 @@
 import json
 import random
 import time
-from app.handler import trivia_modal, trivia_custom_questions_modal, start_trivia_message, trivia_response_notify, trivia_question_send, trivia_complete, trivia_leaderboard, trivia_ongoing, trivia_custom_questions_prompt
-from app.buildBlocks import triviaCustomQuestions
+from app import client
+from app.buildBlocks import imBlock, mentionBlock, helpModal, globalTriviaModal, triviaCustomQuestions, triviaInviteMessage, triviaAskQuestion, triviaComplete, triviaBoard, triviaOngoing, triviaCustomMessage
 
 class Trivia_Game:
     def __init__(self, creator_id):
@@ -124,3 +124,46 @@ def trivia_response(user_id, correct, trigger_id):
     else:
         trivia_players[user_id].question += 1
         trivia_question(user_id, trigger_id)
+
+
+def trivia_modal(trigger_id, user):
+    user_info = client.users_info(user=user)['user']
+    user_name = user_info['profile']['display_name_normalized'] if (user_info['profile']['display_name_normalized'] != "") else user_info['profile']['real_name_normalized']
+    return client.views_open(trigger_id=trigger_id, view=globalTriviaModal(user_name, user))['view']['id']
+
+def trivia_custom_questions_modal(view_id, trigger_id, user, q_number):
+    # client.views_update(view_id=view_id, view=triviaCustomQuestions(user, q_number))
+    # client.views_push(trigger_id=trigger_id, view=triviaCustomQuestions(user, q_number))
+    client.views_open(trigger_id=trigger_id, view=triviaCustomQuestions(user, q_number))
+
+def start_trivia_message(user, channel, game_id):
+    client.chat_postEphemeral(user=user, channel=channel, text="Trivia Time", blocks=triviaInviteMessage(game_id))
+
+def trivia_response_notify(user, channel, player, response):
+    player_info = client.users_info(user=player)['user']
+    player_name = player_info['profile']['display_name_normalized'] if (player_info['profile']['display_name_normalized'] != "") else player_info['profile']['real_name_normalized']
+    if response:
+        client.chat_postEphemeral(user=user, channel=channel, text=f"{player_name} accepted your trivia invite")
+    else:
+        client.chat_postEphemeral(user=user, channel=channel, text=f"{player_name} rejected your trivia invite")
+
+def trivia_question_send(trigger_id, user, channel, question, qnum, view):
+    if view is None:
+        return client.views_open(trigger_id=trigger_id, view=triviaAskQuestion(user, question, qnum))['view']['id']
+    else:
+        return client.views_update(view_id=view, view=triviaAskQuestion(user, question, qnum))['view']['id']
+
+def trivia_complete(view, score):
+    return client.views_update(view_id=view, view=triviaComplete(score))
+
+def trivia_leaderboard(channel, players):
+    for player in players:
+        player_info = client.users_info(user=player['player'])['user']
+        player['name'] = player_info['profile']['display_name_normalized'] if (player_info['profile']['display_name_normalized'] != "") else player_info['profile']['real_name_normalized']
+    client.chat_postMessage(channel=channel, text="Trivia is over!", blocks=triviaBoard(players))
+
+def trivia_ongoing(trigger_id):
+    client.views_open(trigger_id=trigger_id, view=triviaOngoing())
+
+def trivia_custom_questions_prompt(user_id, channel):
+    client.chat_postEphemeral(user=user_id, channel=channel, text="Fill in custom questions", blocks=triviaCustomMessage(user_id))
