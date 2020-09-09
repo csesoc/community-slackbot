@@ -1,0 +1,17 @@
+[
+  {
+    "type": "section",
+    "text": {
+      "type": "mrkdwn",
+      "text": "*<%%URL%%|%%TITLE%%>*\n%%DESCRIPTION%%"
+    },
+    "accessory": {
+      "type": "image",
+      "image_url": "%%IMAGE_URL%%",
+      "alt_text": "image"
+    }
+  },
+  {
+  "type": "divider"
+  }
+]

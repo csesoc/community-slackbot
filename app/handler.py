@@ -279,8 +279,26 @@ def events(payload):
     """
     Display a list of events using linkup
     """
-    
-    client.chat_postMessage(channel=payload["channel_id"], text=payload["text"])
+    #print(payload)
+    # Extract the text from the payload
+    text = payload["text"].strip()
+    keyword = text.split()[0] if text != "" else "cse"
+    page_num = text.split()[1] if len(text.split()) >= 2 else "0"
+
+    if keyword != "cse" and keyword != "unsw":
+        client.views_open(trigger_id=payload["trigger_id"], view=blocks.error_message("Invalid keyword"))
+        return
+
+    if not page_num.isnumeric():
+        client.views_open(trigger_id=payload["trigger_id"], view=blocks.error_message("Invalid page number"))
+        return
+        
+    page_num = int(page_num)
+
+    events = utils.retrieve_event_details(keyword, page_num)
+
+    client.views_open(trigger_id=payload["trigger_id"], view=blocks.events_modal(events, keyword))
+
 
 
 def app_home(event):

@@ -189,12 +189,11 @@ def say():
     threading.Thread(target=handler.say, args=[payload]).start()
     return make_response("", 200)
 
-    @slack.route('/say', methods=['POST'])
-
+@slack.route('/events', methods=['POST'])
 def events():
     """
     Display a list of events using linkup
-    Usage: /events cse | unsw
+    Usage: /events <cse | unsw> [page number]
     """
     # Verify request
     if not utils.verify_request(request):
