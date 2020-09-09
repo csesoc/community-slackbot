@@ -3,7 +3,7 @@ import json
 import random
 
 def mentionBlock(user_name, channel_name, **kwargs):
-    with open("block_views/channelMention.json", "r") as f:
+    with open("app/block_views/channelMention.json", "r") as f:
         blocks = json.load(f)['blocks']
         if kwargs['is_channel'] == True:
             blocks[0]['text']['text'] = blocks[0]['text']['text'].replace("$USER", user_name).replace("$CHANNEL", channel_name)
@@ -12,26 +12,26 @@ def mentionBlock(user_name, channel_name, **kwargs):
         return blocks
 
 def imBlock(user_name):
-    with open("block_views/imGreeting.json", "r") as f:
+    with open("app/block_views/imGreeting.json", "r") as f:
         blocks = json.load(f)['blocks']
         blocks[0]['text']['text'] = blocks[0]['text']['text'].replace("$USER", user_name)
         return blocks
 
 def helpModal(user_name):
-    with open("block_views/helpCommand.json", "r") as f:
+    with open("app/block_views/helpCommand.json", "r") as f:
         view = json.load(f)
         view['blocks'][0]['text']['text'] = view['blocks'][0]['text']['text'].replace("$USER", user_name)
         return view
 
 def globalTriviaModal(user_name, user_id):
-    with open("block_views/triviaGlobal.json", "r") as f:
+    with open("app/block_views/triviaGlobal.json", "r") as f:
         filedata = f.read()
         filedata = filedata.replace("$USERID", user_id).replace("$USER", user_name)
         view = json.loads(filedata)
         return view
 
 def triviaCustomQuestions(user_id, q_number):
-    with open("block_views/triviaCustoms.json", "r") as f:
+    with open("app/block_views/triviaCustoms.json", "r") as f:
         view = json.load(f)
         view['callback_id'] = view['callback_id'].replace("$USERID", user_id)
         question_blocks = view['blocks']
@@ -42,14 +42,14 @@ def triviaCustomQuestions(user_id, q_number):
         return view
 
 def triviaInviteMessage(game_id):
-    with open("block_views/triviaInvite.json", "r") as f:
+    with open("app/block_views/triviaInvite.json", "r") as f:
         blocks = json.load(f)['blocks']
         blocks[2]['elements'][0]['action_id'] = blocks[2]['elements'][0]['action_id'].replace('$GAMEID', game_id)
         blocks[2]['elements'][1]['action_id'] = blocks[2]['elements'][1]['action_id'].replace('$GAMEID', game_id)
         return blocks
 
 def triviaAskQuestion(user, question, qnum):
-    with open("block_views/triviaQuestion.json", "r") as f:
+    with open("app/block_views/triviaQuestion.json", "r") as f:
         filedata = f.read()
         filedata = filedata.replace("$GAMEID", user).replace("$QNUM", str(qnum)).replace("$QUESTION", question['question'])
         numList = [1,2,3,4]
@@ -62,14 +62,14 @@ def triviaAskQuestion(user, question, qnum):
         return view
 
 def triviaComplete(score):
-    with open("block_views/triviaComplete.json", "r") as f:
+    with open("app/block_views/triviaComplete.json", "r") as f:
         filedata = f.read()
         filedata = filedata.replace("$SCORE", str(score))
         view = json.loads(filedata)
         return view
 
 def triviaBoard(players):
-    with open("block_views/triviaLeaderboard.json", "r") as f:
+    with open("app/block_views/triviaLeaderboard.json", "r") as f:
         view = json.load(f)
         playerBlock = view['blocks'].pop()
         players = sorted(players, key=lambda x: x['score'], reverse=True)
@@ -80,12 +80,38 @@ def triviaBoard(players):
         return view['blocks']
 
 def triviaOngoing():
-    with open("block_views/triviaOngoing.json", "r") as f:
+    with open("app/block_views/triviaOngoing.json", "r") as f:
         return json.load(f)
 
 def triviaCustomMessage(user_id):
-    with open("block_views/triviaCustomPrompt.json", "r") as f:
+    with open("app/block_views/triviaCustomPrompt.json", "r") as f:
         filedata = f.read()
         filedata = filedata.replace("$USER", user_id)
         view = json.loads(filedata)
+        return view['blocks']
+
+def reviewModal(course_code, user_id):
+    with open("app/block_views/reviewModal.json", "r") as f:
+        filedata = f.read()
+        filedata = filedata.replace("$USERID", user_id).replace("$COURSE", course_code)
+        view = json.loads(filedata)
+        return view
+
+def reviewConfirm(course_code):
+    with open("app/block_views/reviewConfirm.json", "r") as f:
+        filedata = f.read()
+        filedata = filedata.replace("$COURSE", course_code)
+        view = json.loads(filedata)
+        return view['blocks']
+
+def karmaBoard(info):
+    with open("app/block_views/karmaBoard.json", "r") as f:
+        view = json.load(f)
+        userBlock = view['blocks'].pop()
+        for user in info:
+            tempBlock = copy.deepcopy(userBlock)
+            tempBlock['text']['text'] = userBlock['text']['text'].replace("$USER", user['name']).replace("$KARMA", str(user['karma']))
+            tempBlock['accessory']['image_url'] = userBlock['accessory']['image_url'].replace("$PIC72", user['pfp'])
+            tempBlock['accessory']['alt_text'] = userBlock['accessory']['alt_text'].replace("$USER", user['name'])
+            view['blocks'].append(tempBlock)
         return view['blocks']

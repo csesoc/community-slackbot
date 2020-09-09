@@ -85,9 +85,13 @@ class Review(db.Model):
     __tablename__ = "reviews"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     review = db.Column(db.Text())
+    course = db.Column(db.String(255))  # can make this a foreign key later
     user_id = db.Column(db.String(16), ForeignKey("users.id"))
     lecturer = db.Column(db.String(255))
     term = db.Column(db.String(255))
+    overall = db.Column(db.Integer)
+    time = db.Column(db.Integer)
+    difficulty = db.Column(db.Integer)
     is_approved = db.Column(db.Boolean())
 
     def __repr__(self):

@@ -205,3 +205,17 @@ def retrieve_profile_details(user):
 
     # Return the key value pairs
     return details
+
+
+def get_top_karma():
+    return User.query.order_by(User.karma.desc()).limit(5).all()
+
+def add_karma(u_id):
+    user = User.query.filter_by(id=u_id).first()
+    user.karma = user.karma + 1
+    db.session.commit()
+
+def remove_karma(u_id):
+    user = User.query.filter_by(id=u_id).first()
+    user.karma = user.karma - 1
+    db.session.commit()

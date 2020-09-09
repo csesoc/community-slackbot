@@ -5,7 +5,7 @@ import os
 from flask import json
 from app.block_views import get_anonymous_modal, get_anonymous_message, get_anonymous_reply_modal, get_report_modal
 import app.block_views as blocks
-from app.buildBlocks import imBlock, mentionBlock, helpModal, globalTriviaModal, triviaCustomQuestions, triviaInviteMessage, triviaAskQuestion, triviaComplete, triviaBoard, triviaOngoing, triviaCustomMessage
+from app.buildBlocks import imBlock, mentionBlock, helpModal, globalTriviaModal, triviaCustomQuestions, triviaInviteMessage, triviaAskQuestion, triviaComplete, triviaBoard, triviaOngoing, triviaCustomMessage, reviewModal, karmaBoard, reviewConfirm
 
 def interactions(payload):
     """
@@ -361,3 +361,19 @@ def trivia_ongoing(trigger_id):
 
 def trivia_custom_questions_prompt(user_id, channel):
     client.chat_postEphemeral(user=user_id, channel=channel, text="Fill in custom questions", blocks=triviaCustomMessage(user_id))
+
+def review_modal(trigger_id, course_code, user_id):
+    return client.views_open(trigger_id=trigger_id, view=reviewModal(course_code, user_id))['view']['id']
+
+def review_confirm(user_id, course_code):
+    client.chat_postMessage(channel=user_id, blocks=reviewConfirm(course_code))
+
+def karma_message(channel_id):
+    toppers = utils.get_top_karma()
+    # display name, profile picture, karma count
+    leaders = []
+    for user in toppers:
+        player_info = client.users_info(user=user.id)['user']
+        player_name = player_info['profile']['display_name_normalized'] if (player_info['profile']['display_name_normalized'] != "") else player_info['profile']['real_name_normalized']
+        leaders.append({'name': player_name, 'karma': user.karma, 'pfp': player_info['profile']['image_72']})
+    client.chat_postMessage(channel=channel_id, text="Karma boards", blocks=karmaBoard(leaders))

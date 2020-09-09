@@ -18,8 +18,9 @@ import json
 import random
 import threading
 
-from app.handler import reply_mention, reply_im, help_modal, trivia_modal
+from app.handler import reply_mention, reply_im, help_modal, trivia_modal, review_modal, karma_message
 from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, trivia_custom_questions
+from app.jreview import review_init, review_overall, review_difficulty, review_time, review_submit
 
 
 slack_token = Config.SLACK_BOT_TOKEN
@@ -44,6 +45,18 @@ def reply(event_data):
     if 'bot_id' not in event_data['event'] and 'text' in event_data['event']:
         message = event_data['event']['text']
         reply_im(user, channel, message)
+
+@slack_events_adapter.on("reaction_added")
+def slack_emoji(event_data):
+    if (event_data['event']['reaction'] != 'karma'):
+        return
+    utils.add_karma(event_data['event']['item_user'])
+
+@slack_events_adapter.on("reaction_removed")
+def slack_emoji_remove(event_data):
+    if (event_data['event']['reaction'] != 'karma'):
+        return
+    utils.remove_karma(event_data['event']['item_user'])
 
 @slack.route('/pair', methods=['POST'])
 def pair():
@@ -252,6 +265,12 @@ def slack_shortcut():
                 trivia_set_channel(attributes['actions'][0]['action_id'].replace("trivia_channel_", ""), attributes['actions'][0]['selected_channel'])
         elif "trivia_question_" in attributes['view']['callback_id']:
             trivia_response(attributes['user']['id'], attributes['actions'][0]['value'] == 'correct', attributes['trigger_id'])
+        elif "course_overall_" in attributes['actions'][0]['action_id']:
+            review_overall(attributes['actions'][0]['action_id'].replace("course_overall_", ""), attributes['actions'][0]['selected_option']['value'])
+        elif "course_difficulty_" in attributes['actions'][0]['action_id']:
+            review_difficulty(attributes['actions'][0]['action_id'].replace("course_difficulty_", ""), attributes['actions'][0]['selected_option']['value'])
+        elif "course_time_" in attributes['actions'][0]['action_id']:
+            review_time(attributes['actions'][0]['action_id'].replace("course_time_", ""), attributes['actions'][0]['selected_option']['value'])
     elif attributes['type'] == "view_submission":
         if 'trivia_start_' in  attributes['view']['callback_id']:
             try:
@@ -266,6 +285,8 @@ def slack_shortcut():
                 trivia_failure(game_id, attributes['trigger_id'])
         elif 'custom_questions_' in attributes['view']['callback_id']:
             trivia_custom_questions(attributes['view']['callback_id'].replace('custom_questions_', ''), attributes['view']['state']['values'])
+        elif 'course_review_' in attributes['view']['callback_id']:
+            review_submit(attributes['view']['callback_id'].replace("course_review_", ""), attributes['view']['state']['values'])
 
     return Response()
 
@@ -283,4 +304,19 @@ def slack_help():
     help_modal(request.form.get('trigger_id'), request.form.get('user_id'))
     return make_response("", 200)
 
+@app.route('/review', methods=['POST'])
+def slack_review():
+    if not verify_request(request):
+        return make_response("", 400)
+    # TODO: verify that the course given is valid
+    review_init(request.form.get('user_id'), request.form.get('text'))
+    review_modal(request.form.get('trigger_id'), request.form.get('text'), request.form.get('user_id'))
+    return make_response("", 200)
+
+@app.route('/karma', methods=['POST'])
+def slack_karma():
+    if not verify_request(request):
+        return make_response("", 400)
+    karma_message(request.form.get('channel_id'))
+    return make_response("", 200)
 
