@@ -51,7 +51,7 @@ def trivia_player_list(user_id, user_list):
 
 def trivia_finalise(user_id, trigger_id):
     if trivia_games[user_id].default_qs:
-        with open("blocks/questionBank.json", "r") as f:
+        with open("app/block_views/questionBank.json", "r") as f:
             questionBank = json.load(f)
         for _ in range(trivia_games[user_id].number_qs):
             trivia_games[user_id].questions.append(questionBank.pop(random.randint(0,len(questionBank) - 1)))
@@ -75,10 +75,10 @@ def trivia_custom_questions(game_id, data):
                 'options': [data[f'wrong{j}_{i+1}']['number_questions']['value'] for j in range(1,4)]
             }
         )
-    # start_trivia(game_id)
+    start_trivia(game_id)
 
 def trivia_failure(user_id, trigger_id):
-    pass
+    client.chat_postMessage(channel=user_id, text="Your attempt to create a trivia game failed")
 
 def start_trivia(user_id):
     for user in trivia_games[user_id].trivia_players:

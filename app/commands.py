@@ -6,5 +6,4 @@ def seed():
     print("Running Seeders")
     run_seeders()
 
-
 app.cli.add_command(seed)

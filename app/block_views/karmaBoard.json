@@ -1,0 +1,26 @@
+{
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*The karma leaderboard for the CSESoc Community:*"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*$USER*\n$KARMA points"
+			},
+			"accessory": {
+				"type": "image",
+				"image_url": "$PIC72",
+				"alt_text": "profile pic of $USER"
+			}
+		}
+	]
+}

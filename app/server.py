@@ -18,8 +18,9 @@ import json
 import random
 import threading
 
-from app.handler import reply_mention, reply_im, help_modal, trivia_modal
+from app.handler import reply_mention, reply_im, help_modal, trivia_modal, review_modal, karma_message
 from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, trivia_custom_questions
+from app.jreview import review_init, review_overall, review_difficulty, review_time, review_submit
 
 
 slack_token = Config.SLACK_BOT_TOKEN
@@ -43,6 +44,18 @@ def reply(event_data):
     if 'bot_id' not in event_data['event'] and 'text' in event_data['event']:
         message = event_data['event']['text']
         reply_im(user, channel, message)
+
+@slack_events_adapter.on("reaction_added")
+def slack_emoji(event_data):
+    if (event_data['event']['reaction'] != 'karma'):
+        return
+    utils.add_karma(event_data['event']['item_user'])
+
+@slack_events_adapter.on("reaction_removed")
+def slack_emoji_remove(event_data):
+    if (event_data['event']['reaction'] != 'karma'):
+        return
+    utils.remove_karma(event_data['event']['item_user'])
 
 @slack.route('/pair', methods=['POST'])
 def pair():
@@ -130,6 +143,31 @@ def interactions():
 
     # Parse request
     payload = json.loads(request.form.to_dict()["payload"])
+
+    if (payload['type'] == "view_submission" and 'trivia_start_' in payload['view']['callback_id']):
+        trigger_id = payload["trigger_id"]
+        try:
+            game_id = payload['view']['callback_id'].replace('trivia_start_', '')
+            trivia_q_number(game_id, int(payload['view']['state']['values']['number_questions']['number_questions']['value']))
+            trivia_player_list(game_id, payload['view']['state']['values']['users_playing']['users_playing']['selected_users'])
+            if trivia_finalise(game_id, trigger_id):
+                try:
+                    with app.app_context():
+                        resp = jsonify({'response_action': 'push', 'view': trivia_customs(game_id, trigger_id)})
+                        resp.headers['Authorization'] = slack_token
+                        return resp
+                except Exception as err:
+                    print(err)
+        except:
+            trivia_failure(game_id, trigger_id)
+        return make_response("", 200)
+    elif payload['type'] == "view_submission" and 'custom_questions_' in payload['view']['callback_id']: 
+        trivia_custom_questions(payload['view']['callback_id'].replace('custom_questions_', ''), payload['view']['state']['values'])
+        # can change if we want to be able to go back to the previous modal but this feels cleaner
+        with app.app_context():
+            resp = jsonify({'response_action': 'clear'})
+            resp.headers['Authorization'] = slack_token
+            return resp
 
     # Spawn a thread to service the request
     threading.Thread(target=handler.interactions, args=[payload]).start()
@@ -289,4 +327,18 @@ def slack_help():
     help_modal(request.form.get('trigger_id'), request.form.get('user_id'))
     return make_response("", 200)
 
+@app.route('/review', methods=['POST'])
+def slack_review():
+    if not verify_request(request):
+        return make_response("", 400)
+    # TODO: verify that the course given is valid
+    review_init(request.form.get('user_id'), request.form.get('text'))
+    review_modal(request.form.get('trigger_id'), request.form.get('text'), request.form.get('user_id'))
+    return make_response("", 200)
 
+@app.route('/karma', methods=['POST'])
+def slack_karma():
+    if not verify_request(request):
+        return make_response("", 400)
+    karma_message(request.form.get('channel_id'))
+    return make_response("", 200)
