@@ -144,6 +144,31 @@ def interactions():
     # Parse request
     payload = json.loads(request.form.to_dict()["payload"])
 
+    if (payload['type'] == "view_submission" and 'trivia_start_' in payload['view']['callback_id']):
+        trigger_id = payload["trigger_id"]
+        try:
+            game_id = payload['view']['callback_id'].replace('trivia_start_', '')
+            trivia_q_number(game_id, int(payload['view']['state']['values']['number_questions']['number_questions']['value']))
+            trivia_player_list(game_id, payload['view']['state']['values']['users_playing']['users_playing']['selected_users'])
+            if trivia_finalise(game_id, trigger_id):
+                try:
+                    with app.app_context():
+                        resp = jsonify({'response_action': 'push', 'view': trivia_customs(game_id, trigger_id)})
+                        resp.headers['Authorization'] = slack_token
+                        return resp
+                except Exception as err:
+                    print(err)
+        except:
+            trivia_failure(game_id, trigger_id)
+        return make_response("", 200)
+    elif payload['type'] == "view_submission" and 'custom_questions_' in payload['view']['callback_id']: 
+        trivia_custom_questions(payload['view']['callback_id'].replace('custom_questions_', ''), payload['view']['state']['values'])
+        # can change if we want to be able to go back to the previous modal but this feels cleaner
+        with app.app_context():
+            resp = jsonify({'response_action': 'clear'})
+            resp.headers['Authorization'] = slack_token
+            return resp
+
     # Spawn a thread to service the request
     threading.Thread(target=handler.interactions, args=[payload]).start()
     return make_response("", 200)

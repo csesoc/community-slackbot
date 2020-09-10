@@ -1,6 +1,6 @@
 #function handlers to service user requests 
 import app.utils as utils
-from app import client, user_client, app as a
+from app import client, user_client
 import os
 from flask import json, jsonify
 from app.block_views import get_anonymous_modal, get_anonymous_message, get_anonymous_reply_modal, get_report_modal
@@ -8,7 +8,6 @@ import app.block_views as blocks
 from app.buildBlocks import mentionBlock, imBlock, helpModal, globalTriviaModal, triviaCustomQuestions, triviaInviteMessage, triviaAskQuestion, triviaComplete, triviaBoard, triviaOngoing, triviaCustomMessage, reviewModal, reviewConfirm, karmaBoard
 from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, trivia_custom_questions
 from app.jreview import review_overall, review_difficulty, review_time, review_submit
-from config import Config
 
 def interactions(payload):
     """
@@ -34,25 +33,24 @@ def interactions(payload):
 
     # Received when a modal is submitted.
     if payload["type"] == "view_submission":
-
-        if 'trivia_start_' in payload['view']['callback_id']:
-            try:
-                game_id = payload['view']['callback_id'].replace('trivia_start_', '')
-                trivia_q_number(game_id, int(payload['view']['state']['values']['number_questions']['number_questions']['value']))
-                trivia_player_list(game_id, payload['view']['state']['values']['users_playing']['users_playing']['selected_users'])
-                if trivia_finalise(game_id, trigger_id):
-                    try:
-                        with a.app_context():
-                            resp = jsonify({'response_action': 'push', 'view': trivia_customs(game_id, trigger_id)})
-                            resp.headers['Authorization'] = Config.SLACK_BOT_TOKEN
-                            return resp # TODO: fix so this can actually be sent up
-                    except Exception as err:
-                        print(err)
-            except:
-                trivia_failure(game_id, trigger_id)
-        elif 'custom_questions_' in payload['view']['callback_id']:
-            trivia_custom_questions(payload['view']['callback_id'].replace('custom_questions_', ''), payload['view']['state']['values'])
-        elif 'course_review_' in payload['view']['callback_id']:
+        # if 'trivia_start_' in payload['view']['callback_id']:
+        #     try:
+        #         game_id = payload['view']['callback_id'].replace('trivia_start_', '')
+        #         trivia_q_number(game_id, int(payload['view']['state']['values']['number_questions']['number_questions']['value']))
+        #         trivia_player_list(game_id, payload['view']['state']['values']['users_playing']['users_playing']['selected_users'])
+        #         if trivia_finalise(game_id, trigger_id):
+        #             try:
+        #                 with a.app_context():
+        #                     resp = jsonify({'response_action': 'push', 'view': trivia_customs(game_id, trigger_id)})
+        #                     resp.headers['Authorization'] = Config.SLACK_BOT_TOKEN
+        #                     return resp
+        #             except Exception as err:
+        #                 print(err)
+        #     except:
+        #         trivia_failure(game_id, trigger_id)
+        # if 'custom_questions_' in payload['view']['callback_id']:
+        #     trivia_custom_questions(payload['view']['callback_id'].replace('custom_questions_', ''), payload['view']['state']['values'])
+        if 'course_review_' in payload['view']['callback_id']:
             u_id = payload['view']['callback_id'].replace("course_review_", "")
             course = review_submit(u_id, payload['view']['state']['values'])
             review_confirm(u_id, course)
@@ -447,7 +445,7 @@ def review_modal(trigger_id, course_code, user_id):
     return client.views_open(trigger_id=trigger_id, view=reviewModal(course_code, user_id))['view']['id']
 
 def review_confirm(user_id, course_code):
-    client.chat_postMessage(channel=user_id, blocks=reviewConfirm(course_code))
+    client.chat_postMessage(channel=user_id, text="Review confirmed!", blocks=reviewConfirm(course_code))
 
 def karma_message(channel_id):
     toppers = utils.get_top_karma()
