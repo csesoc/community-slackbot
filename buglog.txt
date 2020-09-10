@@ -1,4 +1,0 @@
-Bug Log
-07/09/20; helpCommand.json file was unable to be opened during processing of /helpme; Corrected the filepath to helpCommand.json
-and the rest of the file paths on buildBlocks.py as well
-

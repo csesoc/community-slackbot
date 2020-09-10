@@ -231,8 +231,15 @@ def onboarding(user, channel=None):
     if utils.query_user_exists(user):
         return
 
+    # Retrieve admin status from slack
+    user_info = client.users_info(user=user)
+    is_admin = user_info["user"]["is_admin"]
+
     # Add user to the database
-    utils.add_new_user(user)
+    if is_admin:
+        utils.add_new_user(user, is_admin=is_admin)
+    else:
+        utils.add_new_user(user)
 
     # Retrieve channel
     if channel is None:
