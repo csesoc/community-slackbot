@@ -1,6 +1,6 @@
 from app import db
 from app.models import Review
-from app.handler import review_confirm
+# from app.handler import review_confirm
 
 class ReviewClass:
     def __init__(self, author, course):
@@ -39,4 +39,5 @@ def review_submit(user_id, values):
     db.session.commit()
     del reviews[user_id]
     # TODO send confirmation of review
-    review_confirm(user_id, rev.course)
+    return rev.course
+    # review_confirm(user_id, rev.course)

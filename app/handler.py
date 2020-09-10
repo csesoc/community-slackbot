@@ -1,11 +1,11 @@
 #function handlers to service user requests 
 import app.utils as utils
-from app import client, user_client
+from app import client, user_client, app as a
 import os
 from flask import json, jsonify
 from app.block_views import get_anonymous_modal, get_anonymous_message, get_anonymous_reply_modal, get_report_modal
 import app.block_views as blocks
-from app.buildBlocks import mentionBlock, imBlock, helpModal, globalTriviaModal, triviaCustomQuestions, triviaInviteMessage, triviaAskQuestion, triviaComplete, triviaBoard, triviaOngoing, triviaCustomMessage
+from app.buildBlocks import mentionBlock, imBlock, helpModal, globalTriviaModal, triviaCustomQuestions, triviaInviteMessage, triviaAskQuestion, triviaComplete, triviaBoard, triviaOngoing, triviaCustomMessage, reviewModal, reviewConfirm, karmaBoard
 from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, trivia_custom_questions
 from app.jreview import review_overall, review_difficulty, review_time, review_submit
 from config import Config
@@ -41,15 +41,21 @@ def interactions(payload):
                 trivia_q_number(game_id, int(payload['view']['state']['values']['number_questions']['number_questions']['value']))
                 trivia_player_list(game_id, payload['view']['state']['values']['users_playing']['users_playing']['selected_users'])
                 if trivia_finalise(game_id, trigger_id):
-                    resp = jsonify({'response_action': 'push', 'view': trivia_customs(game_id, trigger_id)})
-                    resp.headers['Authorization'] = Config.SLACK_BOT_TOKEN
-                    return resp
+                    try:
+                        with a.app_context():
+                            resp = jsonify({'response_action': 'push', 'view': trivia_customs(game_id, trigger_id)})
+                            resp.headers['Authorization'] = Config.SLACK_BOT_TOKEN
+                            return resp # TODO: fix so this can actually be sent up
+                    except Exception as err:
+                        print(err)
             except:
                 trivia_failure(game_id, trigger_id)
         elif 'custom_questions_' in payload['view']['callback_id']:
             trivia_custom_questions(payload['view']['callback_id'].replace('custom_questions_', ''), payload['view']['state']['values'])
         elif 'course_review_' in payload['view']['callback_id']:
-            review_submit(payload['view']['callback_id'].replace("course_review_", ""), payload['view']['state']['values'])
+            u_id = payload['view']['callback_id'].replace("course_review_", "")
+            course = review_submit(u_id, payload['view']['state']['values'])
+            review_confirm(u_id, course)
 
         view = payload["view"]
         callback_id = view["callback_id"]

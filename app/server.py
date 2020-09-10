@@ -18,7 +18,7 @@ import json
 import random
 import threading
 
-from app.handler import reply_mention, reply_im, help_modal, trivia_modal
+from app.handler import reply_mention, reply_im, help_modal, trivia_modal, review_modal, karma_message
 from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, trivia_custom_questions
 from app.jreview import review_init, review_overall, review_difficulty, review_time, review_submit
 
