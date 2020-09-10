@@ -75,10 +75,10 @@ def trivia_custom_questions(game_id, data):
                 'options': [data[f'wrong{j}_{i+1}']['number_questions']['value'] for j in range(1,4)]
             }
         )
-    # start_trivia(game_id)
+    start_trivia(game_id)
 
 def trivia_failure(user_id, trigger_id):
-    pass
+    client.chat_postMessage(channel=user_id, text="Your attempt to create a trivia game failed")
 
 def start_trivia(user_id):
     for user in trivia_games[user_id].trivia_players:

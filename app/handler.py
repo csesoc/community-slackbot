@@ -5,9 +5,9 @@ import os
 from flask import json, jsonify
 from app.block_views import get_anonymous_modal, get_anonymous_message, get_anonymous_reply_modal, get_report_modal
 import app.block_views as blocks
-from app.buildBlocks import mentionBlock, imBlock, helpModal, globalTriviaModal, triviaCustomQuestions, triviaInviteMessage, triviaAskQuestion, triviaComplete, triviaBoard, triviaOngoing, triviaCustomMessage
+from app.buildBlocks import mentionBlock, imBlock, helpModal, globalTriviaModal, triviaCustomQuestions, triviaInviteMessage, triviaAskQuestion, triviaComplete, triviaBoard, triviaOngoing, triviaCustomMessage, reviewModal, reviewConfirm, karmaBoard
 from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, trivia_custom_questions
-from config import Config
+from app.jreview import review_overall, review_difficulty, review_time, review_submit
 
 def interactions(payload):
     """
@@ -33,20 +33,27 @@ def interactions(payload):
 
     # Received when a modal is submitted.
     if payload["type"] == "view_submission":
-
-        if 'trivia_start_' in payload['view']['callback_id']:
-            try:
-                game_id = payload['view']['callback_id'].replace('trivia_start_', '')
-                trivia_q_number(game_id, int(payload['view']['state']['values']['number_questions']['number_questions']['value']))
-                trivia_player_list(game_id, payload['view']['state']['values']['users_playing']['users_playing']['selected_users'])
-                if trivia_finalise(game_id, trigger_id):
-                    resp = jsonify({'response_action': 'push', 'view': trivia_customs(game_id, trigger_id)})
-                    resp.headers['Authorization'] = Config.SLACK_BOT_TOKEN
-                    return resp
-            except:
-                trivia_failure(game_id, trigger_id)
-        elif 'custom_questions_' in payload['view']['callback_id']:
-            trivia_custom_questions(payload['view']['callback_id'].replace('custom_questions_', ''), payload['view']['state']['values'])
+        # if 'trivia_start_' in payload['view']['callback_id']:
+        #     try:
+        #         game_id = payload['view']['callback_id'].replace('trivia_start_', '')
+        #         trivia_q_number(game_id, int(payload['view']['state']['values']['number_questions']['number_questions']['value']))
+        #         trivia_player_list(game_id, payload['view']['state']['values']['users_playing']['users_playing']['selected_users'])
+        #         if trivia_finalise(game_id, trigger_id):
+        #             try:
+        #                 with a.app_context():
+        #                     resp = jsonify({'response_action': 'push', 'view': trivia_customs(game_id, trigger_id)})
+        #                     resp.headers['Authorization'] = Config.SLACK_BOT_TOKEN
+        #                     return resp
+        #             except Exception as err:
+        #                 print(err)
+        #     except:
+        #         trivia_failure(game_id, trigger_id)
+        # if 'custom_questions_' in payload['view']['callback_id']:
+        #     trivia_custom_questions(payload['view']['callback_id'].replace('custom_questions_', ''), payload['view']['state']['values'])
+        if 'course_review_' in payload['view']['callback_id']:
+            u_id = payload['view']['callback_id'].replace("course_review_", "")
+            course = review_submit(u_id, payload['view']['state']['values'])
+            review_confirm(u_id, course)
 
         view = payload["view"]
         callback_id = view["callback_id"]
@@ -163,31 +170,30 @@ def interactions(payload):
     if payload["type"] == "block_actions":
         
         if "trivia_custom_" in payload['actions'][0]['action_id']:
-            print("FIRST ONE")
             trivia_customs(payload['actions'][0]['action_id'].replace("trivia_custom_", ""), payload['trigger_id'])
             return
         elif "accept_trivia_" in payload['actions'][0]['action_id']:
-            print("SECOND ONE")
             trivia_reply(payload['user']['id'], True, payload['actions'][0]['action_id'].replace("accept_trivia_", ""), payload['trigger_id'])
             return
         elif "forfeit_trivia_" in payload['actions'][0]['action_id']:
-            print("THIRD ONE")
             trivia_reply(payload['user']['id'], False, payload['actions'][0]['action_id'].replace("forfeit_trivia_", ""), payload['trigger_id'])
             return
         elif "trivia_start_" in payload['view']['callback_id']:
             if "default_trivia_" in payload['actions'][0]['action_id']:
-                print("FOURTH ONE")
                 trivia_set_qs(payload['actions'][0]['action_id'].replace("default_trivia_", ""), payload['actions'][0]['selected_option']['value'] == "true")
                 return
             elif "trivia_channel_" in payload['actions'][0]['action_id']:
-                print("FIFTH ONE")
                 trivia_set_channel(payload['actions'][0]['action_id'].replace("trivia_channel_", ""), payload['actions'][0]['selected_channel'])
                 return
         elif "trivia_question_" in payload['view']['callback_id']:
-            print("SIXTH ONE")
             trivia_response(payload['user']['id'], payload['actions'][0]['value'] == 'correct', payload['trigger_id'])
             return
-
+        elif "course_overall_" in payload['actions'][0]['action_id']:
+            review_overall(payload['actions'][0]['action_id'].replace("course_overall_", ""), payload['actions'][0]['selected_option']['value'])
+        elif "course_difficulty_" in payload['actions'][0]['action_id']:
+            review_difficulty(payload['actions'][0]['action_id'].replace("course_difficulty_", ""), payload['actions'][0]['selected_option']['value'])
+        elif "course_time_" in payload['actions'][0]['action_id']:
+            review_time(payload['actions'][0]['action_id'].replace("course_time_", ""), payload['actions'][0]['selected_option']['value'])
 
         # Received when a user clicks a Block Kit interactive component.
         actions = payload["actions"]
@@ -435,3 +441,18 @@ def trivia_ongoing(trigger_id):
 
 def trivia_custom_questions_prompt(user_id, channel):
     client.chat_postEphemeral(user=user_id, channel=channel, text="Fill in custom questions", blocks=triviaCustomMessage(user_id))
+def review_modal(trigger_id, course_code, user_id):
+    return client.views_open(trigger_id=trigger_id, view=reviewModal(course_code, user_id))['view']['id']
+
+def review_confirm(user_id, course_code):
+    client.chat_postMessage(channel=user_id, text="Review confirmed!", blocks=reviewConfirm(course_code))
+
+def karma_message(channel_id):
+    toppers = utils.get_top_karma()
+    # display name, profile picture, karma count
+    leaders = []
+    for user in toppers:
+        player_info = client.users_info(user=user.id)['user']
+        player_name = player_info['profile']['display_name_normalized'] if (player_info['profile']['display_name_normalized'] != "") else player_info['profile']['real_name_normalized']
+        leaders.append({'name': player_name, 'karma': user.karma, 'pfp': player_info['profile']['image_72']})
+    client.chat_postMessage(channel=channel_id, text="Karma boards", blocks=karmaBoard(leaders))

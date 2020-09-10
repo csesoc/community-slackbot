@@ -89,3 +89,29 @@ def triviaCustomMessage(user_id):
         filedata = filedata.replace("$USER", user_id)
         view = json.loads(filedata)
         return view['blocks']
+
+def reviewModal(course_code, user_id):
+    with open("app/block_views/reviewModal.json", "r") as f:
+        filedata = f.read()
+        filedata = filedata.replace("$USERID", user_id).replace("$COURSE", course_code)
+        view = json.loads(filedata)
+        return view
+
+def reviewConfirm(course_code):
+    with open("app/block_views/reviewConfirm.json", "r") as f:
+        filedata = f.read()
+        filedata = filedata.replace("$COURSE", course_code)
+        view = json.loads(filedata)
+        return view['blocks']
+
+def karmaBoard(info):
+    with open("app/block_views/karmaBoard.json", "r") as f:
+        view = json.load(f)
+        userBlock = view['blocks'].pop()
+        for user in info:
+            tempBlock = copy.deepcopy(userBlock)
+            tempBlock['text']['text'] = userBlock['text']['text'].replace("$USER", user['name']).replace("$KARMA", str(user['karma']))
+            tempBlock['accessory']['image_url'] = userBlock['accessory']['image_url'].replace("$PIC72", user['pfp'])
+            tempBlock['accessory']['alt_text'] = userBlock['accessory']['alt_text'].replace("$USER", user['name'])
+            view['blocks'].append(tempBlock)
+        return view['blocks']
