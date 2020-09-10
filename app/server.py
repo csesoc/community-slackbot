@@ -92,6 +92,8 @@ def pair():
 
 @slack.route("/course", methods=['POST'])
 def get_course_summary():
+    # TODO: Add in prerequsities, corresponding term date + lecturer, and display corresponding reviews made via /review
+    # TODO: Add in a multi-select menu of courses if course argument is omitted 
     payload = request.form.to_dict()
     payload = payload['text'].split(' ')
 
@@ -332,6 +334,8 @@ def slack_review():
     if not verify_request(request):
         return make_response("", 400)
     # TODO: verify that the course given is valid
+    # TODO: normalise the course argument e.g. math3611 -> MATH3611, mAth3611 -> MATH3611
+    # TODO: add in a multi-select menu feature to the review modal if a course argument is omitted
     review_init(request.form.get('user_id'), request.form.get('text'))
     review_modal(request.form.get('trigger_id'), request.form.get('text'), request.form.get('user_id'))
     return make_response("", 200)
