@@ -98,7 +98,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "*Profile*\n:bust_in_silhouette:\n Type '/profile {@user}' to see useful information about a user. This will show their interests, current courses and karma earned in the Slackspace."
+				"text": "*Profile*\n:bust_in_silhouette:\n Type '/profile {@user}' to see profile information about a user. This will show their favourite programming language, courses taken, karma earned in the Slackspace and more."
 			}
 		},
 		{

@@ -11,8 +11,7 @@ def try_load_view(view):
     :param view:
     :return:
     """
-    view_path = os.path.join("app/block_views/views", view)
-    print(view_path)
+    view_path = os.path.join("app/block_views", view)
     if os.path.exists(view_path):
         return open(view_path, "r").read()
     return None
@@ -34,21 +33,21 @@ def get_block_view(view):
 
 
 def get_report_modal(message_id):
-    return get_block_view("anonymous/report_message.json")\
+    return get_block_view("views/anonymous/report_message.json")\
         .replace("{MESSAGE_ID}", str(message_id))
 
 
 def get_anonymous_modal():
-    return get_block_view("anonymous/anonymous_messaging_modal.json")
+    return get_block_view("views/anonymous/anonymous_messaging_modal.json")
 
 
 def get_anonymous_reply_modal(message_id):
-    return get_block_view("anonymous/anonymous_messaging_modal_reply.json")\
+    return get_block_view("views/anonymous/anonymous_messaging_modal_reply.json")\
         .replace("{MESSAGE_ID}", str(message_id))
 
 
 def get_anonymous_message(message, message_id):
-    return get_block_view("anonymous/anonymous_message.json")\
+    return get_block_view("views/anonymous/anonymous_message.json")\
         .replace("{ANONYMOUS_MESSAGE}", message)\
         .replace("{MESSAGE_ID}", str(message_id))
 
@@ -217,3 +216,31 @@ def app_home(data):
         view = view.replace(f"%%{key.upper()}%%", values[key] if key in values.keys() else "-")
 
     return json.loads(view)
+
+def event_styling(event):
+    # Load event styling
+    event_structure = get_block_view("event_styling.json")
+    event_structure = event_structure.replace("%%TITLE%%", event["title"])
+    event_structure = event_structure.replace("%%DESCRIPTION%%", event["description"])
+    event_structure = event_structure.replace("%%IMAGE_URL%%", event["image_url"])
+    event_structure = event_structure.replace("%%URL%%", event["url"])
+
+    print(event_structure)
+    return json.loads(event_structure)
+
+
+
+def events_modal(events, keyword):
+    # Load modal
+    modal = get_block_view("events_modal.json")
+
+    # Add keyword to header
+    modal = modal.replace("%%KEYWORD%%", keyword)
+    modal = json.loads(modal)
+
+    for event in events:
+        modal["blocks"] += event_styling(event)
+
+    return modal
+
+    

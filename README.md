@@ -1,7 +1,7 @@
 # community-slackbot
 
-## Setup
-Ensure you have a slack app created with the necessary permissions and correct request urls (see server.py for details on the required url for each type of slack request).
+## Setup 
+Ensure you have a slack app installed with the necessary permissions, appropriate features and correctly configured request urls (see server.py for details).
 
 ## Development
 

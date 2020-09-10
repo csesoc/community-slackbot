@@ -7,6 +7,7 @@ import re
 import requests
 import datetime
 import time
+import json
 from bs4 import BeautifulSoup
 from urllib.parse import quote
 
@@ -72,18 +73,21 @@ def retrieve_highest_permission_level(user_id):
     """
     Retrieve highest permission level of a given user_id
     :param user_id: A string of 11 characters representing a slack user id
-    :return: An integer that represents the highest permission level for the given user
+    :return: An integer that represents the highest permission level for the given user,
+             and the corresponding role title
     """
 
     # Retrieve all roles of given user
-    role_ids = [user_role.role_id for user_role in UserRole.query.filter_by(user_id=user_id).all()]
+    query = Roles.query.filter_by(user_id=user_id).all()
 
-    max_role = Roles.query.filter(Roles.id.in_(role_ids))\
-        .order_by(Roles.perm_level.desc())\
-        .first()
-    if max_role is None:
-        return 0
-    return max_role.perm_level
+    # Retrieve all roles of given user
+    query = Roles.query.filter_by(user_id=user_id).all()
+
+    # Set permission level to the highest of the roles or 0 if user does not have any roles
+    perm_level = max(role.perm_level for role in query) if query != [] else 0
+    title = Roles.query.filter_by(user_id=user_id, perm_level=perm_level).first().title
+
+    return perm_level, title
 
 
 def extract_value(values, block_id, action_id):
@@ -206,6 +210,26 @@ def retrieve_profile_details(user):
     # Return the key value pairs
     return details
 
+def retrieve_event_details(keyword, page):
+
+    if keyword == "" or keyword == "unsw":
+        r = requests.get(f'https://api.eventlink.me/events?uni=unsw&limit=5&offset={page * 5}')
+    elif keyword == "cse":
+        r = requests.get(f'https://api.eventlink.me/events?uni=unsw&society_id=csesoc')
+
+    events = json.loads(r.text)
+
+    # Filter events for necessary info
+    rtn = []
+    for event in events:
+        rtn.append({
+            "url": event["url"],
+            "title": event["title"],
+            "description": event["description"],
+            "image_url": event["image_url"]
+        })
+
+    return rtn
 
 def get_top_karma():
     return User.query.order_by(User.karma.desc()).limit(5).all()

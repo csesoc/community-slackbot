@@ -18,7 +18,7 @@ import json
 import random
 import threading
 
-from app.handler import reply_mention, reply_im, help_modal, trivia_modal, review_modal, karma_message
+from app.handler import reply_mention, reply_im, help_modal, trivia_modal
 from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, trivia_custom_questions
 from app.jreview import review_init, review_overall, review_difficulty, review_time, review_submit
 
@@ -30,7 +30,6 @@ slack = Blueprint(
 
 @slack_events_adapter.on("message")
 def reply(event_data):
-    print(event_data)
     channel = event_data["event"]["channel"]
     if event_data['token'] != slack_token and 'text' in event_data['event']:
         if event_data['event']['text'].startswith("stylecheck"):
@@ -63,9 +62,7 @@ def pair():
     if not verify_request(request):
         return make_response("", 400)
 
-    print(request.get_data())
     payload = request.form.to_dict()
-    print(payload)
     if retrieve_highest_permission_level(payload["user_id"]) < UserRoles.MOD:
         min_title = get_role_title(UserRoles.MOD)
         return make_response("You do not have permission to run /pair."
@@ -126,11 +123,8 @@ def stylecheck():
     if not verify_request(request):
         return make_response("", 400)
 
-    print(request.get_data())
     payload = request.form.to_dict()
-    print(payload)
     payload = payload['text'].split(' ')
-    print(payload)
 
     return make_response("Pair success", 200)
 
@@ -160,7 +154,6 @@ def cs_job_opportunities():
     Lets you know about CS job opportunities from indeed
     Usage: /CSopportunities [OPTIONS, page_number=1, query="software internship"]
     """
-    print('GOt here')
 
     # Verify request
     if not utils.verify_request(request):
@@ -168,7 +161,6 @@ def cs_job_opportunities():
 
     # Parse request
     payload = request.form.to_dict()
-    print('Got here')
     # Spawn a thread to service the request
     threading.Thread(target=handler.cs_job_opportunities, args=[payload]).start()
     return make_response("", 200)
@@ -199,7 +191,6 @@ def say():
     Say something as the slackbot.
     Usage: /say message
     """
-    print("Am i even here??")
     # Verify request
     if not utils.verify_request(request):
         return make_response("", 400)
@@ -208,8 +199,24 @@ def say():
     payload = request.form.to_dict()
 
     # Spawn a thread to service the request
-    print("Spawning thread yo")
     threading.Thread(target=handler.say, args=[payload]).start()
+    return make_response("", 200)
+
+@slack.route('/events', methods=['POST'])
+def events():
+    """
+    Display a list of events using linkup
+    Usage: /events <cse | unsw> [page number]
+    """
+    # Verify request
+    if not utils.verify_request(request):
+        return make_response("", 400)
+
+    # Parse request
+    payload = request.form.to_dict()
+
+    # Spawn a thread to service the request
+    threading.Thread(target=handler.events, args=[payload]).start()
     return make_response("", 200)
 
 
@@ -243,7 +250,7 @@ def app_home_opened(event_data):
     threading.Thread(target=handler.app_home, args=[event]).start()
 
 
-@slack.route('/shortcut', methods=['POST'])
+'''@slack.route('/shortcut', methods=['POST'])
 def slack_shortcut():
     if not verify_request(request):
         return make_response("",400)
@@ -265,12 +272,6 @@ def slack_shortcut():
                 trivia_set_channel(attributes['actions'][0]['action_id'].replace("trivia_channel_", ""), attributes['actions'][0]['selected_channel'])
         elif "trivia_question_" in attributes['view']['callback_id']:
             trivia_response(attributes['user']['id'], attributes['actions'][0]['value'] == 'correct', attributes['trigger_id'])
-        elif "course_overall_" in attributes['actions'][0]['action_id']:
-            review_overall(attributes['actions'][0]['action_id'].replace("course_overall_", ""), attributes['actions'][0]['selected_option']['value'])
-        elif "course_difficulty_" in attributes['actions'][0]['action_id']:
-            review_difficulty(attributes['actions'][0]['action_id'].replace("course_difficulty_", ""), attributes['actions'][0]['selected_option']['value'])
-        elif "course_time_" in attributes['actions'][0]['action_id']:
-            review_time(attributes['actions'][0]['action_id'].replace("course_time_", ""), attributes['actions'][0]['selected_option']['value'])
     elif attributes['type'] == "view_submission":
         if 'trivia_start_' in  attributes['view']['callback_id']:
             try:
@@ -285,10 +286,8 @@ def slack_shortcut():
                 trivia_failure(game_id, attributes['trigger_id'])
         elif 'custom_questions_' in attributes['view']['callback_id']:
             trivia_custom_questions(attributes['view']['callback_id'].replace('custom_questions_', ''), attributes['view']['state']['values'])
-        elif 'course_review_' in attributes['view']['callback_id']:
-            review_submit(attributes['view']['callback_id'].replace("course_review_", ""), attributes['view']['state']['values'])
 
-    return Response()
+    return Response()'''
 
 @slack_events_adapter.on("app_mention")
 def slack_mention(event_data):
@@ -296,10 +295,9 @@ def slack_mention(event_data):
     channel = event_data["event"]["channel"]
     reply_mention(user, channel)
 
-@app.route('/helpme', methods=['POST'])
+@slack.route('/helpme', methods=['POST'])
 def slack_help():
     if not verify_request(request):
-        print('GOt here')
         return make_response("",400)
     help_modal(request.form.get('trigger_id'), request.form.get('user_id'))
     return make_response("", 200)
@@ -319,4 +317,3 @@ def slack_karma():
         return make_response("", 400)
     karma_message(request.form.get('channel_id'))
     return make_response("", 200)
-

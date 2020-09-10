@@ -1,10 +1,10 @@
 {
+	"type": "modal",
 	"title": {
 		"type": "plain_text",
-		"text": "Congrats!",
+		"text": "Events",
 		"emoji": true
 	},
-	"type": "modal",
 	"close": {
 		"type": "plain_text",
 		"text": "Close",
@@ -15,8 +15,11 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "*You've finished the trivia!*\nYou scored $SCORE"
+				"text": "Showing events at %%KEYWORD%%"
 			}
+		},
+		{
+			"type": "divider"
 		}
 	]
 }
