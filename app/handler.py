@@ -1,13 +1,18 @@
-#function handlers to service user requests 
+# function handlers to service user requests
 import app.utils as utils
 from app import client, user_client
 import os
 from flask import json, jsonify
 from app.block_views import get_anonymous_modal, get_anonymous_message, get_anonymous_reply_modal, get_report_modal
 import app.block_views as blocks
-from app.buildBlocks import mentionBlock, imBlock, helpModal, globalTriviaModal, triviaCustomQuestions, triviaInviteMessage, triviaAskQuestion, triviaComplete, triviaBoard, triviaOngoing, triviaCustomMessage, reviewModal, reviewConfirm, karmaBoard
-from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, trivia_custom_questions
+from app.buildBlocks import mentionBlock, imBlock, helpModal, globalTriviaModal, triviaCustomQuestions, \
+    triviaInviteMessage, triviaAskQuestion, triviaComplete, triviaBoard, triviaOngoing, triviaCustomMessage, \
+    reviewModal, reviewConfirm, karmaBoard
+from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, \
+    trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, \
+    trivia_custom_questions
 from app.jreview import review_overall, review_difficulty, review_time, review_submit
+
 
 def interactions(payload):
     """
@@ -59,11 +64,13 @@ def interactions(payload):
         callback_id = view["callback_id"]
         state = view["state"]
 
-                # Store submitted profile data
+        # Store submitted profile data
         if callback_id == "edit_profile_modal":
             values = view["state"]["values"]
-            for key in ["favourite_course", "favourite_programming_language", "favourite_netflix_show", "favourite_food", \
-                    "overrated", "underrated", "biggest_flex", "enrolled_courses", "completed_courses", "general_interests"]:
+            for key in ["favourite_course", "favourite_programming_language", "favourite_netflix_show",
+                        "favourite_food", \
+                        "overrated", "underrated", "biggest_flex", "enrolled_courses", "completed_courses",
+                        "general_interests"]:
                 value = utils.extract_value(values, key, key)
                 utils.add_profile_details(user, key, value)
             app_home({"user": user})
@@ -79,7 +86,7 @@ def interactions(payload):
             # Retrieve data from metadata
             number_of_messages = metadata["number_of_messages"]
             target_user_id = metadata["user"][2:13]
-            oldest = int(utils.time.time()) - metadata["time_period"] if metadata["time_period"] != -1 else 0   
+            oldest = int(utils.time.time()) - metadata["time_period"] if metadata["time_period"] != -1 else 0
             channel_id = metadata["channel_id"]
             text_snippet = metadata["text_snippet"]
 
@@ -98,7 +105,8 @@ def interactions(payload):
                         continue
 
                     # Delete if no user specified or user of message matches target
-                    if (target_user_id == "" or target_user_id == msg["user"]) and (text_snippet == "" or text_snippet in blocks.json.dumps(msg)):
+                    if (target_user_id == "" or target_user_id == msg["user"]) and (
+                            text_snippet == "" or text_snippet in blocks.json.dumps(msg)):
                         try:
                             user_client.chat_delete(channel=channel_id, ts=msg["ts"])
                             count_deleted += 1
@@ -168,32 +176,39 @@ def interactions(payload):
                                          "provide the following report id: R{}".format(report_id))
 
     if payload["type"] == "block_actions":
-        
+
         if "trivia_custom_" in payload['actions'][0]['action_id']:
             trivia_customs(payload['actions'][0]['action_id'].replace("trivia_custom_", ""), payload['trigger_id'])
             return
         elif "accept_trivia_" in payload['actions'][0]['action_id']:
-            trivia_reply(payload['user']['id'], True, payload['actions'][0]['action_id'].replace("accept_trivia_", ""), payload['trigger_id'])
+            trivia_reply(payload['user']['id'], True, payload['actions'][0]['action_id'].replace("accept_trivia_", ""),
+                         payload['trigger_id'])
             return
         elif "forfeit_trivia_" in payload['actions'][0]['action_id']:
-            trivia_reply(payload['user']['id'], False, payload['actions'][0]['action_id'].replace("forfeit_trivia_", ""), payload['trigger_id'])
+            trivia_reply(payload['user']['id'], False,
+                         payload['actions'][0]['action_id'].replace("forfeit_trivia_", ""), payload['trigger_id'])
             return
         elif "trivia_start_" in payload['view']['callback_id']:
             if "default_trivia_" in payload['actions'][0]['action_id']:
-                trivia_set_qs(payload['actions'][0]['action_id'].replace("default_trivia_", ""), payload['actions'][0]['selected_option']['value'] == "true")
+                trivia_set_qs(payload['actions'][0]['action_id'].replace("default_trivia_", ""),
+                              payload['actions'][0]['selected_option']['value'] == "true")
                 return
             elif "trivia_channel_" in payload['actions'][0]['action_id']:
-                trivia_set_channel(payload['actions'][0]['action_id'].replace("trivia_channel_", ""), payload['actions'][0]['selected_channel'])
+                trivia_set_channel(payload['actions'][0]['action_id'].replace("trivia_channel_", ""),
+                                   payload['actions'][0]['selected_channel'])
                 return
         elif "trivia_question_" in payload['view']['callback_id']:
             trivia_response(payload['user']['id'], payload['actions'][0]['value'] == 'correct', payload['trigger_id'])
             return
         elif "course_overall_" in payload['actions'][0]['action_id']:
-            review_overall(payload['actions'][0]['action_id'].replace("course_overall_", ""), payload['actions'][0]['selected_option']['value'])
+            review_overall(payload['actions'][0]['action_id'].replace("course_overall_", ""),
+                           payload['actions'][0]['selected_option']['value'])
         elif "course_difficulty_" in payload['actions'][0]['action_id']:
-            review_difficulty(payload['actions'][0]['action_id'].replace("course_difficulty_", ""), payload['actions'][0]['selected_option']['value'])
+            review_difficulty(payload['actions'][0]['action_id'].replace("course_difficulty_", ""),
+                              payload['actions'][0]['selected_option']['value'])
         elif "course_time_" in payload['actions'][0]['action_id']:
-            review_time(payload['actions'][0]['action_id'].replace("course_time_", ""), payload['actions'][0]['selected_option']['value'])
+            review_time(payload['actions'][0]['action_id'].replace("course_time_", ""),
+                        payload['actions'][0]['selected_option']['value'])
 
         # Received when a user clicks a Block Kit interactive component.
         actions = payload["actions"]
@@ -222,6 +237,7 @@ def interactions(payload):
             values = utils.retrieve_profile_details(user)
             client.views_open(trigger_id=trigger_id, view=blocks.edit_profile(values))
 
+
 def onboarding(user, channel=None):
     """
     Onboards a new user or a existing user that hasn't been onboarded yet.
@@ -246,7 +262,8 @@ def onboarding(user, channel=None):
         channel = client.conversations_open(users=[user])["channel"]["id"]
 
     # Post the message in the channel
-    client.chat_postMessage(channel=channel, text='IMPORTANT: CSESoc Slack Onboarding!!', blocks=blocks.onboarding(user))
+    client.chat_postMessage(channel=channel, text='IMPORTANT: CSESoc Slack Onboarding!!',
+                            blocks=blocks.onboarding(user))
 
 
 def cs_job_opportunities(payload):
@@ -259,7 +276,7 @@ def cs_job_opportunities(payload):
     text = payload["text"].strip()
 
     # Attempt to extract options
-    options=""
+    options = ""
     if "-r" in text:
         text = text.replace("-r", "")
         options += "&sort=date"
@@ -272,7 +289,7 @@ def cs_job_opportunities(payload):
         page_number = 1
 
     # Attempt to extract the query from the given text
-    query = text.lstrip('0123456789.- ') 
+    query = text.lstrip('0123456789.- ')
     if query == "":
         query = "software internship"
 
@@ -324,7 +341,9 @@ def purge(payload):
     text_snippet = text
 
     # Open purge confirmation modal
-    client.views_open(trigger_id=payload["trigger_id"], view=blocks.purge_confirmation(number_of_messages, user, time_period, payload["channel_id"], text_snippet))
+    client.views_open(trigger_id=payload["trigger_id"],
+                      view=blocks.purge_confirmation(number_of_messages, user, time_period, payload["channel_id"],
+                                                     text_snippet))
 
 
 def say(payload):
@@ -338,7 +357,7 @@ def events(payload):
     """
     Display a list of events using linkup
     """
-    #print(payload)
+    # print(payload)
     # Extract the text from the payload
     text = payload["text"].strip()
     keyword = text.split()[0] if text != "" else "cse"
@@ -351,13 +370,12 @@ def events(payload):
     if not page_num.isnumeric():
         client.views_open(trigger_id=payload["trigger_id"], view=blocks.error_message("Invalid page number"))
         return
-        
+
     page_num = int(page_num)
 
     events = utils.retrieve_event_details(keyword, page_num)
 
     client.views_open(trigger_id=payload["trigger_id"], view=blocks.events_modal(events, keyword))
-
 
 
 def app_home(event):
@@ -386,47 +404,62 @@ def app_home(event):
 
 greetings = ["hi", "hello"]
 
+
 def reply_mention(user, channel):
     user_info = client.users_info(user=user)['user']
-    user_name = user_info['profile']['display_name_normalized'] if (user_info['profile']['display_name_normalized'] != "") else user_info['profile']['real_name_normalized']
+    user_name = user_info['profile']['display_name_normalized'] if (
+                user_info['profile']['display_name_normalized'] != "") else user_info['profile']['real_name_normalized']
     channel_info = client.conversations_info(channel=channel)['channel']
     channel_name = channel_info['name']
     message = f"Hi {user_name}, it's me slackbot!"
-    client.chat_postMessage(channel=channel, text=message, blocks=mentionBlock(user_name, channel_name, is_channel=channel_info['is_channel']))
+    client.chat_postMessage(channel=channel, text=message,
+                            blocks=mentionBlock(user_name, channel_name, is_channel=channel_info['is_channel']))
+
 
 def reply_im(user, channel, message):
     if message.lower() not in greetings:
         return
     user_info = client.users_info(user=user)['user']
-    user_name = user_info['profile']['display_name_normalized'] if (user_info['profile']['display_name_normalized'] != "") else user_info['profile']['real_name_normalized']
+    user_name = user_info['profile']['display_name_normalized'] if (
+                user_info['profile']['display_name_normalized'] != "") else user_info['profile']['real_name_normalized']
     message = f"Hi {user_name}, it's me slackbot!"
     client.chat_postMessage(channel=channel, text=message, blocks=imBlock(user_name))
 
+
 def help_modal(trigger_id, user):
     user_info = client.users_info(user=user)['user']
-    user_name = user_info['profile']['display_name_normalized'] if (user_info['profile']['display_name_normalized'] != "") else user_info['profile']['real_name_normalized']
+    user_name = user_info['profile']['display_name_normalized'] if (
+                user_info['profile']['display_name_normalized'] != "") else user_info['profile']['real_name_normalized']
     client.views_open(trigger_id=trigger_id, view=helpModal(user_name))
+
 
 def trivia_modal(trigger_id, user):
     user_info = client.users_info(user=user)['user']
-    user_name = user_info['profile']['display_name_normalized'] if (user_info['profile']['display_name_normalized'] != "") else user_info['profile']['real_name_normalized']
+    user_name = user_info['profile']['display_name_normalized'] if (
+                user_info['profile']['display_name_normalized'] != "") else user_info['profile']['real_name_normalized']
     return client.views_open(trigger_id=trigger_id, view=globalTriviaModal(user_name, user))['view']['id']
+
 
 def trivia_custom_questions_modal(view_id, trigger_id, user, q_number):
     # client.views_update(view_id=view_id, view=triviaCustomQuestions(user, q_number))
     # client.views_push(trigger_id=trigger_id, view=triviaCustomQuestions(user, q_number))
     client.views_open(trigger_id=trigger_id, view=triviaCustomQuestions(user, q_number))
 
+
 def start_trivia_message(user, channel, game_id):
     client.chat_postEphemeral(user=user, channel=channel, text="Trivia Time", blocks=triviaInviteMessage(game_id))
 
+
 def trivia_response_notify(user, channel, player, response):
     player_info = client.users_info(user=player)['user']
-    player_name = player_info['profile']['display_name_normalized'] if (player_info['profile']['display_name_normalized'] != "") else player_info['profile']['real_name_normalized']
+    player_name = player_info['profile']['display_name_normalized'] if (
+                player_info['profile']['display_name_normalized'] != "") else player_info['profile'][
+        'real_name_normalized']
     if response:
         client.chat_postEphemeral(user=user, channel=channel, text=f"{player_name} accepted your trivia invite")
     else:
         client.chat_postEphemeral(user=user, channel=channel, text=f"{player_name} rejected your trivia invite")
+
 
 def trivia_question_send(trigger_id, user, channel, question, qnum, view):
     if view is None:
@@ -434,25 +467,36 @@ def trivia_question_send(trigger_id, user, channel, question, qnum, view):
     else:
         return client.views_update(view_id=view, view=triviaAskQuestion(user, question, qnum))['view']['id']
 
+
 def trivia_complete(view, score):
     return client.views_update(view_id=view, view=triviaComplete(score))
+
 
 def trivia_leaderboard(channel, players):
     for player in players:
         player_info = client.users_info(user=player['player'])['user']
-        player['name'] = player_info['profile']['display_name_normalized'] if (player_info['profile']['display_name_normalized'] != "") else player_info['profile']['real_name_normalized']
+        player['name'] = player_info['profile']['display_name_normalized'] if (
+                    player_info['profile']['display_name_normalized'] != "") else player_info['profile'][
+            'real_name_normalized']
     client.chat_postMessage(channel=channel, text="Trivia is over!", blocks=triviaBoard(players))
+
 
 def trivia_ongoing(trigger_id):
     client.views_open(trigger_id=trigger_id, view=triviaOngoing())
 
+
 def trivia_custom_questions_prompt(user_id, channel):
-    client.chat_postEphemeral(user=user_id, channel=channel, text="Fill in custom questions", blocks=triviaCustomMessage(user_id))
+    client.chat_postEphemeral(user=user_id, channel=channel, text="Fill in custom questions",
+                              blocks=triviaCustomMessage(user_id))
+
+
 def review_modal(trigger_id, course_code, user_id):
     return client.views_open(trigger_id=trigger_id, view=reviewModal(course_code, user_id))['view']['id']
 
+
 def review_confirm(user_id, course_code):
     client.chat_postMessage(channel=user_id, text="Review confirmed!", blocks=reviewConfirm(course_code))
+
 
 def karma_message(channel_id):
     toppers = utils.get_top_karma()
@@ -460,6 +504,8 @@ def karma_message(channel_id):
     leaders = []
     for user in toppers:
         player_info = client.users_info(user=user.id)['user']
-        player_name = player_info['profile']['display_name_normalized'] if (player_info['profile']['display_name_normalized'] != "") else player_info['profile']['real_name_normalized']
+        player_name = player_info['profile']['display_name_normalized'] if (
+                    player_info['profile']['display_name_normalized'] != "") else player_info['profile'][
+            'real_name_normalized']
         leaders.append({'name': player_name, 'karma': user.karma, 'pfp': player_info['profile']['image_72']})
     client.chat_postMessage(channel=channel_id, text="Karma boards", blocks=karmaBoard(leaders))
