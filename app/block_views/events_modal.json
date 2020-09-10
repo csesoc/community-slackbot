@@ -1,0 +1,25 @@
+{
+	"type": "modal",
+	"title": {
+		"type": "plain_text",
+		"text": "Events",
+		"emoji": true
+	},
+	"close": {
+		"type": "plain_text",
+		"text": "Close",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Showing events at %%KEYWORD%%"
+			}
+		},
+		{
+			"type": "divider"
+		}
+	]
+}

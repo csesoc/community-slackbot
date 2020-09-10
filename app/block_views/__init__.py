@@ -216,3 +216,31 @@ def app_home(data):
         view = view.replace(f"%%{key.upper()}%%", values[key] if key in values.keys() else "-")
 
     return json.loads(view)
+
+def event_styling(event):
+    # Load event styling
+    event_structure = get_block_view("event_styling.json")
+    event_structure = event_structure.replace("%%TITLE%%", event["title"])
+    event_structure = event_structure.replace("%%DESCRIPTION%%", event["description"])
+    event_structure = event_structure.replace("%%IMAGE_URL%%", event["image_url"])
+    event_structure = event_structure.replace("%%URL%%", event["url"])
+
+    print(event_structure)
+    return json.loads(event_structure)
+
+
+
+def events_modal(events, keyword):
+    # Load modal
+    modal = get_block_view("events_modal.json")
+
+    # Add keyword to header
+    modal = modal.replace("%%KEYWORD%%", keyword)
+    modal = json.loads(modal)
+
+    for event in events:
+        modal["blocks"] += event_styling(event)
+
+    return modal
+
+    

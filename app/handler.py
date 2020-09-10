@@ -2,10 +2,12 @@
 import app.utils as utils
 from app import client, user_client
 import os
-from flask import json
+from flask import json, jsonify
 from app.block_views import get_anonymous_modal, get_anonymous_message, get_anonymous_reply_modal, get_report_modal
 import app.block_views as blocks
-from app.buildBlocks import imBlock, mentionBlock, helpModal, globalTriviaModal, triviaCustomQuestions, triviaInviteMessage, triviaAskQuestion, triviaComplete, triviaBoard, triviaOngoing, triviaCustomMessage
+from app.buildBlocks import mentionBlock, imBlock, helpModal, globalTriviaModal, triviaCustomQuestions, triviaInviteMessage, triviaAskQuestion, triviaComplete, triviaBoard, triviaOngoing, triviaCustomMessage, reviewModal, reviewConfirm, karmaBoard
+from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, trivia_custom_questions
+from app.jreview import review_overall, review_difficulty, review_time, review_submit
 
 def interactions(payload):
     """
@@ -26,9 +28,33 @@ def interactions(payload):
         # Opens the "edit_profile" view with prefilled information
         if callback_id == "anonymous_messaging":
             client.views_open(trigger_id=trigger_id, view=get_anonymous_modal())
+        elif callback_id == "trivia":
+            init_trivia(trigger_id, user)
 
     # Received when a modal is submitted.
     if payload["type"] == "view_submission":
+        # if 'trivia_start_' in payload['view']['callback_id']:
+        #     try:
+        #         game_id = payload['view']['callback_id'].replace('trivia_start_', '')
+        #         trivia_q_number(game_id, int(payload['view']['state']['values']['number_questions']['number_questions']['value']))
+        #         trivia_player_list(game_id, payload['view']['state']['values']['users_playing']['users_playing']['selected_users'])
+        #         if trivia_finalise(game_id, trigger_id):
+        #             try:
+        #                 with a.app_context():
+        #                     resp = jsonify({'response_action': 'push', 'view': trivia_customs(game_id, trigger_id)})
+        #                     resp.headers['Authorization'] = Config.SLACK_BOT_TOKEN
+        #                     return resp
+        #             except Exception as err:
+        #                 print(err)
+        #     except:
+        #         trivia_failure(game_id, trigger_id)
+        # if 'custom_questions_' in payload['view']['callback_id']:
+        #     trivia_custom_questions(payload['view']['callback_id'].replace('custom_questions_', ''), payload['view']['state']['values'])
+        if 'course_review_' in payload['view']['callback_id']:
+            u_id = payload['view']['callback_id'].replace("course_review_", "")
+            course = review_submit(u_id, payload['view']['state']['values'])
+            review_confirm(u_id, course)
+
         view = payload["view"]
         callback_id = view["callback_id"]
         state = view["state"]
@@ -142,6 +168,32 @@ def interactions(payload):
                                          "provide the following report id: R{}".format(report_id))
 
     if payload["type"] == "block_actions":
+        
+        if "trivia_custom_" in payload['actions'][0]['action_id']:
+            trivia_customs(payload['actions'][0]['action_id'].replace("trivia_custom_", ""), payload['trigger_id'])
+            return
+        elif "accept_trivia_" in payload['actions'][0]['action_id']:
+            trivia_reply(payload['user']['id'], True, payload['actions'][0]['action_id'].replace("accept_trivia_", ""), payload['trigger_id'])
+            return
+        elif "forfeit_trivia_" in payload['actions'][0]['action_id']:
+            trivia_reply(payload['user']['id'], False, payload['actions'][0]['action_id'].replace("forfeit_trivia_", ""), payload['trigger_id'])
+            return
+        elif "trivia_start_" in payload['view']['callback_id']:
+            if "default_trivia_" in payload['actions'][0]['action_id']:
+                trivia_set_qs(payload['actions'][0]['action_id'].replace("default_trivia_", ""), payload['actions'][0]['selected_option']['value'] == "true")
+                return
+            elif "trivia_channel_" in payload['actions'][0]['action_id']:
+                trivia_set_channel(payload['actions'][0]['action_id'].replace("trivia_channel_", ""), payload['actions'][0]['selected_channel'])
+                return
+        elif "trivia_question_" in payload['view']['callback_id']:
+            trivia_response(payload['user']['id'], payload['actions'][0]['value'] == 'correct', payload['trigger_id'])
+            return
+        elif "course_overall_" in payload['actions'][0]['action_id']:
+            review_overall(payload['actions'][0]['action_id'].replace("course_overall_", ""), payload['actions'][0]['selected_option']['value'])
+        elif "course_difficulty_" in payload['actions'][0]['action_id']:
+            review_difficulty(payload['actions'][0]['action_id'].replace("course_difficulty_", ""), payload['actions'][0]['selected_option']['value'])
+        elif "course_time_" in payload['actions'][0]['action_id']:
+            review_time(payload['actions'][0]['action_id'].replace("course_time_", ""), payload['actions'][0]['selected_option']['value'])
 
         # Received when a user clicks a Block Kit interactive component.
         actions = payload["actions"]
@@ -179,8 +231,15 @@ def onboarding(user, channel=None):
     if utils.query_user_exists(user):
         return
 
+    # Retrieve admin status from slack
+    user_info = client.users_info(user=user)
+    is_admin = user_info["user"]["is_admin"]
+
     # Add user to the database
-    utils.add_new_user(user)
+    if is_admin:
+        utils.add_new_user(user, is_admin=is_admin)
+    else:
+        utils.add_new_user(user)
 
     # Retrieve channel
     if channel is None:
@@ -279,8 +338,26 @@ def events(payload):
     """
     Display a list of events using linkup
     """
-    
-    client.chat_postMessage(channel=payload["channel_id"], text=payload["text"])
+    #print(payload)
+    # Extract the text from the payload
+    text = payload["text"].strip()
+    keyword = text.split()[0] if text != "" else "cse"
+    page_num = text.split()[1] if len(text.split()) >= 2 else "0"
+
+    if keyword != "cse" and keyword != "unsw":
+        client.views_open(trigger_id=payload["trigger_id"], view=blocks.error_message("Invalid keyword"))
+        return
+
+    if not page_num.isnumeric():
+        client.views_open(trigger_id=payload["trigger_id"], view=blocks.error_message("Invalid page number"))
+        return
+        
+    page_num = int(page_num)
+
+    events = utils.retrieve_event_details(keyword, page_num)
+
+    client.views_open(trigger_id=payload["trigger_id"], view=blocks.events_modal(events, keyword))
+
 
 
 def app_home(event):
@@ -371,3 +448,18 @@ def trivia_ongoing(trigger_id):
 
 def trivia_custom_questions_prompt(user_id, channel):
     client.chat_postEphemeral(user=user_id, channel=channel, text="Fill in custom questions", blocks=triviaCustomMessage(user_id))
+def review_modal(trigger_id, course_code, user_id):
+    return client.views_open(trigger_id=trigger_id, view=reviewModal(course_code, user_id))['view']['id']
+
+def review_confirm(user_id, course_code):
+    client.chat_postMessage(channel=user_id, text="Review confirmed!", blocks=reviewConfirm(course_code))
+
+def karma_message(channel_id):
+    toppers = utils.get_top_karma()
+    # display name, profile picture, karma count
+    leaders = []
+    for user in toppers:
+        player_info = client.users_info(user=user.id)['user']
+        player_name = player_info['profile']['display_name_normalized'] if (player_info['profile']['display_name_normalized'] != "") else player_info['profile']['real_name_normalized']
+        leaders.append({'name': player_name, 'karma': user.karma, 'pfp': player_info['profile']['image_72']})
+    client.chat_postMessage(channel=channel_id, text="Karma boards", blocks=karmaBoard(leaders))

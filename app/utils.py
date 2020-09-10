@@ -7,6 +7,7 @@ import re
 import requests
 import datetime
 import time
+import json
 from bs4 import BeautifulSoup
 from urllib.parse import quote
 
@@ -85,7 +86,8 @@ def retrieve_highest_permission_level(user_id):
 
     # Set permission level to the highest of the roles or 0 if user does not have any roles
     perm_level = max(role.perm_level for role in query) if query != [] else 0
-    title = Roles.query.filter_by(user_id=user_id, perm_level=perm_level).first().title
+    title = Roles.query.filter_by(user_id=user_id, perm_level=perm_level).first()
+    title = title if title is not None else "Member"
 
     return perm_level, title
 
@@ -143,15 +145,20 @@ def jobs_from_indeed(page_number, query, options):
 
 
 def retrieve_created_at(user):
-    created_at = User.query.filter_by(id=user).first().created_at.strftime("%d/%m/%y")
-    return created_at
+    datetime_obj = User.query.filter_by(id=user).first()
+    datetime_str = datetime_obj.created_at.strftime("%d/%m/%y") if datetime_obj is not None else "00/00/00"
+    return datetime_str
 
-def add_new_user(user):
+def add_new_user(user, is_admin=False):
     """
     Add a user to the database
     :param user: A string of 9 characters representing a slack user id
     """
     db.session.add(User(id=user))
+
+    if is_admin:
+        db.session.add(Roles(user_id=user, title="admin", perm_level=2))
+
     db.session.commit()
 
 
@@ -213,9 +220,9 @@ def retrieve_profile_details(user):
 def retrieve_event_details(keyword, page):
 
     if keyword == "" or keyword == "unsw":
-        r = requests.get(f'https://eventlink.me/events?uni=unsw&limit=5')
+        r = requests.get(f'https://api.eventlink.me/events?uni=unsw&limit=5&offset={page * 5}')
     elif keyword == "cse":
-        r = requests.get(f'https://eventlink.me/events?uni=unsw&society_id=csesoc')
+        r = requests.get(f'https://api.eventlink.me/events?uni=unsw&society_id=csesoc')
 
     events = json.loads(r.text)
 
@@ -230,3 +237,16 @@ def retrieve_event_details(keyword, page):
         })
 
     return rtn
+
+def get_top_karma():
+    return User.query.order_by(User.karma.desc()).limit(5).all()
+
+def add_karma(u_id):
+    user = User.query.filter_by(id=u_id).first()
+    user.karma = user.karma + 1
+    db.session.commit()
+
+def remove_karma(u_id):
+    user = User.query.filter_by(id=u_id).first()
+    user.karma = user.karma - 1
+    db.session.commit()
