@@ -51,7 +51,7 @@ def trivia_player_list(user_id, user_list):
 
 def trivia_finalise(user_id, trigger_id):
     if trivia_games[user_id].default_qs:
-        with open("blocks/questionBank.json", "r") as f:
+        with open("app/block_views/questionBank.json", "r") as f:
             questionBank = json.load(f)
         for _ in range(trivia_games[user_id].number_qs):
             trivia_games[user_id].questions.append(questionBank.pop(random.randint(0,len(questionBank) - 1)))

@@ -2,11 +2,12 @@
 import app.utils as utils
 from app import client, user_client
 import os
-from flask import json
+from flask import json, jsonify
 from app.block_views import get_anonymous_modal, get_anonymous_message, get_anonymous_reply_modal, get_report_modal
 import app.block_views as blocks
 from app.buildBlocks import mentionBlock, imBlock, helpModal, globalTriviaModal, triviaCustomQuestions, triviaInviteMessage, triviaAskQuestion, triviaComplete, triviaBoard, triviaOngoing, triviaCustomMessage
 from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, trivia_custom_questions
+from config import Config
 
 def interactions(payload):
     """
@@ -40,7 +41,7 @@ def interactions(payload):
                 trivia_player_list(game_id, payload['view']['state']['values']['users_playing']['users_playing']['selected_users'])
                 if trivia_finalise(game_id, trigger_id):
                     resp = jsonify({'response_action': 'push', 'view': trivia_customs(game_id, trigger_id)})
-                    resp.headers['Authorization'] = slack_token
+                    resp.headers['Authorization'] = Config.SLACK_BOT_TOKEN
                     return resp
             except:
                 trivia_failure(game_id, trigger_id)
