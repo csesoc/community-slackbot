@@ -354,7 +354,7 @@ def events(payload):
 
     events = utils.retrieve_event_details(keyword, page_num)
 
-    client.views_open(trigger_id=payload["trigger_id"], view=blocks.events_modal(events, keyword))
+    client.views_open(trigger_id=payload["trigger_id"], view=blocks.events_modal(events, keyword, page_num))
 
 
 

@@ -218,19 +218,23 @@ def app_home(data):
     return json.loads(view)
 
 def event_styling(event):
+
+    # truncate description
+    if len(event["description"]) > 100:
+        event["description"] = event["description"][:100] + "..."
+
     # Load event styling
     event_structure = get_block_view("event_styling.json")
-    event_structure = event_structure.replace("%%TITLE%%", event["title"])
-    event_structure = event_structure.replace("%%DESCRIPTION%%", event["description"])
-    event_structure = event_structure.replace("%%IMAGE_URL%%", event["image_url"])
-    event_structure = event_structure.replace("%%URL%%", event["url"])
+    event_structure = json.loads(event_structure)
+    event_structure[0]["text"]["text"] = event_structure[0]["text"]["text"].replace("%%TITLE%%", event["title"])
+    event_structure[0]["text"]["text"] = event_structure[0]["text"]["text"].replace("%%DESCRIPTION%%", event["description"])
+    event_structure[0]["accessory"]["image_url"] = event_structure[0]["accessory"]["image_url"].replace("%%IMAGE_URL%%", event["image_url"])
+    event_structure[0]["text"]["text"] = event_structure[0]["text"]["text"].replace("%%URL%%", event["url"])
 
-    print(event_structure)
-    return json.loads(event_structure)
+    return event_structure
 
 
-
-def events_modal(events, keyword):
+def events_modal(events, keyword, page_number):
     # Load modal
     modal = get_block_view("events_modal.json")
 
@@ -241,6 +245,10 @@ def events_modal(events, keyword):
     for event in events:
         modal["blocks"] += event_styling(event)
 
+    # Load page context
+    page_context = get_block_view("event_page_context.json").replace("%%PAGE_NUMBER%%", str(page_number))
+    page_context = json.loads(page_context)
+    modal["blocks"].append(page_context)
+
     return modal
 
-    
