@@ -50,6 +50,9 @@ def trivia_player_list(user_id, user_list):
     trivia_games[user_id].trivia_players = user_list
 
 def trivia_finalise(user_id, trigger_id):
+    if client.auth_test()['user_id'] not in client.conversations_members(channel=trivia_games[user_id].channel)['members']:
+        trivia_failure(user_id, trigger_id)
+        return False
     if trivia_games[user_id].default_qs:
         with open("app/block_views/questionBank.json", "r") as f:
             questionBank = json.load(f)
