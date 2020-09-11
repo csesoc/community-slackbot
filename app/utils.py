@@ -156,9 +156,9 @@ def add_new_user(user, is_admin=False, is_owner=False):
     db.session.add(User(id=user))
 
     if is_owner:
-        db.session.add(Roles(user_id=user, title="owner", perm_level=2))
+        db.session.add(UserRole(user_id=user, role_id=2))
     elif is_admin:
-        db.session.add(Roles(user_id=user, title="admin", perm_level=1))
+        db.session.add(UserRole(user_id=user, role_id=1))
 
 
     db.session.commit()
