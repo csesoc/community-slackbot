@@ -11,19 +11,5 @@
 			"type": "divider"
 		},
 		{REPORTS}
-		{
-			"type": "actions",
-			"elements": [
-				{
-					"type": "button",
-					"text": {
-						"type": "plain_text",
-						"emoji": true,
-						"text": "Next 5 Reports"
-					},
-					"value": "fetch_next_reports"
-				}
-			]
-		}
 	]
 }

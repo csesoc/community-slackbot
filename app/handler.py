@@ -176,7 +176,7 @@ def interactions(payload):
                                          "provide the following report id: R{}".format(report_id))
 
     if payload["type"] == "block_actions":
-
+        print(payload)
         if "trivia_custom_" in payload['actions'][0]['action_id']:
             trivia_customs(payload['actions'][0]['action_id'].replace("trivia_custom_", ""), payload['trigger_id'])
             return
@@ -188,16 +188,16 @@ def interactions(payload):
             trivia_reply(payload['user']['id'], False,
                          payload['actions'][0]['action_id'].replace("forfeit_trivia_", ""), payload['trigger_id'])
             return
-        elif "trivia_start_" in payload['view']['callback_id']:
+        elif 'view' in payload and "trivia_start_" in payload['view']['callback_id']:
             if "default_trivia_" in payload['actions'][0]['action_id']:
                 trivia_set_qs(payload['actions'][0]['action_id'].replace("default_trivia_", ""),
                               payload['actions'][0]['selected_option']['value'] == "true")
                 return
-            elif "trivia_channel_" in payload['actions'][0]['action_id']:
+            elif 'view' in payload and "trivia_channel_" in payload['actions'][0]['action_id']:
                 trivia_set_channel(payload['actions'][0]['action_id'].replace("trivia_channel_", ""),
                                    payload['actions'][0]['selected_channel'])
                 return
-        elif "trivia_question_" in payload['view']['callback_id']:
+        elif 'view' in payload and "trivia_question_" in payload['view']['callback_id']:
             trivia_response(payload['user']['id'], payload['actions'][0]['value'] == 'correct', payload['trigger_id'])
             return
         elif "course_overall_" in payload['actions'][0]['action_id']:
@@ -223,6 +223,13 @@ def interactions(payload):
         if value == "click_reply":
             message_id = payload["message"]["blocks"][0]["block_id"]
             client.views_open(trigger_id=trigger_id, view=get_anonymous_reply_modal(message_id))
+
+        # Close Report
+        if value.startswith("remove_report_"):
+            report_id = value.split("_")[-1]
+            utils.close_report(report_id)
+            client.chat_postMessage(channel=payload["user"]["id"],
+                                    text="Successfully removed report R{}".format(report_id))
 
         # No modal is expected
         if value == "pass":

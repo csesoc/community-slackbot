@@ -77,6 +77,7 @@ class AnonMsgs(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     msg = db.Column(db.Text())
     user_id = db.Column(db.String(16), ForeignKey("users.id"))
+    target_id = db.Column(db.String(16))
 
     def __repr__(self):
         return '<AnonMsgs {}>'.format(self.id)
@@ -103,6 +104,7 @@ class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     msg_id = db.Column(db.Integer, ForeignKey("anon_msgs.id"))
     report = db.Column(db.Text())
+    reported_at = db.Column(db.DateTime, server_default=db.func.now())
 
     def __repr__(self):
         return '<AnonMsgs {}>'.format(self.id)
