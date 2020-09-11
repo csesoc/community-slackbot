@@ -98,7 +98,7 @@ def get_course_summary():
     course = Courses.query.filter_by(course=payload).first()
     if course is None:
         return make_response("No such course found. Use /courses to see available courses", 200)
-    item = get_block_view("courses/course_summary.json")
+    item = get_block_view("views/courses/course_summary.json")
     item = item.replace("{COURSE NAME}", course.course)
     item = item.replace("{COURSE_SHORT_SUMMARY}", course.msg)
     return Response(item, mimetype='application/json')
@@ -106,10 +106,10 @@ def get_course_summary():
 
 @slack.route("/courses", methods=['POST'])
 def get_courses_listing():
-    response = get_block_view("courses/courses_list.json")
+    response = get_block_view("views/courses/courses_list.json")
     list_items = []
     for course in Courses.query.all():
-        item = get_block_view("courses/course_list_item.json")
+        item = get_block_view("views/courses/course_list_item.json")
         item = item.replace("{COURSE NAME}", course.course)
         course_brief_summary = course.msg if len(course.msg) < 120 else course.msg[0:120] + "..."
         item = item.replace("{COURSE_SHORT_SUMMARY}", course_brief_summary)
