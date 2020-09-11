@@ -365,32 +365,21 @@ def app_home(event):
 
     # Retrieve user profile details from slack
     user = event["user"]
-    user_profile = client.users_profile_get(user=user)
+    user_profile = client.users_profile_get(user=user)["profile"]
 
     # Retrieve profile details from database 
     values = utils.retrieve_profile_details(user)
     _, title = utils.retrieve_highest_permission_level(user)
 
-    if "image_original" not in user_profile["profile"].keys():
-        data = {
-            "full_name": user_profile["profile"]["real_name"],
-            "image_original": "https://wallpaperaccess.com/full/129054.jpg",
-            "username": user_profile["profile"]["real_name"].lower().replace(" ", "_"),
-            "values": values,
-            "role": title,
-            "join_date": utils.retrieve_created_at(user)
-        }
-        user_client.views_publish(user_id=user, view=blocks.app_home(data))
-    else:
-        data = {
-            "image_original": user_profile["profile"]["image_original"],
-            "full_name": user_profile["profile"]["real_name"],
-            "username": user_profile["profile"]["real_name"].lower().replace(" ", "_"),
-            "values": values,
-            "role": title,
-            "join_date": utils.retrieve_created_at(user)
-        }
-        user_client.views_publish(user_id=user, view=blocks.app_home(data, has_image_profile=True))
+    data = {
+        "image_original": user_profile["image_original"] if "image_original" in user_profile.keys() else "https://wallpaperaccess.com/full/129054.jpg",
+        "full_name": user_profile["real_name"],
+        "username": user_profile["real_name"].lower().replace(" ", "_"),
+        "values": values,
+        "role": title,
+        "join_date": utils.retrieve_created_at(user)
+    }
+    client.views_publish(user_id=user, view=blocks.app_home(data))
 
 
 greetings = ["hi", "hello"]
