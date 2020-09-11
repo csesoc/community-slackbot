@@ -8,13 +8,13 @@ MAX_STRING_LENGTH = 65535
 
 class UserRoles:
     NORMAL = 0
-    MOD = 1
-    ADMIN = 2
-    ROLES = [NORMAL, MOD, ADMIN]
+    ADMIN = 1
+    OWNER = 2
+    ROLES = [NORMAL, ADMIN, OWNER]
     TITLES = [
-        "Normal",
-        "Moderator",
-        "Admin"
+        "normal",
+        "admin",
+        "owner"
     ]
 
 class User(db.Model):

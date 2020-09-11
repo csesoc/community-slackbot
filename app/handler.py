@@ -234,12 +234,10 @@ def onboarding(user, channel=None):
     # Retrieve admin status from slack
     user_info = client.users_info(user=user)
     is_admin = user_info["user"]["is_admin"]
+    is_owner = user_info["user"]["is_owner"]
 
     # Add user to the database
-    if is_admin:
-        utils.add_new_user(user, is_admin=is_admin)
-    else:
-        utils.add_new_user(user)
+    utils.add_new_user(user, is_admin=is_admin, is_owner=is_owner)
 
     # Retrieve channel
     if channel is None:
@@ -373,15 +371,26 @@ def app_home(event):
     values = utils.retrieve_profile_details(user)
     _, title = utils.retrieve_highest_permission_level(user)
 
-    data = {
-        "image_original": user_profile["profile"]["image_original"],
-        "full_name": user_profile["profile"]["real_name"],
-        "username": user_profile["profile"]["real_name"].lower().replace(" ", "_"),
-        "values": values,
-        "role": title,
-        "join_date": utils.retrieve_created_at(user)
-    }
-    client.views_publish(user_id=user, view=blocks.app_home(data))
+    if "image_original" not in user_profile["profile"].keys():
+        data = {
+            "full_name": user_profile["profile"]["real_name"],
+            "image_original": "https://wallpaperaccess.com/full/129054.jpg",
+            "username": user_profile["profile"]["real_name"].lower().replace(" ", "_"),
+            "values": values,
+            "role": title,
+            "join_date": utils.retrieve_created_at(user)
+        }
+        user_client.views_publish(user_id=user, view=blocks.app_home(data))
+    else:
+        data = {
+            "image_original": user_profile["profile"]["image_original"],
+            "full_name": user_profile["profile"]["real_name"],
+            "username": user_profile["profile"]["real_name"].lower().replace(" ", "_"),
+            "values": values,
+            "role": title,
+            "join_date": utils.retrieve_created_at(user)
+        }
+        user_client.views_publish(user_id=user, view=blocks.app_home(data, has_image_profile=True))
 
 
 greetings = ["hi", "hello"]
