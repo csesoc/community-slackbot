@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <title>
+   Handbook
+  </title>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+ </head>
+ <body style="margin: 0">
+  <div id="error-container">
+  </div>
+  <div id="handbook">
+  </div>
+  <!-- Courseloop-ui / handbook includes -->
+  <!-- Live -->
+  <script src="https://courseloop-ui.s3.amazonaws.com/handbook/v2/production/assets/handbook-0.28.7.js?v=2020-9-11-20-54" type="text/javascript">
+  </script>
+  <script>
+   var routeConfig = {
+  "routes": [
+    {
+      "path": "/",
+      "page": "HomePage"
+    },
+    {
+      "path": "/search",
+      "page": "SearchPage"
+    },
+    {
+      "path": "/mylist",
+      "page": "MyListPage"
+    },
+{
+  "path": "/browse/:category/:urlname",
+  "page": "BrowsePage"
+},
+    {
+      "path": "/:studyLevelURL/:contentType/:implementationYear/:code",
+      "page": "AIPage",
+      "contentTypeMap": {
+        "programs": "course",
+        "specialisations": "aos",
+        "courses": "subject"
+      }
+    }
+  ]
+};
+            var connectionId = "f59fc109-4aaa-40e0-bdcc-7039d31533f8";
+      var routes = routeConfig && routeConfig.routes;
+      new handbookv2.load({
+        target: "handbook",
+        cmsRouteConfig: routes,
+        dataPrefix: "unsw_p",
+        cmsTheme: "unsw",
+        analyticsConfig: {
+  "googleTagManager": {
+    "id": "GTM-5JB423",
+    "react": true
+  }
+},
+        connectionId: connectionId,
+      });
+  </script>
+ </body>
+</html>

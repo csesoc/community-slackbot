@@ -1,0 +1,84 @@
+COMP1000 	Introduction to World Wide Web, Spreadsheets and Databases 	6
+COMP1400 	Programming for Designers 	6
+COMP1511 	Introduction to Programming 	6
+COMP1521 	Computer Systems Fundamentals 	6
+COMP1531 	Software Engineering Fundamentals 	6
+COMP1911 	Computing 1A 	6
+COMP1927 	Computing 2 	6
+COMP2041 	Software Construction: Techniques and Tools 	6
+COMP2111 	System Modelling and Design 	6
+COMP2121 	Microprocessors and Interfacing 	6
+COMP2511 	Object-Oriented Design & Programming 	6
+COMP2521 	Data Structures and Algorithms 	6
+COMP2911 	Engineering Design in Computing 	6
+COMP3121 	Algorithms and Programming Techniques 	6
+COMP3131 	Programming Languages and Compilers 	6
+COMP3141 	Software System Design and Implementation 	6
+COMP3151 	Foundations of Concurrency 	6
+COMP3153 	Algorithmic Verification 	6
+COMP3161 	Concepts of Programming Languages 	6
+COMP3211 	Computer Architecture 	6
+COMP3222 	Digital Circuits and Systems 	6
+COMP3231 	Operating Systems 	6
+COMP3311 	Database Systems 	6
+COMP3331 	Computer Networks and Applications 	6
+COMP3411 	Artificial Intelligence 	6
+COMP3421 	Computer Graphics 	6
+COMP3431 	Robotic Software Architecture 	6
+COMP3511 	Human Computer Interaction 	6
+COMP3601 	Design Project A 	6
+COMP3821 	Extended Algorithms & Programming Techniques 	6
+COMP3891 	Extended Operating Systems 	6
+COMP3900 	Computer Science Project 	6
+COMP3901 	Special Project A 	6
+COMP3902 	Special Project B 	12
+COMP4121 	Advanced and Parallel Algorithms 	6
+COMP4128 	Programming Challenges 	6
+COMP4141 	Theory of Computation 	6
+COMP4161 	Advanced Topics in Software Verification 	6
+COMP4181 	Language-based Software Safety 	6
+COMP4336 	Mobile Data Networking 	6
+COMP4337 	Securing Wireless Networks 	6
+COMP4418 	Knowledge Representation and Reasoning 	6
+COMP4511 	User Interface Design and Construction 	6
+COMP4601 	Design Project B 	6
+COMP4904 	Industrial Training 1 	18
+COMP4905 	Industrial Training 2 	15
+COMP4906 	Industrial Training 3 	15
+COMP4920 	Management and Ethics 	6
+COMP4930 	Thesis Part A 	6
+COMP4931 	Thesis Part B 	6
+COMP4941 	Thesis Part B 	12
+COMP6324 	Internet of Things Service Design and Engineering 	6
+COMP6441 	Security Engineering and Cyber Security 	6
+COMP6443 	Web Application Security and Testing 	6
+COMP6445 	Digital Forensics 	6
+COMP6447 	System and Software Security Assessment 	6
+COMP6448 	Security Engineering Masterclass 	6
+COMP6449 	Security Engineering Professional Practice 	6
+COMP6714 	Information Retrieval and Web Search 	6
+COMP6733 	Internet of Things Experimental Design Studio 	6
+COMP6741 	Parameterized and Exact Computation 	6
+COMP6752 	Modelling Concurrent Systems 	6
+COMP6771 	Advanced C++ Programming 	6
+COMP6841 	Extended Security Engineering and Cyber Security 	6
+COMP6843 	Extended Web Application Security and Testing 	6
+COMP6845 	Extended Digital Forensics and Incident Response 	6
+COMP9161 	Concepts of Programming Languages 	6
+COMP9242 	Advanced Operating Systems 	6
+COMP9243 	Distributed Systems 	6
+COMP9315 	Database Systems Implementation 	6
+COMP9318 	Data Warehousing and Data Mining 	6
+COMP9319 	Web Data Compression and Search 	6
+COMP9321 	Data Services Engineering 	6
+COMP9322 	Software Service Design and Engineering 	6
+COMP9323 	Software as a Service Project 	6
+COMP9332 	Network Routing and Switching 	6
+COMP9333 	Advanced Computer Networks 	6
+COMP9334 	Capacity Planning of Computer Systems and Networks 	6
+COMP9417 	Machine Learning and Data Mining 	6
+COMP9418 	Advanced Topics in Statistical Machine Learning 	6
+COMP9444 	Neural Networks and Deep Learning 	6
+COMP9447 	Security Engineering Workshop 	6
+COMP9517 	Computer Vision 	6
+COMP9844 	Extended Neural Networks and Deep Learning 	6
