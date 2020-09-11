@@ -96,7 +96,7 @@ def retrieve_highest_permission_level(user_id):
     # Set permission level to the highest of the roles or 0 if user does not have any roles
     perm_level = max(role.perm_level for role in query) if query != [] else 0
     title = Roles.query.filter_by(user_id=user_id, perm_level=perm_level).first()
-    title = title if title is not None else "Member"
+    title = title.title if title is not None else "Member"
 
     return perm_level, title
 
@@ -158,15 +158,18 @@ def retrieve_created_at(user):
     datetime_str = datetime_obj.created_at.strftime("%d/%m/%y") if datetime_obj is not None else "00/00/00"
     return datetime_str
 
-def add_new_user(user, is_admin=False):
+def add_new_user(user, is_admin=False, is_owner=False):
     """
     Add a user to the database
     :param user: A string of 9 characters representing a slack user id
     """
     db.session.add(User(id=user))
 
-    if is_admin:
-        db.session.add(Roles(user_id=user, title="admin", perm_level=2))
+    if is_owner:
+        db.session.add(UserRole(user_id=user, role_id=2))
+    elif is_admin:
+        db.session.add(UserRole(user_id=user, role_id=1))
+
 
     db.session.commit()
 
