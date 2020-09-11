@@ -1,0 +1,29 @@
+{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Anonymous Message Report*\n\n*{User 1}* reported by *{User 1}*\n*Report Id:* R{REPORT_ID}\n\nReported content: \n'{REPORT_CONTENT}'\n"
+			},
+			"accessory": {
+				"type": "button",
+				"text": {
+					"type": "plain_text",
+					"emoji": true,
+					"text": "Close Report"
+				},
+				"value": "remove_report_{REPORT_ID}"
+			}
+		},
+		{
+			"type": "context",
+			"elements": [
+				{
+					"type": "plain_text",
+					"emoji": true,
+					"text": ":clock1: Reported at: {REPORTED_AT}"
+				}
+			]
+		},
+		{
+			"type": "divider"
+}
