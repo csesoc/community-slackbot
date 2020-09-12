@@ -88,11 +88,11 @@ def retrieve_highest_permission_level(user_id):
     """
 
     # Retrieve all roles of given user
-    query = Roles.query.filter_by(user_id=user_id).all()
+    query = UserRole.query.filter_by(user_id=user_id).all()
 
     # Set permission level to the highest of the roles or 0 if user does not have any roles
-    perm_level = max(role.perm_level for role in query) if query != [] else 0
-    role = Roles.query.filter_by(user_id=user_id, perm_level=perm_level).first()
+    perm_level = max(role.role_id for role in query) if query != [] else 0
+    role = Roles.query.filter_by(id=perm_level+1).first()
     title = role.title if role is not None else "Member"
 
     return perm_level, title
@@ -160,14 +160,17 @@ def add_new_user(user, is_admin=False, is_owner=False):
     Add a user to the database
     :param user: A string of 9 characters representing a slack user id
     """
+    print("ENTERED HERE")
     db.session.add(User(id=user))
 
     if is_owner:
-        db.session.add(UserRole(user_id=user, role_id=2))
-        db.session.add(Roles(user_id=user, title="owner", perm_level=2))
+        db.session.add(UserRole(user_id=user, role_id=3))
+        #db.session.add(Roles(user_id=user, title="owner", perm_level=2))
     elif is_admin:
+        db.session.add(UserRole(user_id=user, role_id=2))
+        #db.session.add(Roles(user_id=user, title="admin", perm_level=1))
+    else:
         db.session.add(UserRole(user_id=user, role_id=1))
-        db.session.add(Roles(user_id=user, title="admin", perm_level=1))
 
 
     db.session.commit()
