@@ -151,16 +151,16 @@ def add_new_user(user, is_admin=False, is_owner=False):
     :param user: A string of 9 characters representing a slack user id
     """
     db.session.add(User(id=user))
+    db.session.commit()
 
     if is_owner:
         db.session.add(UserRole(user_id=user, role_id=2))
         db.session.add(Roles(user_id=user, title="owner", perm_level=2))
+        db.session.commit()
     elif is_admin:
         db.session.add(UserRole(user_id=user, role_id=1))
         db.session.add(Roles(user_id=user, title="admin", perm_level=1))
-
-
-    db.session.commit()
+        db.session.commit()
 
 
 def query_user_exists(user):
