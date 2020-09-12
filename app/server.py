@@ -1,11 +1,11 @@
-#Accepts user requests, parses them, and calls the required handler
+# Accepts user requests, parses them, and calls the required handler
 
 
 from app import slack_events_adapter, client, handler, app
 from config import Config
 from app.event_handlers.stylecheck import handle_style_check_request
 from flask import Blueprint, make_response, request, jsonify, Response
-from app.models import Courses, UserRoles
+from app.models import Courses, UserRoles, Report
 from app.block_views import get_block_view
 from app.utils import verify_request, retrieve_highest_permission_level, get_role_title
 
@@ -19,14 +19,16 @@ import random
 import threading
 
 from app.handler import reply_mention, reply_im, help_modal, trivia_modal, review_modal, karma_message
-from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, trivia_custom_questions
+from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, \
+    trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, \
+    trivia_custom_questions
 from app.jreview import review_init, review_overall, review_difficulty, review_time, review_submit
-
 
 slack_token = Config.SLACK_BOT_TOKEN
 slack = Blueprint(
     'slack', __name__,
 )
+
 
 @slack_events_adapter.on("message")
 def reply(event_data):
@@ -45,17 +47,20 @@ def reply(event_data):
         message = event_data['event']['text']
         reply_im(user, channel, message)
 
+
 @slack_events_adapter.on("reaction_added")
 def slack_emoji(event_data):
     if (event_data['event']['reaction'] != 'karma'):
         return
     utils.add_karma(event_data['event']['item_user'])
 
+
 @slack_events_adapter.on("reaction_removed")
 def slack_emoji_remove(event_data):
     if (event_data['event']['reaction'] != 'karma'):
         return
     utils.remove_karma(event_data['event']['item_user'])
+
 
 @slack.route('/pair', methods=['POST'])
 def pair():
@@ -120,6 +125,34 @@ def get_courses_listing():
     return Response(response, mimetype='application/json')
 
 
+@slack.route('/reports', methods=['POST'])
+def reports():
+    if not verify_request(request):
+        return make_response("", 400)
+    active_reports = Report.query.all()
+    reports = []
+    for r in active_reports:
+        if len(reports) >= 10:
+            break
+        anon_msg = utils.get_anon_message_from_id(r.msg_id)
+        report_entry = get_block_view("views/reports/report_entry.json")
+        report_entry = report_entry.replace("{REPORT_ID}", str(r.id))
+        report_entry = report_entry.replace("{REPORT_CONTENT}", r.report)
+        report_entry = report_entry.replace("{User 1}", anon_msg.user_id)
+        report_entry = report_entry.replace("{User 2}", anon_msg.target_id)
+        report_entry = report_entry.replace("{REPORTED_AT}",
+                                            "No report time" if r.reported_at is None else r.reported_at.strftime(
+                                                "%B %d, %Y, %H:%M:%S%z"))
+        reports.append(report_entry)
+    reports_string = ",".join(reports)
+    if len(reports) > 0:
+        reports_string += ","
+    response = get_block_view("views/reports/report_message.json")
+    response = response.replace("{REPORTS}", reports_string)
+    response = response.replace("{NUM_REPORTS}", str(len(reports)))
+    return Response(response, mimetype='application/json')
+
+
 @slack.route('/stylecheck', methods=['POST'])
 def stylecheck():
     if not verify_request(request):
@@ -150,8 +183,10 @@ def interactions():
         trigger_id = payload["trigger_id"]
         try:
             game_id = payload['view']['callback_id'].replace('trivia_start_', '')
-            trivia_q_number(game_id, int(payload['view']['state']['values']['number_questions']['number_questions']['value']))
-            trivia_player_list(game_id, payload['view']['state']['values']['users_playing']['users_playing']['selected_users'])
+            trivia_q_number(game_id,
+                            int(payload['view']['state']['values']['number_questions']['number_questions']['value']))
+            trivia_player_list(game_id,
+                               payload['view']['state']['values']['users_playing']['users_playing']['selected_users'])
             if trivia_finalise(game_id, trigger_id):
                 try:
                     with app.app_context():
@@ -163,8 +198,9 @@ def interactions():
         except:
             trivia_failure(game_id, trigger_id)
         return make_response("", 200)
-    elif payload['type'] == "view_submission" and 'custom_questions_' in payload['view']['callback_id']: 
-        trivia_custom_questions(payload['view']['callback_id'].replace('custom_questions_', ''), payload['view']['state']['values'])
+    elif payload['type'] == "view_submission" and 'custom_questions_' in payload['view']['callback_id']:
+        trivia_custom_questions(payload['view']['callback_id'].replace('custom_questions_', ''),
+                                payload['view']['state']['values'])
         # can change if we want to be able to go back to the previous modal but this feels cleaner
         with app.app_context():
             resp = jsonify({'response_action': 'clear'})
@@ -174,6 +210,7 @@ def interactions():
     # Spawn a thread to service the request
     threading.Thread(target=handler.interactions, args=[payload]).start()
     return make_response("", 200)
+
 
 @slack.route('/CSopportunities', methods=['POST'])
 def cs_job_opportunities():
@@ -229,6 +266,7 @@ def say():
     threading.Thread(target=handler.say, args=[payload]).start()
     return make_response("", 200)
 
+
 @slack.route('/events', methods=['POST'])
 def events():
     """
@@ -257,7 +295,7 @@ def team_join(event_data):
     '''
     # Parse request
     user = event_data["event"]["user"]
-    
+
     # Spawn a thread to service the request
     threading.Thread(target=handler.onboarding, args=[user]).start()
 
@@ -316,18 +354,21 @@ def slack_shortcut():
 
     return Response()'''
 
+
 @slack_events_adapter.on("app_mention")
 def slack_mention(event_data):
     user = event_data['event']['user']
     channel = event_data["event"]["channel"]
     reply_mention(user, channel)
 
+
 @slack.route('/helpme', methods=['POST'])
 def slack_help():
     if not verify_request(request):
-        return make_response("",400)
+        return make_response("", 400)
     help_modal(request.form.get('trigger_id'), request.form.get('user_id'))
     return make_response("", 200)
+
 
 @app.route('/review', methods=['POST'])
 def slack_review():
@@ -339,6 +380,7 @@ def slack_review():
     review_init(request.form.get('user_id'), request.form.get('text'))
     review_modal(request.form.get('trigger_id'), request.form.get('text'), request.form.get('user_id'))
     return make_response("", 200)
+
 
 @app.route('/karma', methods=['POST'])
 def slack_karma():

@@ -1,0 +1,15 @@
+{
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "There are *{NUM_REPORTS}* unclosed reports awaiting review"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{REPORTS}
+	]
+}

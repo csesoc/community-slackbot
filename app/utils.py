@@ -13,6 +13,7 @@ from urllib.parse import quote
 
 from app import db
 from app.models import User, UserProfileDetail, Roles, AnonMsgs, Report, UserRole
+from config import Config
 
 
 def verify_request(request):
@@ -25,7 +26,7 @@ def verify_request(request):
     data = request.get_data()
     slack_signature = request.headers['X-Slack-Signature']
     sig_basestring = str.encode('v0:' + timestamp + ':') + data
-    slack_signing_secret = os.environ['SLACK_SIGNING_SECRET']
+    slack_signing_secret = Config.SLACK_SIGNING_SECRET
     secret = str.encode(slack_signing_secret)
     my_signature = 'v0=' + hmac.new(key=secret, msg=sig_basestring, digestmod=hashlib.sha256).hexdigest()
     if hmac.compare_digest(my_signature, slack_signature):
@@ -46,7 +47,7 @@ def create_anon_message(sender_id, target_ids, msg):
 def reply_anon_message(sender_id, msg_id, reply_msg):
     # Should we flag as reply
     msg = AnonMsgs.query.filter_by(id=msg_id).first()
-    anon = AnonMsgs(user_id=sender_id, target_id=msg.target_id, msg=reply_msg)
+    anon = AnonMsgs(user_id=sender_id, target_id=msg.user_id, msg=reply_msg)
     db.session.add(anon)
     db.session.commit()
     return anon
@@ -59,6 +60,11 @@ def report_message(msg_id, report):
     return report.id
 
 
+def close_report(report_id):
+    Report.query.filter_by(id=report_id).delete()
+    db.session.commit()
+
+
 def get_role_title(perm_level):
     role = Roles.query.filter_by(perm_level=perm_level).first()
     return role.title
@@ -67,6 +73,10 @@ def get_role_title(perm_level):
 def get_role_id_by_perm_level(perm_level):
     role = Roles.query.filter_by(perm_level=perm_level).first()
     return role.id
+
+
+def get_anon_message_from_id(msg_id):
+    return AnonMsgs.query.filter_by(id=msg_id).first()
 
 
 def retrieve_highest_permission_level(user_id):
@@ -78,11 +88,11 @@ def retrieve_highest_permission_level(user_id):
     """
 
     # Retrieve all roles of given user
-    query = Roles.query.filter_by(user_id=user_id).all()
+    query = UserRole.query.filter_by(user_id=user_id).all()
 
     # Set permission level to the highest of the roles or 0 if user does not have any roles
-    perm_level = max(role.perm_level for role in query) if query != [] else 0
-    role = Roles.query.filter_by(user_id=user_id, perm_level=perm_level).first()
+    perm_level = max(role.role_id for role in query) if query != [] else 0
+    role = Roles.query.filter_by(id=perm_level+1).first()
     title = role.title if role is not None else "Member"
 
     return perm_level, title
@@ -150,6 +160,7 @@ def add_new_user(user, is_admin=False, is_owner=False):
     Add a user to the database
     :param user: A string of 9 characters representing a slack user id
     """
+    print("ENTERED HERE")
     db.session.add(User(id=user))
     db.session.commit()
 
@@ -158,6 +169,9 @@ def add_new_user(user, is_admin=False, is_owner=False):
         db.session.add(Roles(user_id=user, title="owner", perm_level=2))
         db.session.commit()
     elif is_admin:
+        db.session.add(UserRole(user_id=user, role_id=2))
+        #db.session.add(Roles(user_id=user, title="admin", perm_level=1))
+    else:
         db.session.add(UserRole(user_id=user, role_id=1))
         db.session.add(Roles(user_id=user, title="admin", perm_level=1))
         db.session.commit()

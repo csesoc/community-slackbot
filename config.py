@@ -1,10 +1,10 @@
-#Configurables relating to Flask Server and Database
+# Configuration relating to Flask Server and Database
 
 import os
 from dotenv import load_dotenv
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-load_dotenv(os.path.join(basedir, 'vars.env'))
+load_dotenv(os.path.join(basedir, '.env'))
 
 
 class Config:
