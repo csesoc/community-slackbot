@@ -1,3 +1,7 @@
+"""
+If file contains a http site make sure you add the oauth scope file:read to the bot
+"""
+
 import os
 import uuid
 from guesslang import Guess
@@ -5,6 +9,8 @@ import requests
 from app.event_handlers.stylecheck.linters import *
 
 FILE_FOLDER = "./temp_files"
+if not os.path.exists(FILE_FOLDER):
+    os.mkdir(FILE_FOLDER)
 
 SUPPORTED_LANGUAGES = [
     "C", "C++", "Python"
@@ -63,7 +69,7 @@ def get_code_from_text(text) -> str:
 def save_code_file(slack_token, url: str = None, code: str = None, language: str = None) -> str:
     file_path = None
     if url is not None:
-        res = requests.get(url, headers={'Authorization': 'Bearer' + ' ' + slack_token})
+        res = requests.get(url, headers={'Authorization': 'Bearer' + ' ' + slack_token}, allow_redirects=True)
         terms = url.split('/')
         file_path = os.path.join(FILE_FOLDER, terms[-1])
         with open(file_path, 'wb') as f:

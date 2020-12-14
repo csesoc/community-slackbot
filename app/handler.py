@@ -142,7 +142,7 @@ def interactions(payload):
                 controls.append(control)
 
             users = controls[0]["selected_users"]
-            message = controls[1]["value"]
+            message = controls[2]["value"]
             msg_ids = utils.create_anon_message(user, users, message)
             for i, selected_user in enumerate(users):
                 block = get_anonymous_message(message, msg_ids[i])
