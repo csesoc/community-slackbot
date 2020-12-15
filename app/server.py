@@ -342,6 +342,26 @@ def events():
     threading.Thread(target=handler.events, args=[payload]).start()
     return make_response("", 200)
 
+@slack.route('/faq', methods=['POST'])
+def faq():
+    """
+    Command Configuration
+    Command: /faq
+    Short Description: Frequently Asked Questions.
+    Usage hint: none
+    Escape channels, users, and links sent to your app: False
+    """
+    # Verify request
+    if not utils.verify_request(request):
+        return make_response("", 400)
+
+    # Parse request
+    payload = request.form.to_dict()
+
+    # Spawn a thread to service the request
+    threading.Thread(target=handler.faq, args=[payload]).start()
+    return make_response("", 200)
+
 
 # Events
 @slack_events_adapter.on("team_join")

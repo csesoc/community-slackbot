@@ -404,6 +404,11 @@ def app_home(event):
     }
     client.views_publish(user_id=user, view=blocks.app_home(data))
 
+def faq(payload):
+    """
+    Displays frequently asked questions
+    """
+    client.chat_postEphemeral(channel=payload["channel_id"], user=payload["user_id"], blocks=blocks.faq_message())
 
 greetings = ["hi", "hello"]
 

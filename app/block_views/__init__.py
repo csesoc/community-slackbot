@@ -252,3 +252,26 @@ def events_modal(events, keyword, page_number):
 
     return modal
 
+def faq_message():
+    question_answer_pairs = json.loads(get_block_view("faq.json"))
+    blocks = [
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "_*Frequently Asked Questions*_"
+            }
+        }
+    ]
+
+    for pair in question_answer_pairs:
+        blocks.append({
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": f"*Q:* {pair['question']}\n *A:* {pair['answer']}"
+            }
+        })
+
+    return blocks
+
