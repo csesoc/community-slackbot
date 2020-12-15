@@ -1,4 +1,3 @@
-import shlex
 from pylint import epylint as lint
 import subprocess
 from subprocess import PIPE, STDOUT

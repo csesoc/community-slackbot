@@ -12,6 +12,7 @@ from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q
     trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, \
     trivia_custom_questions
 from app.jreview import review_overall, review_difficulty, review_time, review_submit
+from app.models import Courses
 
 
 def interactions(payload):
@@ -174,6 +175,26 @@ def interactions(payload):
             client.chat_postMessage(channel=payload["user"]["id"],
                                     text="Message Reported, to follow up "
                                          "provide the following report id: R{}".format(report_id))
+
+        if callback_id == "select_course_outline":
+            control = list(state["values"].items())
+            course_code = list(control[0][1].values())[0]["selected_option"]["text"]["text"]
+            course = Courses.query.filter_by(course=course_code).first()
+            if course is None:
+                message = "No such course found. Use /courses to see available courses"
+                client.chat_postMessage(channel=payload["user"]["id"],
+                                        text=message)
+            else:
+                message = blocks.get_block_view("views/courses/course_summary.json")
+                message = message.replace("{COURSE NAME}", course.course)
+                message = message.replace("{COURSE_SHORT_SUMMARY}", course.msg)
+                print(message)
+                message = json.loads(message, strict=False)
+                message = message["blocks"]
+                message = json.dumps(message)
+                print(message)
+                client.chat_postMessage(channel=payload["user"]["id"],
+                                        blocks=message)
 
     if payload["type"] == "block_actions":
         print(payload)

@@ -1,0 +1,51 @@
+{
+	"type": "modal",
+	"callback_id": "select_course_outline",
+	"title": {
+		"type": "plain_text",
+		"text": "Select Course",
+		"emoji": true
+	},
+	"submit": {
+		"type": "plain_text",
+		"text": "Show Course Outline",
+		"emoji": true
+	},
+	"close": {
+		"type": "plain_text",
+		"text": "Cancel",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Please select a course to show outline for:*"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "static_select",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Select an item",
+					"emoji": true
+				},
+				"options": [
+                  {COURSES_OPTIONS}
+				],
+				"action_id": "static_select-action"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Label",
+				"emoji": true
+			}
+		}
+	]
+}

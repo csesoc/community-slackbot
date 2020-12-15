@@ -6,7 +6,7 @@ from config import Config
 from app.event_handlers.stylecheck import handle_style_check_request
 from flask import Blueprint, make_response, request, jsonify, Response
 from app.models import Courses, UserRoles, Report
-from app.block_views import get_block_view
+from app.block_views import get_block_view, get_course_select_outline
 from app.utils import verify_request, retrieve_highest_permission_level, get_role_title
 
 import app.utils as utils
@@ -98,9 +98,12 @@ def pair():
 @slack.route("/course", methods=['POST'])
 def get_course_summary():
     # TODO: Add in prerequsities, corresponding term date + lecturer, and display corresponding reviews made via /review
-    # TODO: Add in a multi-select menu of courses if course argument is omitted 
     payload = request.form.to_dict()
-    payload = payload['text'].split(' ')
+    payload = [x for x in payload['text'].split(' ') if x != ""]
+    print(payload)
+    if payload is None or len(payload) == 0:
+        client.views_open(trigger_id=request.form.get('trigger_id'), view=get_course_select_outline())
+        return make_response("", 200)
 
     course = Courses.query.filter_by(course=payload).first()
     if course is None:
