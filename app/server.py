@@ -215,8 +215,34 @@ def interactions():
 @slack.route('/CSopportunities', methods=['POST'])
 def cs_job_opportunities():
     """
-    Lets you know about CS job opportunities from indeed
-    Usage: /CSopportunities [OPTIONS, page_number=1, query="software internship"]
+    Command Configuration
+    Command: /csopportunities
+    Short Description: Lets you know about CS job opportunities from indeed
+    Usage hint: [OPTIONS, page_number, query]
+    Escape channels, users, and links sent to your app: False
+
+    Manual testing
+    Default (first page of software internships): /csopportunities
+    Specify page number (second page): /csopportunities 2
+    Specify most recent job posts first: /csopportunities -r
+    Specify query: /csopportunities web developer
+    Specify query and page number: /csopportunities 2 web developer
+    Specify query and most recent: /csopportunities -r web developer
+    Specify page number and most recent: /csopportunities -r 2
+    Specify query, page number and recent: /csopportunities -r 2 web developer
+
+    Extra info
+    Currently uses job data from indeed, although we are looking to change to
+    a different source due to data access concerns. Ideally the new source would
+    have the majority of avaliable jobs relevant to cse students, such as the cse
+    jobs board which is still in development. Additionally, it is prefered if we
+    are able to obtain and store the jobs data in our database, to avoid strain
+    on the jobs source website, although this may depend on how much this particular
+    command is used. Storing the entire jobs database from indeed or similar sites
+    each week would be very difficult, and could be viewed as a whole entirely
+    different project in terms of difficulty. However, if we focus on sourcing jobs
+    from smaller sources with more relevant job oppotunities (such as jobs board),
+    then this may be viable. For a MVP, sourcing the data from indeed should be fine.
     """
 
     # Verify request
@@ -225,6 +251,7 @@ def cs_job_opportunities():
 
     # Parse request
     payload = request.form.to_dict()
+
     # Spawn a thread to service the request
     threading.Thread(target=handler.cs_job_opportunities, args=[payload]).start()
     return make_response("", 200)
@@ -233,8 +260,26 @@ def cs_job_opportunities():
 @slack.route('/purge', methods=['POST'])
 def purge():
     """
-    Mass delete unwanted messages.
-    Usage: /purge <number of messages> [user, time_period, text_snippet]
+    Command Configuration
+    Command: /purge
+    Short Description: Mass delete unwanted messages
+    Usage hint: <number of messages> [user, time_period, text_snippet]
+    Escape channels, users, and links sent to your app: True
+
+    Manual testing
+    Delete 1 most recent messages: /purge 1
+    Delete 1 most recent messages from yourself: /purge 1 @you
+    Delete 1 most recent message within the last 60 seconds: /purge 1 60
+    Delete 1 most recent message which contain the text snippet "bad": /purge 1 bad
+    Delete 1 most recent message within the last 60 seconds from yourself: /purge 1 @you 60
+    Delete 1 most recent message from yourself which contain the text snippet "bad": /purge 1 @you bad
+    Delete 1 most recent message within the last 60 seconds which contain the text snippet "bad": /purge 1 60 bad
+    Delete 1 message from yourself in the last 60 seconds which contain the snippet "bad": /purge 1 @you 60 bad
+
+    Extra info
+    Make sure that the bot is in the channel for successful purge.
+    To remove emphirical messages, press Ctrl+R.
+    For testing with multiple users, you can use the bot's /say command.
     """
 
     # Verify request
@@ -252,8 +297,11 @@ def purge():
 @slack.route('/say', methods=['POST'])
 def say():
     """
-    Say something as the slackbot.
-    Usage: /say message
+    Command Configuration
+    Command: /say
+    Short Description: Say something as the slackbot.
+    Usage hint: <message>
+    Escape channels, users, and links sent to your app: False
     """
     # Verify request
     if not utils.verify_request(request):
@@ -270,8 +318,18 @@ def say():
 @slack.route('/events', methods=['POST'])
 def events():
     """
-    Display a list of events using linkup
-    Usage: /events <cse | unsw> [page number]
+    Command Configuration
+    Command: /events
+    Short Description: Display a list of events using linkup.
+    Usage hint: <cse | unsw> [page number]
+    Escape channels, users, and links sent to your app: False
+
+    Manual testing
+    /events
+    /events cse
+    /events unsw
+    /events cse 1
+    /events unsw 1
     """
     # Verify request
     if not utils.verify_request(request):
@@ -291,7 +349,9 @@ def team_join(event_data):
     '''
     Onboarding will trigger on both the "team_join" and "app_home_opened" event.
     This is to ensure that new, returning, and existing users of the slack space 
-    can easily be onboarded and added to the database without any problems. 
+    can easily be onboarded and added to the database without any problems.
+    Required configuration: subscribe to the "app_home_opened" and "team_join" 
+    bot events at https://api.slack.com/apps/YOUR_APP_ID_HERE/event-subscriptions
     '''
     # Parse request
     user = event_data["event"]["user"]
@@ -312,6 +372,8 @@ def app_home_opened(event_data):
 
     # Spawn a thread to service the request
     threading.Thread(target=handler.onboarding, args=[user, channel]).start()
+
+    # Spawn a thread to publish a app home view.
     threading.Thread(target=handler.app_home, args=[event]).start()
 
 

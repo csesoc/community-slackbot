@@ -77,7 +77,7 @@ def edit_profile(current):
     for key in ["favourite_course", "favourite_programming_language", "favourite_netflix_show", "favourite_food", \
             "overrated", "underrated", "biggest_flex", "enrolled_courses", "completed_courses", "general_interests"]:
         try:
-            string_view = string_view.replace(f"%%{key}%%", current[key])
+            string_view = string_view.replace(f"%%{key}%%", current[key] if (key in current.keys() and current[key] is not None) else "")
         except KeyError:
             string_view = string_view.replace(f"%%{key}%%", "")
 
@@ -213,7 +213,7 @@ def app_home(data):
     values = data["values"]
     for key in ["favourite_course", "favourite_programming_language", "favourite_netflix_show", "favourite_food", \
         "overrated", "underrated", "biggest_flex", "enrolled_courses", "completed_courses", "general_interests"]:
-        view = view.replace(f"%%{key.upper()}%%", values[key] if key in values.keys() else "-")
+        view = view.replace(f"%%{key.upper()}%%", values[key] if (key in values.keys() and values[key] is not None) else "-")
 
     return json.loads(view)
 

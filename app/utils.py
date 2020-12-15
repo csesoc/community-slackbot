@@ -229,9 +229,9 @@ def retrieve_profile_details(user):
 def retrieve_event_details(keyword, page):
 
     if keyword == "" or keyword == "unsw":
-        r = requests.get(f'https://api.eventlink.me/events?uni=unsw&limit=5&offset={page * 5}')
+        r = requests.get(f'https://dev-api.linkupevents.com.au/events?uni=unsw&limit=5&offset={page * 5}')
     elif keyword == "cse":
-        r = requests.get(f'https://api.eventlink.me/events?uni=unsw&society_id=csesoc')
+        r = requests.get(f'https://dev-api.linkupevents.com.au/events?uni=unsw&society_id=csesoc')
 
     events = json.loads(r.text)
 

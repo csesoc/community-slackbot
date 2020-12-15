@@ -176,7 +176,7 @@ def interactions(payload):
                                          "provide the following report id: R{}".format(report_id))
 
     if payload["type"] == "block_actions":
-        print(payload)
+        # print(payload)
         if "trivia_custom_" in payload['actions'][0]['action_id']:
             trivia_customs(payload['actions'][0]['action_id'].replace("trivia_custom_", ""), payload['trigger_id'])
             return
@@ -274,7 +274,6 @@ def onboarding(user, channel=None):
 def cs_job_opportunities(payload):
     """
     Lets you know about CS job opportunities from indeed
-    Usage: /CSopportunities [OPTIONS, page_number=1, query="software internship"]
     """
 
     # Extract the text from the payload
@@ -283,7 +282,7 @@ def cs_job_opportunities(payload):
     # Attempt to extract options
     options = ""
     if "-r" in text:
-        text = text.replace("-r", "")
+        text = text.replace("-r", "").strip()
         options += "&sort=date"
 
     # Attempt to extract the page number from the given text
@@ -308,7 +307,6 @@ def cs_job_opportunities(payload):
 def purge(payload):
     """
     Mass delete unwanted messages.
-    Usage: /purge <number of messages> [user, time_period, text_snippet]
     """
 
     # Retrieve permission level of user_id
