@@ -61,13 +61,14 @@ def get_course_select_outline():
         item = """{
         "text": {
             "type": "plain_text",
-            "text": "{course}",
+            "text": "{COURSE}",
             "emoji": true
         },
-        "value": "value-0"
-    }""".replace("{course}", course)
+        "value": "{VALUE}"
+    }""".replace("{COURSE}", course).replace("{VALUE}", course)
         items.append(item)
-    return get_block_view("views/courses/select_course_outline.json").replace("{COURSES_OPTIONS}", ",".join(items))
+    return get_block_view("views/courses/select_course_outline.json")\
+        .replace("{COURSES_OPTIONS}", ",".join(items))
 
 # Functions to load block_views start here
 # Block_views may vary from block_view to block_view,

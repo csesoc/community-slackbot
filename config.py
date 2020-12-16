@@ -28,3 +28,11 @@ class Config:
     SLACK_SIGNING_SECRET = os.environ['SLACK_SIGNING_SECRET']
     SLACK_USER_TOKEN = os.environ['SLACK_USER_TOKEN']
     SLACK_BOT_TOKEN = os.environ['SLACK_BOT_TOKEN']
+
+    # SMTP
+    SMTP_HOST = os.environ['SMTP_HOST']
+    SMTP_PORT = os.environ['SMTP_PORT']
+    SMTP_USE_TLS = os.environ['SMTP_USE_TLS'] == "true"
+    EMAIL_LOGIN = os.environ['EMAIL_LOGIN']
+    EMAIL_PASSWORD = os.environ['EMAIL_PASSWORD']
+    SMTP_SEND_MAIL = os.environ['SMTP_SEND_MAIL'] == "true"

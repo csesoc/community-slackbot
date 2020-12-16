@@ -177,8 +177,14 @@ def interactions(payload):
                                          "provide the following report id: R{}".format(report_id))
 
         if callback_id == "select_course_outline":
+            print(payload)
+            view = payload["view"]
+            state = view["state"]
             control = list(state["values"].items())
+            print(state)
+            print(list(control[0][1].values())[0])
             course_code = list(control[0][1].values())[0]["selected_option"]["text"]["text"]
+            print(course_code)
             course = Courses.query.filter_by(course=course_code).first()
             if course is None:
                 message = "No such course found. Use /courses to see available courses"
@@ -188,11 +194,9 @@ def interactions(payload):
                 message = blocks.get_block_view("views/courses/course_summary.json")
                 message = message.replace("{COURSE NAME}", course.course)
                 message = message.replace("{COURSE_SHORT_SUMMARY}", course.msg)
-                print(message)
                 message = json.loads(message, strict=False)
                 message = message["blocks"]
                 message = json.dumps(message)
-                print(message)
                 client.chat_postMessage(channel=payload["user"]["id"],
                                         blocks=message)
 

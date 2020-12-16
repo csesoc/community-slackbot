@@ -38,14 +38,14 @@
 				},
 				"options": [
                   {COURSES_OPTIONS}
-				],
-				"action_id": "static_select-action"
+				]
 			},
 			"label": {
 				"type": "plain_text",
 				"text": "Label",
 				"emoji": true
-			}
+			},
+			"block_id": "static_select_courses_list"
 		}
 	]
 }

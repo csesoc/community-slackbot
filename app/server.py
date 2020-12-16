@@ -174,7 +174,7 @@ def important():
         return make_response("", 200)
 
     threading.Thread(target=send_important_email_notification, args=[payload["channel_name"], payload["channel_id"], user_id]).start()
-    return make_response("Sent email", 200)
+    return make_response("Sent email notifications", 200)
 
 
 @slack.route('/interactions', methods=['POST'])
