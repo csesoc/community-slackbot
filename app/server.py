@@ -2,11 +2,12 @@
 
 
 from app import slack_events_adapter, client, handler, app
+from app.mail import send_important_email_notification
 from config import Config
 from app.event_handlers.stylecheck import handle_style_check_request
 from flask import Blueprint, make_response, request, jsonify, Response
 from app.models import Courses, UserRoles, Report
-from app.block_views import get_block_view, get_course_select_outline
+from app.block_views import get_block_view, get_course_select_outline, permission_denied
 from app.utils import verify_request, retrieve_highest_permission_level, get_role_title
 
 import app.utils as utils
@@ -156,15 +157,24 @@ def reports():
     return Response(response, mimetype='application/json')
 
 
-@slack.route('/stylecheck', methods=['POST'])
-def stylecheck():
+@slack.route('/important', methods=['POST'])
+def important():
     if not verify_request(request):
         return make_response("", 400)
 
     payload = request.form.to_dict()
-    payload = payload['text'].split(' ')
+    user_id = payload["user_id"]
 
-    return make_response("Pair success", 200)
+    # Retrieve permission level of user_id
+    perm_level, _ = utils.retrieve_highest_permission_level(user_id)
+
+    # Deny request if user doesn't have enough permission
+    if perm_level <= 0:
+        client.views_open(trigger_id=payload["trigger_id"], view=permission_denied())
+        return make_response("", 200)
+
+    threading.Thread(target=send_important_email_notification, args=[payload["channel_name"], payload["channel_id"], user_id]).start()
+    return make_response("Sent email", 200)
 
 
 @slack.route('/interactions', methods=['POST'])
