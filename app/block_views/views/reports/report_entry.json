@@ -2,7 +2,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "*Anonymous Message Report*\n\n*{User 1}* reported by *{User 1}*\n*Report Id:* R{REPORT_ID}\n\nReported content: \n'{REPORT_CONTENT}'\n"
+				"text": "*Anonymous Message Report*\n\n*{User 1}* reported by *{User 2}*\n*Report Id:* R{REPORT_ID}\n\nReported content: \n'{REPORT_CONTENT}'\n"
 			},
 			"accessory": {
 				"type": "button",

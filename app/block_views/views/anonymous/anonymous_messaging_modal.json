@@ -34,26 +34,6 @@
 			}
 		},
 		{
-			"type": "section",
-			"text": {
-				"type": "mrkdwn",
-				"text": "*Set Channel Recipient*"
-			}
-		},
-		{
-			"type": "actions",
-			"elements": [
-				{
-					"type": "channels_select",
-					"placeholder": {
-						"type": "plain_text",
-						"text": "Select a channel",
-						"emoji": true
-					}
-				}
-			]
-		},
-		{
 			"type": "input",
 			"element": {
 				"type": "plain_text_input",

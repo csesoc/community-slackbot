@@ -127,10 +127,7 @@ def get_courses_listing():
     return Response(response, mimetype='application/json')
 
 
-@slack.route('/reports', methods=['POST'])
-def reports():
-    if not verify_request(request):
-        return make_response("", 400)
+def send_reports_message(channel_id, user_id):
     active_reports = Report.query.all()
     reports = []
     for r in active_reports:
@@ -140,19 +137,33 @@ def reports():
         report_entry = get_block_view("views/reports/report_entry.json")
         report_entry = report_entry.replace("{REPORT_ID}", str(r.id))
         report_entry = report_entry.replace("{REPORT_CONTENT}", r.report)
-        report_entry = report_entry.replace("{User 1}", anon_msg.user_id)
-        report_entry = report_entry.replace("{User 2}", anon_msg.target_id)
+        report_entry = report_entry.replace("{User 1}", "{} ({})".format(
+            utils.get_full_name_from_uid(anon_msg.user_id), anon_msg.user_id))
+        report_entry = report_entry.replace("{User 2}", "{} ({})".format(
+            utils.get_full_name_from_uid(anon_msg.target_id), anon_msg.target_id))
         report_entry = report_entry.replace("{REPORTED_AT}",
                                             "No report time" if r.reported_at is None else r.reported_at.strftime(
                                                 "%B %d, %Y, %H:%M:%S%z"))
         reports.append(report_entry)
     reports_string = ",".join(reports)
-    if len(reports) > 0:
-        reports_string += ","
+    # if len(reports) > 0:
+    #     reports_string += ","
     response = get_block_view("views/reports/report_message.json")
     response = response.replace("{REPORTS}", reports_string)
     response = response.replace("{NUM_REPORTS}", str(len(reports)))
-    return Response(response, mimetype='application/json')
+    res_json = json.loads(response, strict=False)["blocks"]
+    response = json.dumps(res_json)
+    client.chat_postEphemeral(channel=channel_id, user=user_id, blocks=response)
+
+
+@slack.route('/reports', methods=['POST'])
+def reports():
+    if not verify_request(request):
+        return make_response("", 400)
+    payload = request.form.to_dict()
+    args = [payload["channel_id"], payload["user_id"]]
+    threading.Thread(target=send_reports_message, args=args).start()
+    return make_response("", 200)
 
 
 @slack.route('/important', methods=['POST'])

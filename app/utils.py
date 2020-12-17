@@ -305,3 +305,9 @@ def get_course_summary_block(course) -> str:
     item = item.replace("{USER_REVIEWS}", reviews_str)
 
     return item
+
+
+def get_full_name_from_uid(user_id: str) -> str:
+    info_endpoint = f"https://slack.com/api/users.info?token={Config.SLACK_BOT_TOKEN}&user={user_id}"
+    user_info = requests.get(info_endpoint).json()
+    return user_info["user"]["real_name"]

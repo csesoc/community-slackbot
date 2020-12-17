@@ -143,7 +143,7 @@ def interactions(payload):
                 controls.append(control)
 
             users = controls[0]["selected_users"]
-            message = controls[2]["value"]
+            message = controls[1]["value"]
             msg_ids = utils.create_anon_message(user, users, message)
             for i, selected_user in enumerate(users):
                 block = get_anonymous_message(message, msg_ids[i])
@@ -252,7 +252,7 @@ def interactions(payload):
             report_id = value.split("_")[-1]
             utils.close_report(report_id)
             client.chat_postMessage(channel=payload["user"]["id"],
-                                    text="Successfully removed report R{}".format(report_id))
+                                    text="Successfully closed report R{}".format(report_id))
 
         # No modal is expected
         if value == "pass":
