@@ -61,7 +61,7 @@ def get_course_select_outline():
         item = """{
         "text": {
             "type": "plain_text",
-            "text": "{COURSE}",
+            "text": "{COURSE}",  
             "emoji": true
         },
         "value": "{VALUE}"

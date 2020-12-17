@@ -1,0 +1,10 @@
+{
+      "type": "section",
+      "text": {
+          "type": "mrkdwn",
+          "text": "*User Review*\n\n*Lecturer*: {LECTURER}\n *Term*: {TERM}\n\n*Thoughts on the Course*\n{THOUGHTS}\n\n*Ratings*\nOverall: {OVERALL}\nDifficulty: {DIFFICULTY}\nTime Committment: {TIME}"
+      }
+  },
+  {
+      "type": "divider"
+  }

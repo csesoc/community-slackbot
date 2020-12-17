@@ -191,9 +191,7 @@ def interactions(payload):
                 client.chat_postMessage(channel=payload["user"]["id"],
                                         text=message)
             else:
-                message = blocks.get_block_view("views/courses/course_summary.json")
-                message = message.replace("{COURSE NAME}", course.course)
-                message = message.replace("{COURSE_SHORT_SUMMARY}", course.msg)
+                message = utils.get_course_summary_block(course)
                 message = json.loads(message, strict=False)
                 message = message["blocks"]
                 message = json.dumps(message)

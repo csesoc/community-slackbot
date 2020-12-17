@@ -109,9 +109,7 @@ def get_course_summary():
     course = Courses.query.filter_by(course=payload).first()
     if course is None:
         return make_response("No such course found. Use /courses to see available courses", 200)
-    item = get_block_view("views/courses/course_summary.json")
-    item = item.replace("{COURSE NAME}", course.course)
-    item = item.replace("{COURSE_SHORT_SUMMARY}", course.msg)
+    item = utils.get_course_summary_block(course)
     return Response(item, mimetype='application/json')
 
 

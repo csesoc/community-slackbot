@@ -1,19 +1,33 @@
 {
-  "blocks": [
-    {
-      "type": "section",
-      "text": {
-        "type": "mrkdwn",
-        "text": "*{COURSE NAME}*"
-      }
-    },
-    {
-      "type": "section",
-      "text": {
-        "type": "plain_text",
-        "text": "{COURSE_SHORT_SUMMARY}",
-        "emoji": true
-      }
-    }
-  ]
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*{COURSE NAME}*"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "plain_text",
+				"text": "{COURSE_SHORT_SUMMARY}",
+				"emoji": true
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Ratings ({NUM_REVIEWS} reviews)*\nOverall: {OVERALL}\nDifficulty: {DIFFICULTY}\nTime Committment: {TIME}"
+			}
+		},
+		{
+			"type": "divider"
+		}
+        {USER_REVIEWS}
+	]
 }
