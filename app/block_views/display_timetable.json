@@ -1,0 +1,33 @@
+{
+    "type": "modal",
+    "title": {
+        "type": "plain_text",
+        "text": "Timetable",
+        "emoji": true
+    },
+    "blocks": [
+        {
+            "type": "actions",
+            "elements": [
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Previous",
+                        "emoji": true
+                    },
+                    "value": "timetable_previous"
+                },
+                {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Next",
+                        "emoji": true
+                    },
+                    "value": "timetable_next"
+                }
+            ]
+        }
+    ]
+}

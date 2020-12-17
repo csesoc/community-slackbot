@@ -1,5 +1,6 @@
 import os
 import json
+import datetime
 
 TEST_VIEW_ONE = "test"
 __CACHED_VIEWS = {}
@@ -275,3 +276,19 @@ def faq_message():
 
     return blocks
 
+def display_timetable(start_date, data):
+    modal = json.loads(get_block_view("display_timetable.json"))
+    for index, day in enumerate(["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]):
+        text = f"{(start_date + datetime.timedelta(index)).strftime('*%A %d %B*')}"
+        for entry in data[day]:
+            text = text + "\n" + entry['title'] + "\n\t" f"_{entry['time']}_"
+        block = {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": text,
+            }
+        }
+        modal["blocks"].insert(-1, block)
+    modal["private_metadata"] = str(start_date)
+    return modal

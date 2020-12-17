@@ -5,16 +5,32 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "*Your Profile*"
+				"text": "*Your Profile* :bust_in_silhouette:"
 			},
 			"accessory": {
 				"type": "button",
 				"text": {
 					"type": "plain_text",
-					"text": "Edit your Profile",
+					"text": "Edit Your Profile :memo:",
 					"emoji": true
 				},
 				"value": "edit_profile"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": " "
+			},
+			"accessory": {
+				"type": "button",
+				"text": {
+					"type": "plain_text",
+					"text": "Display timetable :calendar:",
+					"emoji": true
+				},
+				"value": "display_timetable"
 			}
 		},
 		{

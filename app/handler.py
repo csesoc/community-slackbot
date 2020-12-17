@@ -244,6 +244,22 @@ def interactions(payload):
             values = utils.retrieve_profile_details(user)
             client.views_open(trigger_id=trigger_id, view=blocks.edit_profile(values))
 
+        # Opens the "display_timetable" modal
+        if value == "display_timetable":
+            start_date = utils.get_starting_date()
+            data = utils.get_timetable_data(start_date)
+            client.views_open(trigger_id=trigger_id, view=blocks.display_timetable(start_date, data))
+
+        if value == "timetable_previous":
+            start_date = utils.get_previous_date(payload["view"]["private_metadata"])
+            data = utils.get_timetable_data(start_date)
+            client.views_update(view_id=payload["container"]["view_id"], view=blocks.display_timetable(start_date, data))
+
+        if value == "timetable_next":
+            start_date = utils.get_next_date(payload["view"]["private_metadata"])
+            data = utils.get_timetable_data(start_date)
+            client.views_update(view_id=payload["container"]["view_id"], view=blocks.display_timetable(start_date, data))
+
 
 def onboarding(user, channel=None):
     """

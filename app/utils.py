@@ -259,3 +259,88 @@ def remove_karma(u_id):
     user = User.query.filter_by(id=u_id).first()
     user.karma = user.karma - 1
     db.session.commit()
+
+def get_starting_date():
+    """
+    Returns the date of the first day of the starting week which starts on a monday
+    """
+    date = datetime.date.today()
+    while (date.weekday() != 0):
+        date = date - datetime.timedelta(1)
+    return date
+
+def get_previous_date(date):
+    date = datetime.datetime.strptime(str(date), "%Y-%m-%d")
+    return date.date() - datetime.timedelta(7)
+
+def get_next_date(date):
+    date = datetime.datetime.strptime(str(date), "%Y-%m-%d")
+    return date.date() + datetime.timedelta(7)
+
+def get_timetable_data(date):
+    # Dummy data as we cannot yet experiment with the timetable in the database.
+    # TODO: Connect to database
+    if str(date) == '2020-12-14':
+        return {
+            "monday": [
+                {
+                    "title": "COMP2511 O-O Design & Programming Tut-Lab H09A",
+                    "time": "9:00am - 12:00pm"
+                },
+                {
+                    "title": "COMP3121 Algorithms and Programming Techniques Lecture LEC1",
+                    "time": "1:00pm - 3:00pm"
+                }
+            ],
+            "tuesday": [
+                {
+                    "title": "MATH2701 Algebra and Analysis Lecture A",
+                    "time": "11:00am - 2:00pm"
+                }
+            ],
+            "wednesday": [],
+            "thursday": [],
+            "friday": [
+                {
+                    "title": "MATH2701 Algebra and Analysis Lecture B",
+                    "time": " 6:00pm - 9:00pm"
+                }
+            ],
+            "saturday": [],
+            "sunday": []
+        }
+    elif str(date) == '2020-12-21':
+        return {
+            "monday": [
+                {
+                    "title": "COMP2511 O-O Design & Programming Tut-Lab H09A",
+                    "time": "9:00am - 12:00pm"
+                }
+            ],
+            "tuesday": [],
+            "wednesday": [],
+            "thursday": [
+                {
+                    "title": "COMP3121 Algorithms and Programming Techniques Lecture LEC1",
+                    "time": "1:00pm - 3:00pm"
+                }
+            ],
+            "friday": [
+                {
+                    "title": "MATH2701 Algebra and Analysis Lecture B",
+                    "time": " 6:00pm - 9:00pm"
+                }
+            ],
+            "saturday": [],
+            "sunday": []
+        }
+    else:
+        return {
+            "monday": [],
+            "tuesday": [],
+            "wednesday": [],
+            "thursday": [],
+            "friday": [],
+            "saturday": [],
+            "sunday": []
+        }   
