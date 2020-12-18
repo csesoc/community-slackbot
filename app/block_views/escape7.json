@@ -1,0 +1,46 @@
+{
+    "title": {
+        "type": "plain_text",
+        "text": "Escape Room",
+        "emoji": true
+    },
+    "submit": {
+        "type": "plain_text",
+        "text": "Next",
+        "emoji": true
+    },
+    "type": "modal",
+    "close": {
+        "type": "plain_text",
+        "text": "Exit",
+        "emoji": true
+    },
+    "blocks": [
+        {
+            "type": "image",
+            "image_url": "https://cdn.idropnews.com/wp-content/uploads/2015/09/27222219/JPEG_5.jpg",
+            "alt_text": "inspiration"
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Out emerges what appears to be some sort of smart device. Naturally, it is locked with a 4-digit pin, and a hint statement is provided: ‘Open’.  "
+            }
+        },
+        {
+            "type": "input",
+            "block_id": "pin_input",
+            "element": {
+                "type": "plain_text_input",
+                "action_id": "pin_input"
+            },
+            "label": {
+                "type": "plain_text",
+                "text": "Passcode",
+                "emoji": true
+            }
+        }
+    ],
+	"callback_id": "escape_room_7_$USER"
+}

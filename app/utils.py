@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import quote
 
 from app import db
-from app.models import User, UserProfileDetail, Roles, AnonMsgs, Report, UserRole
+from app.models import User, UserProfileDetail, Roles, AnonMsgs, Report, UserRole, Courses
 from config import Config
 
 
@@ -259,3 +259,6 @@ def remove_karma(u_id):
     user = User.query.filter_by(id=u_id).first()
     user.karma = user.karma - 1
     db.session.commit()
+
+def get_courses():
+    return Courses.query.all()

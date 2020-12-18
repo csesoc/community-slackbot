@@ -1,0 +1,33 @@
+{
+    "title": {
+        "type": "plain_text",
+        "text": "Escape Room",
+        "emoji": true
+    },
+    "submit": {
+        "type": "plain_text",
+        "text": "Next",
+        "emoji": true
+    },
+    "type": "modal",
+    "close": {
+        "type": "plain_text",
+        "text": "Exit",
+        "emoji": true
+    },
+    "blocks": [
+        {
+            "type": "image",
+            "image_url": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/07959b8c-5689-4ecf-a183-01efdd9e0b2f/d2myvxp-7d16a0ba-e126-4eb6-9852-758ad35c8765.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOiIsImlzcyI6InVybjphcHA6Iiwib2JqIjpbW3sicGF0aCI6IlwvZlwvMDc5NTliOGMtNTY4OS00ZWNmLWExODMtMDFlZmRkOWUwYjJmXC9kMm15dnhwLTdkMTZhMGJhLWUxMjYtNGViNi05ODUyLTc1OGFkMzVjODc2NS5qcGcifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6ZmlsZS5kb3dubG9hZCJdfQ.A2PEqqHt2czOsi4bZQT7Z2zGNxWvThcH27wz3FK-qGQ",
+            "alt_text": "inspiration"
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "You look in the corner of the room, and find a narrow crevice. You reach reluctantly into the hole, and after a few minutes of rummaging your hand comes upon a handle. Instinctively albeit naively, you pull the handle only to hear a resounding boom throughout the room.  "
+            }
+        }
+    ],
+	"callback_id": "escape_room_5_$USER"
+}

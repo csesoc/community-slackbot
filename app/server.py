@@ -18,11 +18,12 @@ import json
 import random
 import threading
 
-from app.handler import reply_mention, reply_im, help_modal, trivia_modal, review_modal, karma_message
+from app.handler import reply_mention, reply_im, help_modal, trivia_modal, review_modal, review_modal_course, karma_message
 from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, \
     trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, \
     trivia_custom_questions
-from app.jreview import review_init, review_overall, review_difficulty, review_time, review_submit
+from app.jreview import review_init, review_overall, review_difficulty, review_time, review_submit, review_course
+from app.jescape import init_escape, get_view, remove_escape, update_escape, escape_modal
 
 slack_token = Config.SLACK_BOT_TOKEN
 slack = Blueprint(
@@ -206,6 +207,41 @@ def interactions():
             resp = jsonify({'response_action': 'clear'})
             resp.headers['Authorization'] = slack_token
             return resp
+    elif payload['type'] == 'view_submission' and 'escape_room_' in payload['view']['callback_id']:
+        escape_set = payload['view']['callback_id'].replace('escape_room_', '')
+        escape_count = int(escape_set.split('_')[0])
+        escape_user = escape_set.split('_')[1]
+        if escape_count == 2:
+            if int(payload['view']['state']['values']['pin_input']['pin_input']['value']) == 1234567:
+                escape_count += 1
+            else:
+                escape_count = "Failure"
+        elif escape_count == 4:
+            if payload['view']['state']['values']['pin_input']['pin_input']['value'].lower().strip() == "look in the corner":
+                escape_count += 1
+            else:
+                escape_count = "Failure"
+        elif escape_count == 7:
+            if int(payload['view']['state']['values']['pin_input']['pin_input']['value']) == 6736:
+                escape_count += 1
+            else:
+                escape_count = "Failure"
+        elif escape_count == 10:
+            if int(payload['view']['state']['values']['pin_input']['pin_input']['value']) == 3:
+                escape_count = "Success"
+            else:
+                escape_count = "Failure"
+        else:
+            escape_count += 1
+        try:
+            with app.app_context():
+                resp = jsonify({'response_action': 'update', 'view': escape_modal(escape_user, escape_count)})
+                resp.headers['Authorization'] = slack_token
+                return resp
+        except Exception as err:
+            print(err)
+            return make_response("", 400)
+    # print(payload)
 
     # Spawn a thread to service the request
     threading.Thread(target=handler.interactions, args=[payload]).start()
@@ -377,8 +413,13 @@ def slack_review():
     # TODO: verify that the course given is valid
     # TODO: normalise the course argument e.g. math3611 -> MATH3611, mAth3611 -> MATH3611
     # TODO: add in a multi-select menu feature to the review modal if a course argument is omitted
-    review_init(request.form.get('user_id'), request.form.get('text'))
-    review_modal(request.form.get('trigger_id'), request.form.get('text'), request.form.get('user_id'))
+    if request.form.get('text') != "":
+        review_init(request.form.get('user_id'))
+        review_course(request.form.get('user_id'), request.form.get('text'))
+        review_modal(request.form.get('trigger_id'), request.form.get('text'), request.form.get('user_id'))
+    else:
+        review_init(request.form.get('user_id'))
+        review_modal_course(request.form.get('trigger_id'), request.form.get('user_id'))
     return make_response("", 200)
 
 

@@ -1,0 +1,48 @@
+{
+    "title": {
+        "type": "plain_text",
+        "text": "Escape Room",
+        "emoji": true
+    },
+    "submit": {
+        "type": "plain_text",
+        "text": "Next",
+        "emoji": true
+    },
+    "type": "modal",
+    "close": {
+        "type": "plain_text",
+        "text": "Exit",
+        "emoji": true
+    },
+    "blocks": [
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "```import java.util.*;\nimport java.lang.*;\nimport java.security.*;\nimport javax.crypto.*;\n\npublic class System { \n\n\tpublic static void main(String[] args) {\n\t\tinitateOverride();\n\t} \n\n\tprivate static void initiateOverride() { \n\t\tString plainText = System.getenv('passcode'); \n\t\tbyte[] passCode = encrypt(plainText);\n\t\tauthenticate(passCode);\n\t\tProcess pro = run.exec('shutdown -s -t');\n\t}\n\n\tprivate void authenticate(byte[] passCode) {\n\t\tMap<String, String> env = System.getenv();\n\t\tenv.put('passCode', passCode.toString());\n\t}\n\n\tprivate byte[] encrypt(String plainText) {\n\t\tSignature sign = Signature.getInstance('SHA256withRSA');\n\t\tKeypairGenerator keyPairGen = \n\t\tKeyPairGenerator.getInstance('RSA');\n\t\tkeyPairGen.initalize(2048);\n\t\tKeyPair pair = keyPairGen.generateKeyPair();\n\t\tCipher cipher = \n\t\tCipher.getInstance('RSA/ECB/PKCS1Padding');\n\t\tcipher.init(Cipher.ENCRYPT_MODE, pair.getPublic());\n\t\tcipher.update(input);\n\t\treturn cipher.doFinal():\n\t}\n\n}```"
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "You try executing the code, and get an error which you localise to the file above. The security system detects this, and now the LCD Display has restarted. The countdown timer is now set for 1 minute. It’s now or never. Determine the number of bugs in the code and execute the system to escape!"
+            }
+        },
+        {
+            "type": "input",
+            "block_id": "pin_input",
+            "element": {
+                "type": "plain_text_input",
+                "action_id": "pin_input"
+            },
+            "label": {
+                "type": "plain_text",
+                "text": "Number of Bugs",
+                "emoji": true
+            }
+        }
+    ],
+	"callback_id": "escape_room_10_$USER"
+}
