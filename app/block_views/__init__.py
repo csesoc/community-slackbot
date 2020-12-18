@@ -2,6 +2,8 @@ import os
 import json
 import datetime
 
+from app.models import Courses
+
 TEST_VIEW_ONE = "test"
 __CACHED_VIEWS = {}
 
@@ -51,6 +53,23 @@ def get_anonymous_message(message, message_id):
     return get_block_view("views/anonymous/anonymous_message.json")\
         .replace("{ANONYMOUS_MESSAGE}", message)\
         .replace("{MESSAGE_ID}", str(message_id))
+
+
+def get_course_select_outline():
+    courses = [c.course for c in Courses.query.order_by(Courses.course.asc()).all()]
+    items = []
+    for course in courses:
+        item = """{
+        "text": {
+            "type": "plain_text",
+            "text": "{COURSE}",  
+            "emoji": true
+        },
+        "value": "{VALUE}"
+    }""".replace("{COURSE}", course).replace("{VALUE}", course)
+        items.append(item)
+    return get_block_view("views/courses/select_course_outline.json")\
+        .replace("{COURSES_OPTIONS}", ",".join(items))
 
 # Functions to load block_views start here
 # Block_views may vary from block_view to block_view,

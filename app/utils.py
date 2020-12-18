@@ -12,7 +12,8 @@ from bs4 import BeautifulSoup
 from urllib.parse import quote
 
 from app import db
-from app.models import User, UserProfileDetail, Roles, AnonMsgs, Report, UserRole
+from app.block_views import get_block_view
+from app.models import User, UserProfileDetail, Roles, AnonMsgs, Report, UserRole, Review
 from config import Config
 
 
@@ -344,3 +345,53 @@ def get_timetable_data(date):
             "saturday": [],
             "sunday": []
         }   
+
+def get_user_review_block(review) -> str:
+    item = get_block_view("views/courses/user_review.json")
+    item = item.replace("{LECTURER}", review.lecturer)
+    item = item.replace("{TERM}", review.term)
+    item = item.replace("{THOUGHTS}", review.review)
+
+    item = item.replace("{OVERALL}", "{} ({:.1f}/5)".format(review.overall * ":star:", review.overall))
+    item = item.replace("{DIFFICULTY}", "{} ({:.1f}/5)".format(review.difficulty * ":star:", review.difficulty))
+    item = item.replace("{TIME}", "{} ({:.1f}/5)".format(review.time * ":star:", review.time))
+
+    return item
+
+
+def get_course_summary_block(course) -> str:
+    item = get_block_view("views/courses/course_summary.json")
+    item = item.replace("{COURSE NAME}", course.course)
+    item = item.replace("{COURSE_SHORT_SUMMARY}", course.msg)
+
+    reviews = Review.query.filter_by(course=course.course).all()
+    num_reviews = len(reviews)
+    item = item.replace("{NUM_REVIEWS}", str(num_reviews))
+    reviews_str = ""
+
+    overall_rating = 0.0
+    overall_difficulty = 0.0
+    overall_time = 0.0
+    for review in reviews:
+        overall_rating += review.overall
+        overall_time += review.time
+        overall_difficulty += review.difficulty
+
+    if num_reviews > 0:
+        overall_time /= num_reviews
+        overall_rating /= num_reviews
+        overall_difficulty /= num_reviews
+        reviews_str = "," + ",".join([get_user_review_block(review) for review in reviews])
+    item = item.replace("{OVERALL}", "{} ({:.1f}/5)".format(int(overall_rating) * ":star:", overall_rating))
+    item = item.replace("{DIFFICULTY}", "{} ({:.1f}/5)".format(int(overall_difficulty) * ":star:", overall_difficulty))
+    item = item.replace("{TIME}", "{} ({:.1f}/5)".format(int(overall_time) * ":star:", overall_time))
+
+    item = item.replace("{USER_REVIEWS}", reviews_str)
+
+    return item
+
+
+def get_full_name_from_uid(user_id: str) -> str:
+    info_endpoint = f"https://slack.com/api/users.info?token={Config.SLACK_BOT_TOKEN}&user={user_id}"
+    user_info = requests.get(info_endpoint).json()
+    return user_info["user"]["real_name"]

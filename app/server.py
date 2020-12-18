@@ -2,11 +2,12 @@
 
 
 from app import slack_events_adapter, client, handler, app
+from app.mail import send_important_email_notification
 from config import Config
 from app.event_handlers.stylecheck import handle_style_check_request
 from flask import Blueprint, make_response, request, jsonify, Response
 from app.models import Courses, UserRoles, Report
-from app.block_views import get_block_view
+from app.block_views import get_block_view, get_course_select_outline, permission_denied
 from app.utils import verify_request, retrieve_highest_permission_level, get_role_title
 
 import app.utils as utils
@@ -98,16 +99,17 @@ def pair():
 @slack.route("/course", methods=['POST'])
 def get_course_summary():
     # TODO: Add in prerequsities, corresponding term date + lecturer, and display corresponding reviews made via /review
-    # TODO: Add in a multi-select menu of courses if course argument is omitted 
     payload = request.form.to_dict()
-    payload = payload['text'].split(' ')
+    payload = [x for x in payload['text'].split(' ') if x != ""]
+    print(payload)
+    if payload is None or len(payload) == 0:
+        client.views_open(trigger_id=request.form.get('trigger_id'), view=get_course_select_outline())
+        return make_response("", 200)
 
     course = Courses.query.filter_by(course=payload).first()
     if course is None:
         return make_response("No such course found. Use /courses to see available courses", 200)
-    item = get_block_view("views/courses/course_summary.json")
-    item = item.replace("{COURSE NAME}", course.course)
-    item = item.replace("{COURSE_SHORT_SUMMARY}", course.msg)
+    item = utils.get_course_summary_block(course)
     return Response(item, mimetype='application/json')
 
 
@@ -125,10 +127,7 @@ def get_courses_listing():
     return Response(response, mimetype='application/json')
 
 
-@slack.route('/reports', methods=['POST'])
-def reports():
-    if not verify_request(request):
-        return make_response("", 400)
+def send_reports_message(channel_id, user_id):
     active_reports = Report.query.all()
     reports = []
     for r in active_reports:
@@ -138,30 +137,53 @@ def reports():
         report_entry = get_block_view("views/reports/report_entry.json")
         report_entry = report_entry.replace("{REPORT_ID}", str(r.id))
         report_entry = report_entry.replace("{REPORT_CONTENT}", r.report)
-        report_entry = report_entry.replace("{User 1}", anon_msg.user_id)
-        report_entry = report_entry.replace("{User 2}", anon_msg.target_id)
+        report_entry = report_entry.replace("{User 1}", "{} ({})".format(
+            utils.get_full_name_from_uid(anon_msg.user_id), anon_msg.user_id))
+        report_entry = report_entry.replace("{User 2}", "{} ({})".format(
+            utils.get_full_name_from_uid(anon_msg.target_id), anon_msg.target_id))
         report_entry = report_entry.replace("{REPORTED_AT}",
                                             "No report time" if r.reported_at is None else r.reported_at.strftime(
                                                 "%B %d, %Y, %H:%M:%S%z"))
         reports.append(report_entry)
     reports_string = ",".join(reports)
-    if len(reports) > 0:
-        reports_string += ","
+    # if len(reports) > 0:
+    #     reports_string += ","
     response = get_block_view("views/reports/report_message.json")
     response = response.replace("{REPORTS}", reports_string)
     response = response.replace("{NUM_REPORTS}", str(len(reports)))
-    return Response(response, mimetype='application/json')
+    res_json = json.loads(response, strict=False)["blocks"]
+    response = json.dumps(res_json)
+    client.chat_postEphemeral(channel=channel_id, user=user_id, blocks=response)
 
 
-@slack.route('/stylecheck', methods=['POST'])
-def stylecheck():
+@slack.route('/reports', methods=['POST'])
+def reports():
+    if not verify_request(request):
+        return make_response("", 400)
+    payload = request.form.to_dict()
+    args = [payload["channel_id"], payload["user_id"]]
+    threading.Thread(target=send_reports_message, args=args).start()
+    return make_response("", 200)
+
+
+@slack.route('/important', methods=['POST'])
+def important():
     if not verify_request(request):
         return make_response("", 400)
 
     payload = request.form.to_dict()
-    payload = payload['text'].split(' ')
+    user_id = payload["user_id"]
 
-    return make_response("Pair success", 200)
+    # Retrieve permission level of user_id
+    perm_level, _ = utils.retrieve_highest_permission_level(user_id)
+
+    # Deny request if user doesn't have enough permission
+    if perm_level <= 0:
+        client.views_open(trigger_id=payload["trigger_id"], view=permission_denied())
+        return make_response("", 200)
+
+    threading.Thread(target=send_important_email_notification, args=[payload["channel_name"], payload["channel_id"], user_id]).start()
+    return make_response("Sent email notifications", 200)
 
 
 @slack.route('/interactions', methods=['POST'])

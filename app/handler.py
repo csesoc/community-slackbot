@@ -12,6 +12,7 @@ from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q
     trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, \
     trivia_custom_questions
 from app.jreview import review_overall, review_difficulty, review_time, review_submit
+from app.models import Courses
 
 
 def interactions(payload):
@@ -175,6 +176,28 @@ def interactions(payload):
                                     text="Message Reported, to follow up "
                                          "provide the following report id: R{}".format(report_id))
 
+        if callback_id == "select_course_outline":
+            print(payload)
+            view = payload["view"]
+            state = view["state"]
+            control = list(state["values"].items())
+            print(state)
+            print(list(control[0][1].values())[0])
+            course_code = list(control[0][1].values())[0]["selected_option"]["text"]["text"]
+            print(course_code)
+            course = Courses.query.filter_by(course=course_code).first()
+            if course is None:
+                message = "No such course found. Use /courses to see available courses"
+                client.chat_postMessage(channel=payload["user"]["id"],
+                                        text=message)
+            else:
+                message = utils.get_course_summary_block(course)
+                message = json.loads(message, strict=False)
+                message = message["blocks"]
+                message = json.dumps(message)
+                client.chat_postMessage(channel=payload["user"]["id"],
+                                        blocks=message)
+
     if payload["type"] == "block_actions":
         # print(payload)
         if "trivia_custom_" in payload['actions'][0]['action_id']:
@@ -229,7 +252,7 @@ def interactions(payload):
             report_id = value.split("_")[-1]
             utils.close_report(report_id)
             client.chat_postMessage(channel=payload["user"]["id"],
-                                    text="Successfully removed report R{}".format(report_id))
+                                    text="Successfully closed report R{}".format(report_id))
 
         # No modal is expected
         if value == "pass":
