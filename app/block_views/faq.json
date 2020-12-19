@@ -1,30 +1,30 @@
 [
     {
         "question": "How should I use this space?",
-        "answer": "You can use this space for anything csesoc related :)"
+        "answer": "You can use this space for anything CSEsoc related :)"
     },
     {
-        "question": "What programs are on offer in the faculty of cse?",
+        "question": "What programs are on offer in the faculty of CSE?",
         "answer": "See https://www.handbook.unsw.edu.au/undergraduate/programs/2021/3778 for more details"
     },
     {
-        "question": "What uni opportunities are available for a cse student?",
-        "answer": "There are many oppotunities for cse students. Make sure to like and follow https://www.facebook.com/csesoc/events/ and https://www.facebook.com/UnswFacultyOfEngineering so you don't miss out on any opportuntities"
+        "question": "What uni opportunities are available for a CSE student?",
+        "answer": "There are many opportunities for CSE students. Make sure to like and follow https://www.facebook.com/csesoc/events/ and https://www.facebook.com/UnswFacultyOfEngineering so you're up to date in this arena."
     },
     {
-        "question": "What cs stream is right for me?",
-        "answer": "If you enjoy X, then Y is good"
+        "question": "What CS stream is right for me?",
+        "answer": "Consult the following link https://www.handbook.unsw.edu.au/undergraduate/programs/2021/3778 to learn about the various majors in UNSW CS, and to find out what *piques your interest*. At the end of the day you're going to code, but it's what you're coding that's the motivation. "
     },
     {
         "question": "What job opportunities are available for a cse student?",
-        "answer": "Type in /csopportunities to see avaiable opportunities. Alternativly, you can visit http://jobsboard.csesoc.unsw.edu.au/ to find more job opportunities for a cse student"
+        "answer": "Type in /csopportunities to search for available opportunities on Indeed. Alternatively, you can visit http://jobsboard.csesoc.unsw.edu.au/ to find job opportunities curated for cse students."
     },
     {
         "question": "What's in a good resume?",
-        "answer": "Placeholder answer. Update when you find out"
+        "answer": "Any coding projects you've worked on, industry experience (if any), and interests to name a few. Utilising https://student.unsw.edu.au/resume-checker as you progress through university and build up your experiences is a no-brainer here. "
     },
     {
         "question": "What events are happening?",
-        "answer": "Type in /events for a list of events and "
+        "answer": "Type in /events for a list of events both CSE and UNSW wide. "
     }
 ]
