@@ -8,11 +8,13 @@ MAX_STRING_LENGTH = 65535
 
 class UserRoles:
     NORMAL = 0
+    MOD = 1
     ADMIN = 1
     OWNER = 2
-    ROLES = [NORMAL, ADMIN, OWNER]
+    ROLES = [NORMAL, MOD, ADMIN, OWNER]
     TITLES = [
         "normal",
+        "moderator",
         "admin",
         "owner"
     ]

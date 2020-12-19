@@ -36,3 +36,5 @@ class Config:
     EMAIL_LOGIN = os.environ['EMAIL_LOGIN']
     EMAIL_PASSWORD = os.environ['EMAIL_PASSWORD']
     SMTP_SEND_MAIL = os.environ['SMTP_SEND_MAIL'] == "true"
+
+    PAIR_GROUP_SIZE = 2

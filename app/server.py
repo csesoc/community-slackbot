@@ -69,7 +69,7 @@ def pair():
         return make_response("", 400)
 
     payload = request.form.to_dict()
-    if retrieve_highest_permission_level(payload["user_id"]) < UserRoles.MOD:
+    if retrieve_highest_permission_level(payload["user_id"])[0] < UserRoles.MOD:
         min_title = get_role_title(UserRoles.MOD)
         return make_response("You do not have permission to run /pair."
                              " You require at least {} privileges to run /pair".format(min_title), 200)

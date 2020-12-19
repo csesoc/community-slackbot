@@ -235,7 +235,7 @@ def interactions(payload):
 
         # Received when a user clicks a Block Kit interactive component.
         actions = payload["actions"]
-        value = actions[0]["value"]
+        value = actions[0]["value"] if value in actions[0].keys() else ""
 
         # Opens the "report" view
         if value == "click_report":
