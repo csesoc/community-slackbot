@@ -259,7 +259,7 @@ def events_modal(events, keyword, page_number):
     modal = get_block_view("events_modal.json")
 
     # Add keyword to header
-    modal = modal.replace("%%KEYWORD%%", keyword)
+    modal = modal.replace("%%KEYWORD%%", keyword.upper())
     modal = json.loads(modal)
 
     for event in events:
