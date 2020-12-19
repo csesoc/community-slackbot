@@ -1,0 +1,28 @@
+{
+    "title": {
+        "type": "plain_text",
+        "text": "Escape Room",
+        "emoji": true
+    },
+    "submit": {
+        "type": "plain_text",
+        "text": "Next",
+        "emoji": true
+    },
+    "type": "modal",
+    "close": {
+        "type": "plain_text",
+        "text": "Exit",
+        "emoji": true
+    },
+    "blocks": [
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "You input the correct pin, and the device unlocks. A big ‘ABORT’ message appears, and you press it. The LCD display turns off.   "
+            }
+        }
+    ],
+	"callback_id": "escape_room_8_$USER"
+}

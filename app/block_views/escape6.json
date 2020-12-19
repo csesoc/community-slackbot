@@ -1,0 +1,33 @@
+{
+    "title": {
+        "type": "plain_text",
+        "text": "Escape Room",
+        "emoji": true
+    },
+    "submit": {
+        "type": "plain_text",
+        "text": "Next",
+        "emoji": true
+    },
+    "type": "modal",
+    "close": {
+        "type": "plain_text",
+        "text": "Exit",
+        "emoji": true
+    },
+    "blocks": [
+        {
+            "type": "image",
+            "image_url": "https://i.ytimg.com/vi/5ghJwzYrUEw/hqdefault.jpg",
+            "alt_text": "inspiration"
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "A countdown timer set to 5 minutes appears on the display. In a panic, you desperately push into the handle, trying to undo the calamity that has unfolded, but to no avail. You continue feeling desperately inside the hole for any other items, and your persistence is rewarded with a thin, rectangular surface. "
+            }
+        }
+    ],
+	"callback_id": "escape_room_6_$USER"
+}

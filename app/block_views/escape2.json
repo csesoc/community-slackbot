@@ -1,0 +1,46 @@
+{
+    "title": {
+        "type": "plain_text",
+        "text": "Escape Room",
+        "emoji": true
+    },
+    "submit": {
+        "type": "plain_text",
+        "text": "Next",
+        "emoji": true
+    },
+    "type": "modal",
+    "close": {
+        "type": "plain_text",
+        "text": "Exit",
+        "emoji": true
+    },
+    "blocks": [
+        {
+            "type": "image",
+            "image_url": "https://images-na.ssl-images-amazon.com/images/I/31Y2H3SODNL._AC_.jpg",
+            "alt_text": "inspiration"
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "The box has a combination lock requiring a 7-digit pin. You take a closer look at the tattered paper which reads, \n\n\t\t\t\t\t\t\t\t\t\t\t  LOCK & KEY! \n\nWhat is the pin?"
+            }
+        },
+        {
+            "type": "input",
+            "block_id": "pin_input",
+            "element": {
+                "type": "plain_text_input",
+                "action_id": "pin_input"
+            },
+            "label": {
+                "type": "plain_text",
+                "text": "Pin",
+                "emoji": true
+            }
+        }
+    ],
+	"callback_id": "escape_room_2_$USER"
+}

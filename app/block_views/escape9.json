@@ -1,0 +1,33 @@
+{
+    "title": {
+        "type": "plain_text",
+        "text": "Escape Room",
+        "emoji": true
+    },
+    "submit": {
+        "type": "plain_text",
+        "text": "Next",
+        "emoji": true
+    },
+    "type": "modal",
+    "close": {
+        "type": "plain_text",
+        "text": "Exit",
+        "emoji": true
+    },
+    "blocks": [
+        {
+            "type": "image",
+            "image_url": "https://cdn.wallpapersafari.com/59/76/kjnZVG.jpg",
+            "alt_text": "inspiration"
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "The interface now changes to a set of .java files. After a few minutes of deep thought, you conclude that what appears before you is software designed to override the currently operating security system. If you open this, you can exit through the door.  "
+            }
+        }
+    ],
+	"callback_id": "escape_room_9_$USER"
+}

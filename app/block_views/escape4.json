@@ -1,0 +1,41 @@
+{
+    "title": {
+        "type": "plain_text",
+        "text": "Escape Room",
+        "emoji": true
+    },
+    "submit": {
+        "type": "plain_text",
+        "text": "Next",
+        "emoji": true
+    },
+    "type": "modal",
+    "close": {
+        "type": "plain_text",
+        "text": "Exit",
+        "emoji": true
+    },
+    "blocks": [
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Inside the box, you find some jumbled text. A student who’s heard of COMP6441, you surmise that it’s something related to ciphers. The text reads, ‘When displaced, the message disappears.’ followed by ‘MPPL JO UIF DPSOFS’. What does the ciphertext read when decrypted? "
+            }
+        },
+        {
+            "type": "input",
+            "block_id": "pin_input",
+            "element": {
+                "type": "plain_text_input",
+                "action_id": "pin_input"
+            },
+            "label": {
+                "type": "plain_text",
+                "text": "plaintext",
+                "emoji": true
+            }
+        }
+    ],
+	"callback_id": "escape_room_4_$USER"
+}

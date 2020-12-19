@@ -40,7 +40,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "*CSESocSlack:~$* profile %%USERNAME%%\nRetrieving profile for user %%USERNAME%%..."
+				"text": "*You*"
 			}
 		},
 		{
@@ -56,6 +56,9 @@
 			}
 		},
 		{
+			"type": "divider"
+		},
+		{
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
@@ -69,7 +72,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "*CSESocSlack:~$* help\n:sos: For help on how to use this slackbot, click the button below"
+				"text": "*Help*\n:sos: For help on how to use this slackbot, click the button below"
 			}
 		},
 		{
@@ -93,7 +96,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "*CSESocSlack:~$* feedback\n:memo: Want to give some feedback for the slackbot?\n:email: Shoot us a message at projects@csesoc.unsw.edu.au"
+				"text": "*Feedback*\n:memo: Want to give some feedback for the slackbot?\n:email: Shoot us a message at projects@csesoc.unsw.edu.au"
 			}
 		},
 		{
@@ -110,35 +113,10 @@
 		{
 			"type": "section",
 			"text": {
-				"type": "mrkdwn",
-				"text": "*CSESocSlack:~$  _*"
-			}
-		},
-		{
-			"type": "section",
-			"text": {
 				"type": "plain_text",
 				"text": " ",
 				"emoji": true
 			}
-		},
-		{
-			"type": "section",
-			"text": {
-				"type": "plain_text",
-				"text": " ",
-				"emoji": true
-			}
-		},
-		{
-			"type": "context",
-			"elements": [
-				{
-					"type": "image",
-					"image_url": "https://api.slack.com/img/blocks/bkb_template_images/placeholder.png",
-					"alt_text": "placeholder"
-				}
-			]
 		}
 	]
 }

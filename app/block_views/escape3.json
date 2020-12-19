@@ -1,0 +1,33 @@
+{
+    "title": {
+        "type": "plain_text",
+        "text": "Escape Room",
+        "emoji": true
+    },
+    "submit": {
+        "type": "plain_text",
+        "text": "Next",
+        "emoji": true
+    },
+    "type": "modal",
+    "close": {
+        "type": "plain_text",
+        "text": "Exit",
+        "emoji": true
+    },
+    "blocks": [
+        {
+            "type": "image",
+            "image_url": "https://img.freepik.com/fotos-gratis/abra-a-caixa-preta-de-madeira_1232-121.jpg?size=626&ext=jpg",
+            "alt_text": "inspiration"
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "You enter the pin and the box opens."
+            }
+        }
+    ],
+	"callback_id": "escape_room_3_$USER"
+}

@@ -7,12 +7,13 @@ from app.block_views import get_anonymous_modal, get_anonymous_message, get_anon
 import app.block_views as blocks
 from app.buildBlocks import mentionBlock, imBlock, helpModal, globalTriviaModal, triviaCustomQuestions, \
     triviaInviteMessage, triviaAskQuestion, triviaComplete, triviaBoard, triviaOngoing, triviaCustomMessage, \
-    reviewModal, reviewConfirm, karmaBoard
+    reviewModal, reviewConfirm, karmaBoard, reviewModalCourse, escapeRoom
 from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, \
     trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, \
     trivia_custom_questions
-from app.jreview import review_overall, review_difficulty, review_time, review_submit
 from app.models import Courses
+from app.jreview import review_overall, review_difficulty, review_time, review_submit, review_course
+from app.jescape import init_escape, get_view, remove_escape
 
 
 def interactions(payload):
@@ -36,6 +37,8 @@ def interactions(payload):
             client.views_open(trigger_id=trigger_id, view=get_anonymous_modal())
         elif callback_id == "trivia":
             init_trivia(trigger_id, user)
+        elif callback_id == 'escape_room':
+            init_escape(user, client.views_open(trigger_id=trigger_id, view=escapeRoom(user, 1))['view']['id'])
 
     # Received when a modal is submitted.
     if payload["type"] == "view_submission":
@@ -223,6 +226,9 @@ def interactions(payload):
         elif 'view' in payload and "trivia_question_" in payload['view']['callback_id']:
             trivia_response(payload['user']['id'], payload['actions'][0]['value'] == 'correct', payload['trigger_id'])
             return
+        elif "course_code_" in payload['actions'][0]['action_id']:
+            review_course(payload['actions'][0]['action_id'].replace("course_code_", ""),
+                           payload['actions'][0]['selected_option']['value'])
         elif "course_overall_" in payload['actions'][0]['action_id']:
             review_overall(payload['actions'][0]['action_id'].replace("course_overall_", ""),
                            payload['actions'][0]['selected_option']['value'])
@@ -540,6 +546,8 @@ def trivia_custom_questions_prompt(user_id, channel):
 def review_modal(trigger_id, course_code, user_id):
     return client.views_open(trigger_id=trigger_id, view=reviewModal(course_code, user_id))['view']['id']
 
+def review_modal_course(trigger_id, user_id):
+    return client.views_open(trigger_id=trigger_id, view=reviewModalCourse(user_id))['view']['id']
 
 def review_confirm(user_id, course_code):
     client.chat_postMessage(channel=user_id, text="Review confirmed!", blocks=reviewConfirm(course_code))

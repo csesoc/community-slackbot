@@ -1,0 +1,21 @@
+{
+    "title": {
+        "type": "plain_text",
+        "text": "Escape Room",
+        "emoji": true
+    },
+    "type": "modal",
+    "close": {
+        "type": "plain_text",
+        "text": "Exit",
+        "emoji": true
+    },
+    "blocks": [
+        {
+            "type": "image",
+            "image_url": "https://i0.wp.com/static.giantbomb.com/uploads/original/0/329/1195180-psd3d036.jpg",
+            "alt_text": "inspiration"
+        }
+    ],
+	"callback_id": "escape_room_f_$USER"
+}

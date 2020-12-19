@@ -1,0 +1,267 @@
+{
+	"title": {
+		"type": "plain_text",
+		"text": "My App",
+		"emoji": true
+	},
+	"submit": {
+		"type": "plain_text",
+		"text": "Submit",
+		"emoji": true
+	},
+	"type": "modal",
+	"close": {
+		"type": "plain_text",
+		"text": "Cancel",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Leaving a review:"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Which course are you reviewing?"
+			},
+			"accessory": {
+				"type": "static_select",
+				"action_id": "course_code_$USERID",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Select an item",
+					"emoji": true
+				},
+				"options": [
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "$COURSECODE",
+							"emoji": true
+						},
+						"value": "$COURSECODE"
+					}
+				]
+			}
+		},
+		{
+			"type": "input",
+			"block_id": "course_lecturer",
+			"element": {
+				"type": "plain_text_input",
+				"action_id": "course_lecturer"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Who was your lecturer for the course?",
+				"emoji": true
+			}
+		},
+		{
+			"type": "input",
+			"block_id": "course_when",
+			"element": {
+				"type": "plain_text_input",
+				"action_id": "course_when"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "When did you take the course?",
+				"emoji": true
+			}
+		},
+		{
+			"type": "input",
+			"block_id": "course_comments",
+			"element": {
+				"type": "plain_text_input",
+				"multiline": true,
+				"action_id": "course_comments"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Thoughts on the course?",
+				"emoji": true
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "How would you rate the course overall?"
+			},
+			"accessory": {
+				"type": "static_select",
+				"action_id": "course_overall_$USERID",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Select an item",
+					"emoji": true
+				},
+				"options": [
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "1",
+							"emoji": true
+						},
+						"value": "1"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "2",
+							"emoji": true
+						},
+						"value": "2"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "3",
+							"emoji": true
+						},
+						"value": "3"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "4",
+							"emoji": true
+						},
+						"value": "4"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "5",
+							"emoji": true
+						},
+						"value": "5"
+					}
+				]
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Course difficulty"
+			},
+			"accessory": {
+				"type": "static_select",
+				"action_id": "course_difficulty_$USERID",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Select an item",
+					"emoji": true
+				},
+				"options": [
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "1",
+							"emoji": true
+						},
+						"value": "1"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "2",
+							"emoji": true
+						},
+						"value": "2"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "3",
+							"emoji": true
+						},
+						"value": "3"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "4",
+							"emoji": true
+						},
+						"value": "4"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "5",
+							"emoji": true
+						},
+						"value": "5"
+					}
+				]
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Time taken on course"
+			},
+			"accessory": {
+				"type": "static_select",
+				"action_id": "course_time_$USERID",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Select an item",
+					"emoji": true
+				},
+				"options": [
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "1",
+							"emoji": true
+						},
+						"value": "1"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "2",
+							"emoji": true
+						},
+						"value": "2"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "3",
+							"emoji": true
+						},
+						"value": "3"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "4",
+							"emoji": true
+						},
+						"value": "4"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "5",
+							"emoji": true
+						},
+						"value": "5"
+					}
+				]
+			}
+		}
+	]
+}

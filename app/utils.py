@@ -13,7 +13,7 @@ from urllib.parse import quote
 
 from app import db
 from app.block_views import get_block_view
-from app.models import User, UserProfileDetail, Roles, AnonMsgs, Report, UserRole, Review
+from app.models import User, UserProfileDetail, Roles, AnonMsgs, Report, UserRole, Review, Courses
 from config import Config
 
 
@@ -395,3 +395,5 @@ def get_full_name_from_uid(user_id: str) -> str:
     info_endpoint = f"https://slack.com/api/users.info?token={Config.SLACK_BOT_TOKEN}&user={user_id}"
     user_info = requests.get(info_endpoint).json()
     return user_info["user"]["real_name"]
+def get_courses():
+    return Courses.query.all()

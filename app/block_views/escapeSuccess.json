@@ -1,0 +1,21 @@
+{
+    "title": {
+        "type": "plain_text",
+        "text": "Escape Room",
+        "emoji": true
+    },
+    "type": "modal",
+    "close": {
+        "type": "plain_text",
+        "text": "Exit",
+        "emoji": true
+    },
+    "blocks": [
+        {
+            "type": "image",
+            "image_url": "https://i.huffpost.com/gen/2186196/images/o-SECRETS-OF-SUCCESS-facebook.jpg",
+            "alt_text": "inspiration"
+        }
+    ],
+	"callback_id": "escape_room_s_$USER"
+}

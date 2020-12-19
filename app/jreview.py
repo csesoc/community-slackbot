@@ -3,9 +3,9 @@ from app.models import Review
 # from app.handler import review_confirm
 
 class ReviewClass:
-    def __init__(self, author, course):
+    def __init__(self, author):
         self.author = author
-        self.course = course
+        self.course = ""
         self.lecturer = ""
         self.when = ""
         self.comments = ""
@@ -15,8 +15,11 @@ class ReviewClass:
 
 reviews = {}
 
-def review_init(user_id, course):
-    reviews[user_id] = ReviewClass(user_id, course)
+def review_init(user_id):
+    reviews[user_id] = ReviewClass(user_id)
+
+def review_course(user_id, course):
+    reviews[user_id].course = course
 
 def review_overall(user_id, overall):
     reviews[user_id].overall = overall

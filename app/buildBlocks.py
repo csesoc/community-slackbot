@@ -1,6 +1,7 @@
 import copy
 import json
 import random
+from app.utils import get_courses
 
 def mentionBlock(user_name, channel_name, **kwargs):
     with open("app/block_views/channelMention.json", "r") as f:
@@ -97,6 +98,21 @@ def reviewModal(course_code, user_id):
         view = json.loads(filedata)
         return view
 
+def reviewModalCourse(user_id):
+    courses = get_courses()
+    with open("app/block_views/reviewCourseModal.json", "r") as f:
+        filedata = f.read()
+        filedata = filedata.replace("$USERID", user_id)
+        view = json.loads(filedata)
+        courseBlock = view['blocks'][1]['accessory']['options'].pop()
+        for course in courses:
+            tempBlock = copy.deepcopy(courseBlock)
+            tempBlock['text']['text'] = courseBlock['text']['text'].replace("$COURSECODE", course.course)
+            tempBlock['value'] = courseBlock['value'].replace("$COURSECODE", course.course)
+            view['blocks'][1]['accessory']['options'].append(tempBlock)
+        return view
+    
+
 def reviewConfirm(course_code):
     with open("app/block_views/reviewConfirm.json", "r") as f:
         filedata = f.read()
@@ -115,3 +131,10 @@ def karmaBoard(info):
             tempBlock['accessory']['alt_text'] = userBlock['accessory']['alt_text'].replace("$USER", user['name'])
             view['blocks'].append(tempBlock)
         return view['blocks']
+
+def escapeRoom(user_id, escape_num):
+    with open(f"app/block_views/escape{escape_num}.json", "r") as f:
+        filedata = f.read()
+        filedata = filedata.replace("$USER", user_id)
+        view = json.loads(filedata)
+        return view
