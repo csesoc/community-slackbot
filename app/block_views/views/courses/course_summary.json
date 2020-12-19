@@ -22,7 +22,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "*Ratings ({NUM_REVIEWS} reviews)*\nOverall: {OVERALL}\nDifficulty: {DIFFICULTY}\nTime Committment: {TIME}"
+				"text": "*Ratings ({NUM_REVIEWS} reviews)*\nOverall: {OVERALL}\nDifficulty: {DIFFICULTY}\nTime Commitment: {TIME}"
 			}
 		},
 		{
