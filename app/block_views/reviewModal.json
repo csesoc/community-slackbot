@@ -32,7 +32,7 @@
 			},
 			"label": {
 				"type": "plain_text",
-				"text": "Who was your lecturer for the course?",
+				"text": "Who was your lecturer for *$COURSE*?",
 				"emoji": true
 			}
 		},
@@ -45,7 +45,7 @@
 			},
 			"label": {
 				"type": "plain_text",
-				"text": "When did you take the course?",
+				"text": "When did you take *$COURSE*?",
 				"emoji": true
 			}
 		},
@@ -59,7 +59,7 @@
 			},
 			"label": {
 				"type": "plain_text",
-				"text": "Thoughts on the course?",
+				"text": "Thoughts on *$COURSE*?",
 				"emoji": true
 			}
 		},
@@ -67,7 +67,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "How would you rate the course overall?"
+				"text": "How would you rate *$COURSE* overall?"
 			},
 			"accessory": {
 				"type": "static_select",
@@ -183,7 +183,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "Time taken on course"
+				"text": "Time taken on *$COURSE*"
 			},
 			"accessory": {
 				"type": "static_select",
