@@ -27,7 +27,7 @@
 					"type": "button",
 					"text": {
 						"type": "plain_text",
-						"text": "I'm scared",
+						"text": "I decline",
 						"emoji": true
                     },
                     "action_id": "forfeit_trivia_$GAMEID",

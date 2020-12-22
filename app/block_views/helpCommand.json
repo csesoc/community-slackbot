@@ -5,9 +5,14 @@
 		"text": "My App",
 		"emoji": true
 	},
+	"submit": {
+		"type": "plain_text",
+		"text": "Submit",
+		"emoji": true
+	},
 	"close": {
 		"type": "plain_text",
-		"text": "Close",
+		"text": "Cancel",
 		"emoji": true
 	},
 	"blocks": [
@@ -88,13 +93,6 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "*Timetabler*\n:calendar:\n Type '/timetable' to start a modal that lets you customise your term timetable using Notangles."
-			}
-		},
-		{
-			"type": "section",
-			"text": {
-				"type": "mrkdwn",
 				"text": "*Important*\n:heavy_exclamation_mark:\n Type '/important {message}' to send an important message to a channel. This will send an email notification to all members of the channel. Only available to admins of a channel."
 			}
 		},
@@ -116,14 +114,14 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "*Freerooms*\n:door:\n Type '/freerooms' to help find available rooms nearby using CSESOC's Freerooms."
+				"text": "*FAQ*\n:robot_face:\nTo see commonly asked questions, type '/FAQ'."
 			}
 		},
 		{
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "*FAQ*\n:robot_face:\nTo see commonly asked questions, type '/FAQ'."
+				"text": "*Connect*/*Free*\n:raised_hands:\nShare your timetable with other students via /connect {@user} and check to see who is free using /free."
 			}
 		}
 	]

@@ -1,0 +1,21 @@
+Appropriate updates to helpme once Slackbot integrations are completed 
+
+
+{
+        "type": "section",
+        "text": {
+            "type": "mrkdwn",
+            "text": "*Timetabler*\n:calendar:\n Type '/timetable' to start a modal that lets you customise your term timetable using Notangles."
+        }
+}
+
+
+
+{
+    "type": "section",
+    "text": {
+        "type": "mrkdwn",
+        "text": "*Freerooms*\n:door:\n Type '/freerooms' to help find available rooms nearby using CSESOC's Freerooms."
+    }
+}
+

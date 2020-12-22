@@ -46,7 +46,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "Would like to use default trivia or your own?"
+				"text": "Would you like to use default trivia or your own?"
 			},
 			"accessory": {
 				"type": "static_select",
@@ -60,7 +60,7 @@
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "default",
+							"text": "Default",
 							"emoji": true
 						},
 						"value": "true"
@@ -68,7 +68,7 @@
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "mine own",
+							"text": "Custom",
 							"emoji": true
 						},
 						"value": "false"

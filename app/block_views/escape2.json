@@ -25,7 +25,7 @@
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": "The box has a combination lock requiring a 7-digit pin. You take a closer look at the tattered paper which reads, \n\n\t\t\t\t\t\t\t\t\t\t\t  LOCK & KEY! \n\nWhat is the pin?"
+                "text": "The box has a combination lock requiring a 7-digit pin. You take a closer look at the paper which reads, \n\n\t\t\t\t\t\t\t\t\t\t\t  LOCK & KEY! \n\nWhat is the pin?"
             }
         },
         {
