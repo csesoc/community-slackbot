@@ -20,7 +20,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "Leaving a review:"
+				"text": " "
 			}
 		},
 		{
@@ -93,21 +93,20 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "How would you rate the course overall?"
+				"text": "Overall Rating"
 			},
 			"accessory": {
 				"type": "static_select",
-				"action_id": "course_overall_$USERID",
 				"placeholder": {
 					"type": "plain_text",
-					"text": "Select an item",
+					"text": "Score/5",
 					"emoji": true
 				},
 				"options": [
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "1",
+							"text": "1/5",
 							"emoji": true
 						},
 						"value": "1"
@@ -115,7 +114,7 @@
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "2",
+							"text": "2/5",
 							"emoji": true
 						},
 						"value": "2"
@@ -123,7 +122,7 @@
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "3",
+							"text": "3/5",
 							"emoji": true
 						},
 						"value": "3"
@@ -131,7 +130,7 @@
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "4",
+							"text": "4/5",
 							"emoji": true
 						},
 						"value": "4"
@@ -139,33 +138,33 @@
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "5",
+							"text": "5/5",
 							"emoji": true
 						},
 						"value": "5"
 					}
-				]
+				],
+				"action_id": "course_overall_$USERID"
 			}
 		},
 		{
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "Course difficulty"
+				"text": "Course Difficulty"
 			},
 			"accessory": {
 				"type": "static_select",
-				"action_id": "course_difficulty_$USERID",
 				"placeholder": {
 					"type": "plain_text",
-					"text": "Select an item",
+					"text": "Score/5",
 					"emoji": true
 				},
 				"options": [
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "1",
+							"text": "1/5",
 							"emoji": true
 						},
 						"value": "1"
@@ -173,7 +172,7 @@
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "2",
+							"text": "2/5",
 							"emoji": true
 						},
 						"value": "2"
@@ -181,7 +180,7 @@
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "3",
+							"text": "3/5",
 							"emoji": true
 						},
 						"value": "3"
@@ -189,7 +188,7 @@
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "4",
+							"text": "4/5",
 							"emoji": true
 						},
 						"value": "4"
@@ -197,33 +196,33 @@
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "5",
+							"text": "5/5",
 							"emoji": true
 						},
 						"value": "5"
 					}
-				]
+				],
+				"action_id": "course_difficulty_$USERID"
 			}
 		},
 		{
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "Time taken on course"
+				"text": "Resources Available"
 			},
 			"accessory": {
 				"type": "static_select",
-				"action_id": "course_time_$USERID",
 				"placeholder": {
 					"type": "plain_text",
-					"text": "Select an item",
+					"text": "Score/5",
 					"emoji": true
 				},
 				"options": [
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "1",
+							"text": "1/5",
 							"emoji": true
 						},
 						"value": "1"
@@ -231,7 +230,7 @@
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "2",
+							"text": "2/5",
 							"emoji": true
 						},
 						"value": "2"
@@ -239,7 +238,7 @@
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "3",
+							"text": "3/5",
 							"emoji": true
 						},
 						"value": "3"
@@ -247,7 +246,7 @@
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "4",
+							"text": "4/5",
 							"emoji": true
 						},
 						"value": "4"
@@ -255,12 +254,71 @@
 					{
 						"text": {
 							"type": "plain_text",
-							"text": "5",
+							"text": "5/5",
 							"emoji": true
 						},
 						"value": "5"
 					}
-				]
+				],
+				"action_id": "course_resources_$USERID"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Time Needed"
+			},
+			"accessory": {
+				"type": "static_select",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Score/5",
+					"emoji": true
+				},
+				"options": [
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "1/5",
+							"emoji": true
+						},
+						"value": "1"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "2/5",
+							"emoji": true
+						},
+						"value": "2"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "3/5",
+							"emoji": true
+						},
+						"value": "3"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "4/5",
+							"emoji": true
+						},
+						"value": "4"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "5/5",
+							"emoji": true
+						},
+						"value": "5"
+					}
+				],
+				"action_id": "course_time_$USERID"
 			}
 		}
 	]

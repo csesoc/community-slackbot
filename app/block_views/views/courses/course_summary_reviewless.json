@@ -1,0 +1,26 @@
+{
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*{COURSE NAME}*"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "plain_text",
+				"text": "{COURSE_SHORT_SUMMARY}",
+				"emoji": true
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*No reviews have been submitted for this course. Want to share your thoughts? Use the /review command to be the first to review this course.*"
+			}
+		}
+	]
+}

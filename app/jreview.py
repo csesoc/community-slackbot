@@ -12,6 +12,7 @@ class ReviewClass:
         self.overall = 0
         self.difficulty = 0
         self.time = 0
+        self.resources = 0
 
 reviews = {}
 
@@ -30,6 +31,9 @@ def review_difficulty(user_id, difficulty):
 def review_time(user_id, time):
     reviews[user_id].time = time
 
+def review_resources(user_id, resources):
+    reviews[user_id].resources = resources
+
 def review_submit(user_id, values):
     reviews[user_id].lecturer = values['course_lecturer']['course_lecturer']['value']
     reviews[user_id].when = values['course_when']['course_when']['value']
@@ -37,7 +41,7 @@ def review_submit(user_id, values):
     # insert into db
     rev = reviews[user_id]
     rev_db = Review(course=rev.course, review=rev.comments, user_id=rev.author, lecturer=rev.lecturer, term=rev.when, 
-                    overall=rev.overall, difficulty=rev.difficulty, time=rev.time, is_approved=False)
+                    overall=rev.overall, difficulty=rev.difficulty, time=rev.time, resources=rev.resources, is_approved=False)
     db.session.add(rev_db)
     db.session.commit()
     del reviews[user_id]

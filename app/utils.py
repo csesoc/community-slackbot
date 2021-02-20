@@ -382,11 +382,15 @@ def get_course_summary_block(course) -> str:
         overall_rating /= num_reviews
         overall_difficulty /= num_reviews
         reviews_str = "," + ",".join([get_user_review_block(review) for review in reviews])
-    item = item.replace("{OVERALL}", "{} ({:.1f}/5)".format(int(overall_rating) * ":star:", overall_rating))
-    item = item.replace("{DIFFICULTY}", "{} ({:.1f}/5)".format(int(overall_difficulty) * ":star:", overall_difficulty))
-    item = item.replace("{TIME}", "{} ({:.1f}/5)".format(int(overall_time) * ":star:", overall_time))
-
-    item = item.replace("{USER_REVIEWS}", reviews_str)
+        item = item.replace("{OVERALL}", "{} ({:.1f}/5)".format(int(overall_rating) * ":star:", overall_rating))
+        item = item.replace("{DIFFICULTY}", "{} ({:.1f}/5)".format(int(overall_difficulty) * ":star:", overall_difficulty))
+        item = item.replace("{TIME}", "{} ({:.1f}/5)".format(int(overall_time) * ":star:", overall_time))
+        item = item.replace("{USER_REVIEWS}", reviews_str)
+    
+    else:
+        item = get_block_view("views/courses/course_summary_reviewless.json")
+        item = item.replace("{COURSE NAME}", course.course)
+        item = item.replace("{COURSE_SHORT_SUMMARY}", course.msg)
 
     return item
 

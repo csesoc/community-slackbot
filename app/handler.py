@@ -12,7 +12,7 @@ from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q
     trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, \
     trivia_custom_questions
 from app.models import Courses
-from app.jreview import review_overall, review_difficulty, review_time, review_submit, review_course
+from app.jreview import review_overall, review_difficulty, review_time, review_submit, review_course, review_resources
 from app.jescape import init_escape, get_view, remove_escape
 
 
@@ -202,7 +202,7 @@ def interactions(payload):
                                         blocks=message)
 
     if payload["type"] == "block_actions":
-        # print(payload)
+        print(payload)
         if "trivia_custom_" in payload['actions'][0]['action_id']:
             trivia_customs(payload['actions'][0]['action_id'].replace("trivia_custom_", ""), payload['trigger_id'])
             return
@@ -237,6 +237,9 @@ def interactions(payload):
                               payload['actions'][0]['selected_option']['value'])
         elif "course_time_" in payload['actions'][0]['action_id']:
             review_time(payload['actions'][0]['action_id'].replace("course_time_", ""),
+                        payload['actions'][0]['selected_option']['value'])
+        elif "course_resources_" in payload['actions'][0]['action_id']:
+            review_resources(payload['actions'][0]['action_id'].replace("course_resources_", ""),
                         payload['actions'][0]['selected_option']['value'])
 
         # Received when a user clicks a Block Kit interactive component.

@@ -37,7 +37,7 @@ def reply(event_data):
     channel = event_data["event"]["channel"]
     if event_data['token'] != slack_token and 'text' in event_data['event']:
         if event_data['event']['text'].startswith("stylecheck"):
-            handle_style_check_request(client, slack_token, event_data)
+            threading.Thread(target=handle_style_check_request, args = [client, slack_token, event_data]).start()
 
         # message was edited/deleted
     if "user" not in event_data["event"]:
@@ -47,21 +47,22 @@ def reply(event_data):
     # wont respond to bots
     if 'bot_id' not in event_data['event'] and 'text' in event_data['event']:
         message = event_data['event']['text']
-        reply_im(user, channel, message)
+        threading.Thread(target=reply_im, args = [user, channel, message]).start()
 
 
 @slack_events_adapter.on("reaction_added")
 def slack_emoji(event_data):
-    if (event_data['event']['reaction'] != 'karma'):
+    print(event_data)
+    if (event_data['event']['reaction'] != 'karma') or (event_data['event']['user'] == event_data['event']['item_user']) :
         return
-    utils.add_karma(event_data['event']['item_user'])
+    threading.Thread(target=utils.add_karma, args = [event_data['event']['item_user']]).start()
 
 
 @slack_events_adapter.on("reaction_removed")
 def slack_emoji_remove(event_data):
-    if (event_data['event']['reaction'] != 'karma'):
+    if (event_data['event']['reaction'] != 'karma') or (event_data['event']['user'] == event_data['event']['item_user']):
         return
-    utils.remove_karma(event_data['event']['item_user'])
+    threading.Thread(target=utils.remove_karma, args=[event_data['event']['item_user']]).start()
 
 
 @slack.route('/pair', methods=['POST'])
@@ -154,7 +155,7 @@ def send_reports_message(channel_id, user_id):
     response = response.replace("{NUM_REPORTS}", str(len(reports)))
     res_json = json.loads(response, strict=False)["blocks"]
     response = json.dumps(res_json)
-    client.chat_postEphemeral(channel=channel_id, user=user_id, blocks=response)
+    threading.Thread(target=client.chat_postEphemeral, kwargs={"channel" : channel_id, "user" : user_id, "blocks" : response}).start
 
 
 @slack.route('/reports', methods=['POST'])
@@ -499,18 +500,18 @@ def slack_shortcut():
 def slack_mention(event_data):
     user = event_data['event']['user']
     channel = event_data["event"]["channel"]
-    reply_mention(user, channel)
+    threading.Thread(target=handler.reply_mention, args = [user, channel]).start()
 
 
 @slack.route('/helpme', methods=['POST'])
 def slack_help():
     if not verify_request(request):
         return make_response("", 400)
-    help_modal(request.form.get('trigger_id'), request.form.get('user_id'))
+    threading.Thread(target=handler.help_modal, args=[request.form.get('trigger_id'), request.form.get('user_id')]).start()
     return make_response("", 200)
 
 
-@app.route('/review', methods=['POST'])
+@slack.route('/review', methods=['POST'])
 def slack_review():
     if not verify_request(request):
         return make_response("", 400)
@@ -518,18 +519,30 @@ def slack_review():
     # TODO: normalise the course argument e.g. math3611 -> MATH3611, mAth3611 -> MATH3611
     # TODO: add in a multi-select menu feature to the review modal if a course argument is omitted
     if request.form.get('text') != "":
-        review_init(request.form.get('user_id'))
-        review_course(request.form.get('user_id'), request.form.get('text'))
-        review_modal(request.form.get('trigger_id'), request.form.get('text'), request.form.get('user_id'))
+        threading.Thread(target=review_init, args = [request.form.get('user_id')]).start()
+        threading.Thread(target=review_course, args = [request.form.get('user_id'), request.form.get('text')]).start()
+        threading.Thread(target=review_modal, args = [request.form.get('trigger_id'), request.form.get('text'), request.form.get('user_id')]).start()
     else:
-        review_init(request.form.get('user_id'))
-        review_modal_course(request.form.get('trigger_id'), request.form.get('user_id'))
+        threading.Thread(target=review_init, args = [request.form.get('user_id')]).start()
+        threading.Thread(target=review_modal_course, args = [request.form.get('trigger_id'), request.form.get('user_id')]).start()
     return make_response("", 200)
 
 
-@app.route('/karma', methods=['POST'])
+@slack.route('/karma', methods=['POST'])
 def slack_karma():
     if not verify_request(request):
         return make_response("", 400)
-    karma_message(request.form.get('channel_id'))
+    threading.Thread(target=karma_message, args=[request.form.get('channel_id')]).start()
+    return make_response("", 200)
+
+@slack.route('/connect', methods=['POST'])
+def connect():
+    if not verify_request(request):
+        return make_response("", 400)
+    return make_response("", 200)
+
+@slack.route('/free', methods=['POST'])
+def free():
+    if not verify_request(request):
+        return make_response("", 400)
     return make_response("", 200)

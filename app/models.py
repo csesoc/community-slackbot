@@ -95,6 +95,7 @@ class Review(db.Model):
     overall = db.Column(db.Integer)
     time = db.Column(db.Integer)
     difficulty = db.Column(db.Integer)
+    resources = db.Column(db.Integer)
     is_approved = db.Column(db.Boolean())
 
     def __repr__(self):
