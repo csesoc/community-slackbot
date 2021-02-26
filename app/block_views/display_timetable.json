@@ -1,33 +1,62 @@
 {
-    "type": "modal",
-    "title": {
-        "type": "plain_text",
-        "text": "Timetable",
-        "emoji": true
-    },
-    "blocks": [
-        {
-            "type": "actions",
-            "elements": [
-                {
-                    "type": "button",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "Previous",
-                        "emoji": true
-                    },
-                    "value": "timetable_previous"
-                },
-                {
-                    "type": "button",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "Next",
-                        "emoji": true
-                    },
-                    "value": "timetable_next"
-                }
-            ]
-        }
-    ]
+	"type": "modal",
+	"title": {
+		"type": "plain_text",
+		"text": "2021 Timetable",
+		"emoji": true
+	},
+	"close": {
+		"type": "plain_text",
+		"text": "Ok",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "actions",
+			"elements": [
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "Previous",
+						"emoji": true
+					},
+					"value": "timetable_previous"
+				},
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "Next",
+						"emoji": true
+					},
+					"value": "timetable_next"
+				}
+			]
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Check timetable on:"
+			},
+			"accessory": {
+				"type": "datepicker",
+				"initial_date": "1990-04-28",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Select a date",
+					"emoji": true
+				},
+				"action_id": "datepicker-action"
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "<https://student.unsw.edu.au/maps|UNSW Maps are available here>"
+			}
+		}
+	]
 }

@@ -1,0 +1,22 @@
+{
+	"type": "modal",
+	"title": {
+		"type": "plain_text",
+		"text": "Error",
+		"emoji": true
+	},
+	"close": {
+		"type": "plain_text",
+		"text": "Ok",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "You must have a timetable and be connected with others in order to check who is free... 😞 "
+			}
+		}
+	]
+}

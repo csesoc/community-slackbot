@@ -111,3 +111,22 @@ class Report(db.Model):
 
     def __repr__(self):
         return '<AnonMsgs {}>'.format(self.id)
+
+class Calendars(db.Model):
+    __tablename__ = "calendars"
+    id = db.Column(db.Integer, primary_key = True)
+    user_id = (db.Integer, ForeignKey("users.id"))
+    calendar = db.Column(db.Text)
+
+    def __repr__(self):
+        return '<Calendar with cal_id {} for user with user_id {}>'.format(self.id, self.user_id)
+
+class Connections(db.Model):
+    __tablename__ = "connected"
+    id = db.Column(db.Integer, primary_key = True)
+    user_id = (db.Integer, ForeignKey("users.id"))
+    connections = db.Column(db.Text())
+
+
+    def __repr__(self):
+        return '<User with user_id {} connected to users {}>'.format(self.id, self.connected)

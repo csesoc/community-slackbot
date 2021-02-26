@@ -14,6 +14,7 @@ class Trivia_Game:
         self.questions = []
         self.view = None
         self.finished = []
+        self.in_progress = False
     
     def __str__(self):
         return f"Creator: {self.creator_id}\nChannel: {self.channel}\nDefault Qs?: {self.default_qs}\nNumber of Qs: {self.number_qs}\nPlayers: {self.trivia_players}"
@@ -31,7 +32,7 @@ trivia_games = {}
 trivia_players = {}
 
 def init_trivia(trigger_id, user_id):
-    if user_id in trivia_games.keys():
+    if user_id in trivia_games.keys() and trivia_games[user_id].in_progress == True:
         trivia_ongoing(trigger_id)
         return
     trivia_games[user_id] = Trivia_Game(user_id)
@@ -59,8 +60,10 @@ def trivia_finalise(user_id, trigger_id):
         for _ in range(trivia_games[user_id].number_qs):
             trivia_games[user_id].questions.append(questionBank.pop(random.randint(0,len(questionBank) - 1)))
         start_trivia(user_id)
+        trivia_games['user_id'].in_progress = True
     elif len(trivia_games[user_id].questions) != 0:
         start_trivia(user_id)
+        trivia_games['user_id'].in_progress = True
     else:
         # trivia_custom_questions_prompt(user_id, trivia_games[user_id].channel)
         return True
@@ -81,14 +84,23 @@ def trivia_custom_questions(game_id, data):
     start_trivia(game_id)
 
 def trivia_failure(user_id, trigger_id):
-    client.chat_postMessage(channel=user_id, text="Your attempt to create a trivia game failed")
+    client.chat_postEphemeral(user=user_id, channel=user_id, text="Your attempt to create a trivia game failed")
 
 def start_trivia(user_id):
     for user in trivia_games[user_id].trivia_players:
+        id = client.users_info(user=user)['user']['id']
+        #skip invite for user that initiated trivia
+        if id == user_id:
+            continue
         start_trivia_message(user, trivia_games[user_id].channel, user_id)
 
 def trivia_reply(user_id, response, game_id, trigger_id):
     trivia_response_notify(trivia_games[game_id].creator_id, trivia_games[game_id].channel, user_id, response)
+    
+    if trivia_players[game_id].time != None:
+        trivia_question(game_id, trigger_id)
+
+
     if user_id not in trivia_games[game_id].trivia_players:
         # not in game / already rejected invite
         pass
@@ -163,6 +175,9 @@ def trivia_leaderboard(channel, players):
     for player in players:
         player_info = client.users_info(user=player['player'])['user']
         player['name'] = player_info['profile']['display_name_normalized'] if (player_info['profile']['display_name_normalized'] != "") else player_info['profile']['real_name_normalized']
+        if player_info['user']['id'] in trivia_games:
+            trivia_games[player_info['user']['id']].pop()
+
     client.chat_postMessage(channel=channel, text="Trivia is over!", blocks=triviaBoard(players))
 
 def trivia_ongoing(trigger_id):
@@ -170,3 +185,10 @@ def trivia_ongoing(trigger_id):
 
 def trivia_custom_questions_prompt(user_id, channel):
     client.chat_postEphemeral(user=user_id, channel=channel, text="Fill in custom questions", blocks=triviaCustomMessage(user_id))
+
+def valid_trivia_acceptance(game_id):
+    if game_id in trivia_games:
+        if trivia_games[game_id].in_progress == False:
+            return True
+    
+    return False

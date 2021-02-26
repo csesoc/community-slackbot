@@ -1,10 +1,26 @@
 {
+	"type": "modal",
+	"title": {
+		"type": "plain_text",
+		"text": "Trivia Invitation",
+		"emoji": true
+	},
+	"submit": {
+		"type": "plain_text",
+		"text": "Submit",
+		"emoji": true
+	},
+	"close": {
+		"type": "plain_text",
+		"text": "Cancel",
+		"emoji": true
+	},
 	"blocks": [
 		{
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "_*You've been invited to a trivia game*_"
+				"text": "_*You've been invited to a Trivia Game by $INVITER*_"
 			}
 		},
 		{
@@ -19,8 +35,8 @@
 						"type": "plain_text",
 						"text": "I accept",
 						"emoji": true
-                    },
-                    "action_id": "accept_trivia_$GAMEID",
+					},
+					"action_id": "accept_trivia_$GAMEID",
 					"value": "true"
 				},
 				{
@@ -29,8 +45,8 @@
 						"type": "plain_text",
 						"text": "I decline",
 						"emoji": true
-                    },
-                    "action_id": "forfeit_trivia_$GAMEID",
+					},
+					"action_id": "forfeit_trivia_$GAMEID",
 					"value": "false"
 				}
 			]

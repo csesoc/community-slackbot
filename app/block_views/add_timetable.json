@@ -1,0 +1,32 @@
+{
+	"type": "modal",
+	"title": {
+		"type": "plain_text",
+		"text": "Add Timetable",
+		"emoji": true
+	},
+	"submit": {
+		"type": "plain_text",
+		"text": "Submit",
+		"emoji": true
+	},
+	"close": {
+		"type": "plain_text",
+		"text": "Cancel",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"action_id": "submit_timetable"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Add your personal iCal link down below",
+				"emoji": true
+			}
+		}
+	]
+}

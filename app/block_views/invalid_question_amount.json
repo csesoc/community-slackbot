@@ -1,0 +1,23 @@
+{
+	"type": "modal",
+	"title": {
+		"type": "plain_text",
+		"text": "Invalid Number of Qs",
+		"emoji": true
+	},
+	"close": {
+		"type": "plain_text",
+		"text": "Ok",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "The Amount of Default Questions is between 1 and 10"
+			}
+		}
+	],
+	"callback_id": "trivia_start_$USERID"
+}

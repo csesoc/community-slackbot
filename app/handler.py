@@ -14,6 +14,7 @@ from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q
 from app.models import Courses
 from app.jreview import review_overall, review_difficulty, review_time, review_submit, review_course, review_resources
 from app.jescape import init_escape, get_view, remove_escape
+from app.connect import *
 
 
 def interactions(payload):
@@ -201,8 +202,10 @@ def interactions(payload):
                 client.chat_postMessage(channel=payload["user"]["id"],
                                         blocks=message)
 
+            if callback_id == "timetable_input":
+                pass
+
     if payload["type"] == "block_actions":
-        print(payload)
         if "trivia_custom_" in payload['actions'][0]['action_id']:
             trivia_customs(payload['actions'][0]['action_id'].replace("trivia_custom_", ""), payload['trigger_id'])
             return
@@ -278,19 +281,28 @@ def interactions(payload):
 
         # Opens the "display_timetable" modal
         if value == "display_timetable":
-            start_date = utils.get_starting_date()
-            data = utils.get_timetable_data(start_date)
-            client.views_open(trigger_id=trigger_id, view=blocks.display_timetable(start_date, data))
+            if display(user, datetime.date.today()) is None:
+                client.views_open(trigger_id=trigger_id, view=blocks.get_block_view('display_timetable_error.json'))
+            client.views_open(trigger_id=trigger_id, view=display(user, datetime.date.today()))
 
         if value == "timetable_previous":
-            start_date = utils.get_previous_date(payload["view"]["private_metadata"])
-            data = utils.get_timetable_data(start_date)
-            client.views_update(view_id=payload["container"]["view_id"], view=blocks.display_timetable(start_date, data))
+            date = utils.get_previous_date(payload["view"]["private_metadata"])
+            if display(user, date) is None:
+                client.views_update(trigger_id=trigger_id, view=blocks.get_block_view('display_timetable_error.json'))
+            client.views_update(view_id=payload["container"]["view_id"], view=display(user, date))
 
         if value == "timetable_next":
-            start_date = utils.get_next_date(payload["view"]["private_metadata"])
-            data = utils.get_timetable_data(start_date)
-            client.views_update(view_id=payload["container"]["view_id"], view=blocks.display_timetable(start_date, data))
+            date = utils.get_next_date(payload["view"]["private_metadata"])
+            if display(user, date) is None:
+                client.views_update(trigger_id=trigger_id, view=blocks.get_block_view('display_timetable_error.json'))
+            client.views_update(view_id=payload["container"]["view_id"], view=display(user, date))
+
+        if value == 'add_timetable':
+            client.views_open(trigger_id=trigger_id, view=get_block_view('submit_timetable.json'))
+
+        
+
+
 
 
 def onboarding(user, channel=None):
@@ -567,3 +579,26 @@ def karma_message(channel_id):
             'real_name_normalized']
         leaders.append({'name': player_name, 'karma': user.karma, 'pfp': player_info['profile']['image_72']})
     client.chat_postMessage(channel=channel_id, text="Karma boards", blocks=karmaBoard(leaders))
+    
+def translate_user_name_to_id(user_name):
+    empty_string = []
+    for member in client.users_list()['members']:
+        if member['name'] == user_name:
+            return member['id']
+    return empty_string
+
+def free_handler(user_id, trigger_id):
+    free_view = free(user_id)
+    if free_view == None:
+        client.views_open(trigger_id=trigger_id, view=get_block_view('free_error.json'))
+    else:
+        if free_view['blocks'].count == 0:
+            client.views_open(trigger_id=trigger_id, view=get_block_view('none_free.json'))
+        else:
+            client.views_open(trigger_id=trigger_id, view=free_view)
+
+def connect_handler(connector, connectee, trigger_id):
+    if connect(connector, connectee) == False:
+        client.views_open(trigger_id=trigger_id, view = get_block_view('connect_error.json')) 
+    else:
+        client.views_open(trigger_id=trigger_id, view = get_block_view('connected.json'))

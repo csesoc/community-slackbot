@@ -19,10 +19,8 @@ import json
 import random
 import threading
 
-from app.handler import reply_mention, reply_im, help_modal, trivia_modal, review_modal, review_modal_course, karma_message
-from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, \
-    trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, \
-    trivia_custom_questions
+from app.handler import reply_mention, reply_im, help_modal, trivia_modal, review_modal, review_modal_course, karma_message, translate_user_name_to_id, connect, free
+from app.jtrivia import init_trivia, trivia_set_channel, trivia_set_qs, trivia_q_number, trivia_player_list, trivia_finalise, trivia_failure, start_trivia, trivia_reply, trivia_response, trivia_customs, trivia_custom_questions, valid_trivia_acceptance
 from app.jreview import review_init, review_overall, review_difficulty, review_time, review_submit, review_course
 from app.jescape import init_escape, get_view, remove_escape, update_escape, escape_modal
 
@@ -34,6 +32,7 @@ slack = Blueprint(
 
 @slack_events_adapter.on("message")
 def reply(event_data):
+    print(event_data)
     channel = event_data["event"]["channel"]
     if event_data['token'] != slack_token and 'text' in event_data['event']:
         if event_data['event']['text'].startswith("stylecheck"):
@@ -45,7 +44,7 @@ def reply(event_data):
     user = event_data["event"]["user"]
     channel = event_data["event"]["channel"]
     # wont respond to bots
-    if 'bot_id' not in event_data['event'] and 'text' in event_data['event']:
+    if 'bot_id' not in event_data['event'] and 'text' in event_data['event'] and event_data['event']['channel_type'] == 'im':
         message = event_data['event']['text']
         threading.Thread(target=reply_im, args = [user, channel, message]).start()
 
@@ -80,7 +79,7 @@ def pair():
     groupings = []
     current_group = []
     for member_id in member_ids:
-        current_group.append(member_id)
+        current_group.append(client.users_info(user=member_id)['real_name'])
         if len(current_group) == app.config["PAIR_GROUP_SIZE"]:
             groupings.append(current_group)
             current_group = []
@@ -203,17 +202,35 @@ def interactions():
     # Parse request
     payload = json.loads(request.form.to_dict()["payload"])
 
+    if payload["type"] == "block_actions" and 'view' in payload.keys():
+        if "accept_trivia_" in payload['actions'][0]['action_id']:
+            game_id = payload['actions'][0]['action_id'].replace("accept_trivia_", "")
+            if valid_trivia_acceptance(game_id):
+                trivia_reply(payload['user']['id'], True, game_id, payload['trigger_id'])
+        if "forfeit_trivia_" in payload['actions'][0]['action_id']:
+            game_id = payload['actions'][0]['action_id'].replace("forfeit_trivia_", "")
+            if valid_trivia_acceptance(game_id):
+                trivia_reply(payload['user']['id'], False, game_id, payload['trigger_id'])
+        return make_response("", 200)
+
     if (payload['type'] == "view_submission" and 'trivia_start_' in payload['view']['callback_id']):
         trigger_id = payload["trigger_id"]
         try:
             game_id = payload['view']['callback_id'].replace('trivia_start_', '')
-            trivia_q_number(game_id,
-                            int(payload['view']['state']['values']['number_questions']['number_questions']['value']))
-            trivia_player_list(game_id,
-                               payload['view']['state']['values']['users_playing']['users_playing']['selected_users'])
+            num_questions = int(payload['view']['state']['values']['number_questions']['number_questions']['value'])
+            block_id = payload['view']['blocks'][3]['block_id']
+            user_id = "default_trivia_" + payload['user']['id']
+            default = payload['view']['state']['values'][block_id][user_id]['selected_option']['value']
+            if ((num_questions > 10 or num_questions == 0) and default) == True:
+                resp = jsonify({'response_action': 'push', 'view': get_block_view('invalid_question_amount.json')})
+                resp.headers['Authorization'] = slack_token
+                return resp
+            trivia_q_number(game_id, int(payload['view']['state']['values']['number_questions']['number_questions']['value']))
+            trivia_player_list(game_id, payload['view']['state']['values']['users_playing']['users_playing']['selected_users'])
             if trivia_finalise(game_id, trigger_id):
                 try:
                     with app.app_context():
+
                         resp = jsonify({'response_action': 'push', 'view': trivia_customs(game_id, trigger_id)})
                         resp.headers['Authorization'] = slack_token
                         return resp
@@ -539,10 +556,15 @@ def slack_karma():
 def connect():
     if not verify_request(request):
         return make_response("", 400)
+    print(request.form)
+    name = request.form.get('text')[1:]
+    connectee = translate_user_name_to_id(name)
+    threading.Thread(target=connect_handler, args=[request.form['user_id'], connectee, request.form['trigger_id']])
     return make_response("", 200)
 
 @slack.route('/free', methods=['POST'])
 def free():
     if not verify_request(request):
         return make_response("", 400)
+    threading.Thread(target=free_handler, args=[request.form['user_id'], request.form['trigger_id']])
     return make_response("", 200)
